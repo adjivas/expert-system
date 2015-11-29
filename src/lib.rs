@@ -8,3 +8,5 @@
 mod fact;
 
 pub use fact::Fact;
+#[cfg(feature = "verbose")] const FACT_DEREF_LAST: &'static str = "We know that ";
+#[cfg(feature = "verbose")] const FACT_FIRSTS_LAST: &'static str = "Since we know";

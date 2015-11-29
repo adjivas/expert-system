@@ -15,11 +15,9 @@ cargo build
 |__ LICENSE
 |__ README.md
 |__ tests
-|   |__ rule.rs
 |   |__ fact.rs
 |   \__ lib.rs
 \__ src
-    |__ rule.rs
     |__ fact.rs
     |__ lib.rs
     \__ main.rs
