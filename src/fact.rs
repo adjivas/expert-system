@@ -90,7 +90,7 @@ impl <'a> std::ops::Add for Fact<'a> {
     #[cfg(not(feature = "and"))]
     fn add(self, other: Fact) -> Fact {
         Fact {
-            exprt: self.exprt + &other.exprt,
+            exprt: "(".to_string() + &self.exprt + &other.exprt + ")",
             imply: Vec::new(),
             value: self.value && other.value,
         }
@@ -99,7 +99,7 @@ impl <'a> std::ops::Add for Fact<'a> {
     #[cfg(feature = "and")]
     fn add(self, other: Fact) -> Fact {
         Fact {
-            exprt: self.exprt + "&" + &other.exprt,
+            exprt: "(".to_string() + &self.exprt + "&" + &other.exprt + ")",
             imply: Vec::new(),
             value: self.value && other.value,
         }
@@ -113,7 +113,7 @@ impl <'a> std::ops::BitOr for Fact<'a> {
 
     fn bitor(self, other: Fact) -> Fact {
         Fact {
-            exprt: self.exprt + "|" + &other.exprt,
+            exprt: "(".to_string() + &self.exprt + "|" + &other.exprt + ")",
             imply: Vec::new(),
             value: self.value || other.value,
         }
@@ -127,7 +127,7 @@ impl <'a> std::ops::BitXor for Fact<'a> {
 
     fn bitxor(self, other: Fact) -> Fact {
         Fact {
-            exprt: self.exprt + "^" + &other.exprt,
+            exprt: "(".to_string() + &self.exprt + "^" + &other.exprt + ")",
             imply: Vec::new(),
             value: self.value ^ other.value,
         }

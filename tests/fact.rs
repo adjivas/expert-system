@@ -34,12 +34,93 @@ fn test_fact_deref () {
 }
 
 #[test]
+#[cfg(not(feature = "and"))]
+fn test_fact_not () {
+    assert_eq!(
+        !expert_sys::Fact::new("a".to_string()),
+        expert_sys::Fact {
+            exprt: "!a".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) +
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(ab)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) |
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(a|b)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) ^
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(a^b)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+}
+
+#[test]
+#[cfg(feature = "and")]
+fn test_fact_not () {
+    assert_eq!(
+        !expert_sys::Fact::new("a".to_string()),
+        expert_sys::Fact {
+            exprt: "!a".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) +
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(a&b)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) |
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(a|b)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+    assert_eq!(
+        !(expert_sys::Fact::new("a".to_string()) ^
+        expert_sys::Fact::new("b".to_string())),
+        expert_sys::Fact {
+            exprt: "!(a^b)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+}
+
+#[test]
+#[cfg(not(feature = "and"))]
 fn test_fact_and () {
     assert_eq!(
         {expert_sys::Fact::new("a".to_string()) +
         expert_sys::Fact::new("b".to_string())},
         expert_sys::Fact {
-            exprt: "ab".to_string(),
+            exprt: "(ab)".to_string(),
             imply: Vec::new(),
             value: false,
         }
@@ -48,7 +129,7 @@ fn test_fact_and () {
         expert_sys::Fact::new_rev("a".to_string()) +
         expert_sys::Fact::new("b".to_string()),
         expert_sys::Fact {
-            exprt: "ab".to_string(),
+            exprt: "(ab)".to_string(),
             imply: Vec::new(),
             value: false,
         }
@@ -57,7 +138,7 @@ fn test_fact_and () {
         expert_sys::Fact::new("a".to_string()) +
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "ab".to_string(),
+            exprt: "(ab)".to_string(),
             imply: Vec::new(),
             value: false,
         }
@@ -66,7 +147,48 @@ fn test_fact_and () {
         expert_sys::Fact::new_rev("a".to_string()) +
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "ab".to_string(),
+            exprt: "(ab)".to_string(),
+            imply: Vec::new(),
+            value: true,
+        }
+    );
+}
+
+#[test]
+#[cfg(feature = "and")]
+fn test_fact_and () {
+    assert_eq!(
+        {expert_sys::Fact::new("a".to_string()) +
+        expert_sys::Fact::new("b".to_string())},
+        expert_sys::Fact {
+            exprt: "(a&b)".to_string(),
+            imply: Vec::new(),
+            value: false,
+        }
+    );
+    assert_eq!(
+        expert_sys::Fact::new_rev("a".to_string()) +
+        expert_sys::Fact::new("b".to_string()),
+        expert_sys::Fact {
+            exprt: "(a&b)".to_string(),
+            imply: Vec::new(),
+            value: false,
+        }
+    );
+    assert_eq!(
+        expert_sys::Fact::new("a".to_string()) +
+        expert_sys::Fact::new_rev("b".to_string()),
+        expert_sys::Fact {
+            exprt: "(a&b)".to_string(),
+            imply: Vec::new(),
+            value: false,
+        }
+    );
+    assert_eq!(
+        expert_sys::Fact::new_rev("a".to_string()) +
+        expert_sys::Fact::new_rev("b".to_string()),
+        expert_sys::Fact {
+            exprt: "(a&b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -79,7 +201,7 @@ fn test_fact_or () {
         {expert_sys::Fact::new("a".to_string()) |
         expert_sys::Fact::new("b".to_string())},
         expert_sys::Fact {
-            exprt: "a|b".to_string(),
+            exprt: "(a|b)".to_string(),
             imply: Vec::new(),
             value: false,
         }
@@ -88,7 +210,7 @@ fn test_fact_or () {
         expert_sys::Fact::new_rev("a".to_string()) |
         expert_sys::Fact::new("b".to_string()),
         expert_sys::Fact {
-            exprt: "a|b".to_string(),
+            exprt: "(a|b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -97,7 +219,7 @@ fn test_fact_or () {
         expert_sys::Fact::new("a".to_string()) |
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "a|b".to_string(),
+            exprt: "(a|b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -106,7 +228,7 @@ fn test_fact_or () {
         expert_sys::Fact::new_rev("a".to_string()) |
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "a|b".to_string(),
+            exprt: "(a|b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -119,7 +241,7 @@ fn test_fact_xor () {
         {expert_sys::Fact::new("a".to_string()) ^
         expert_sys::Fact::new("b".to_string())},
         expert_sys::Fact {
-            exprt: "a^b".to_string(),
+            exprt: "(a^b)".to_string(),
             imply: Vec::new(),
             value: false,
         }
@@ -128,7 +250,7 @@ fn test_fact_xor () {
         expert_sys::Fact::new_rev("a".to_string()) ^
         expert_sys::Fact::new("b".to_string()),
         expert_sys::Fact {
-            exprt: "a^b".to_string(),
+            exprt: "(a^b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -137,7 +259,7 @@ fn test_fact_xor () {
         expert_sys::Fact::new("a".to_string()) ^
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "a^b".to_string(),
+            exprt: "(a^b)".to_string(),
             imply: Vec::new(),
             value: true,
         }
@@ -146,7 +268,7 @@ fn test_fact_xor () {
         expert_sys::Fact::new_rev("a".to_string()) ^
         expert_sys::Fact::new_rev("b".to_string()),
         expert_sys::Fact {
-            exprt: "a^b".to_string(),
+            exprt: "(a^b)".to_string(),
             imply: Vec::new(),
             value: false,
         }
