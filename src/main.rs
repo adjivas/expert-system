@@ -8,5 +8,7 @@
 extern crate expert_sys;
 
 fn main () {
-    println!("hello world");
+    let a: expert_sys::Fact = expert_sys::Fact::new_rev("a".to_string());
+    let b: expert_sys::Fact = expert_sys::Fact::new_imply("b".to_string(), std::cell::UnsafeCell::new(&a));
+    let c: expert_sys::Fact = expert_sys::Fact::new_imply("c".to_string(), std::cell::UnsafeCell::new(&a));
 }

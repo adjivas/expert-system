@@ -9,11 +9,10 @@ extern crate std;
 
 /// The `Fact` structure is a binary axiom.
 
-#[derive(Debug, PartialEq)]
 pub struct Fact<'a> {
     pub exprt: String, // logical expression.
-    pub imply: Vec<&'a Fact<'a>>, // dependencies.
     pub value: bool, // result.
+    pub imply: Option<std::cell::UnsafeCell<&'a Fact<'a>>>, // dependencies.
 }
 
 impl <'a> Fact<'a> {
@@ -23,8 +22,34 @@ impl <'a> Fact<'a> {
     pub fn new (exprt: String) -> Self {
         Fact {
             exprt: exprt,
-            imply: Vec::new(),
             value: false,
+            imply: None,
+        }
+    }
+
+    /// The `new_imply` constructor function returns a default false axiom with dependencies.
+
+    pub fn new_imply (exprt: String, imply: std::cell::UnsafeCell<&'a Fact<'a>>) -> Self {
+        Fact {
+            exprt: exprt,
+            value: false,
+            imply: Some(imply),
+        }
+    }
+
+    pub fn new_fact (fact: Fact<'a>) -> Self {
+        Fact {
+            exprt: fact.exprt,
+            value: fact.value,
+            imply: fact.imply,
+        }
+    }
+
+    pub fn new_fact_imply (fact: Fact<'a>, imply: std::cell::UnsafeCell<&'a Fact<'a>>) -> Self {
+        Fact {
+            exprt: fact.exprt,
+            value: fact.value,
+            imply: Some(imply),
         }
     }
 
@@ -33,52 +58,19 @@ impl <'a> Fact<'a> {
     pub fn new_rev (exprt: String) -> Self {
         Fact {
             exprt: exprt,
-            imply: Vec::new(),
             value: true,
+            imply: None,
         }
     }
-
-    /// The `push_imply` adds a new dependency to the tree.
-
-    pub fn push_imply (&mut self, imply: &'a Fact) {
-        self.imply.push(imply);
-    }
 }
-
 
 impl <'a> std::ops::Deref for Fact<'a> {
     type Target = bool;
 
     /// The `deref` function returns information if the axiom is true.
 
-    #[cfg(not(feature = "verbose"))]
     fn deref(&self) -> &bool {
-        if self.value { &self.value }
-        else {
-            match self.imply.iter().find(|&val| ***val) {
-                Some(val) => &val,
-                None => &self.value,
-            }
-        }
-    }
-
-    /// The `deref` function returns information if the axiom is true.
-
-    #[cfg(feature = "verbose")]
-    fn deref(&self) -> &bool {
-        if self.value {
-            println!("{}", super::FACT_DEREF_LAST.to_string() + &self.exprt + &" is true. ");
-            &self.value
-        }
-        else {
-            match self.imply.iter().find(|&val| ***val) {
-                Some(val) => {
-                    println!("{}", super::FACT_FIRSTS_LAST.to_string() + &self.exprt + &", ");
-                    &val
-                },
-                None => &self.value,
-            }
-        }
+        &self.value
     }
 }
 
@@ -91,17 +83,17 @@ impl <'a> std::ops::Add for Fact<'a> {
     fn add(self, other: Fact) -> Fact {
         Fact {
             exprt: "(".to_string() + &self.exprt + &other.exprt + ")",
-            imply: Vec::new(),
             value: self.value && other.value,
+            imply: None,
         }
     }
 
     #[cfg(feature = "and")]
     fn add(self, other: Fact) -> Fact {
         Fact {
-            exprt: "(".to_string() + &self.exprt + "&" + &other.exprt + ")",
-            imply: Vec::new(),
+            exprt: "(".to_string() + &self.exprt + "+" + &other.exprt + ")",
             value: self.value && other.value,
+            imply: None,
         }
     }
 }
@@ -114,8 +106,8 @@ impl <'a> std::ops::BitOr for Fact<'a> {
     fn bitor(self, other: Fact) -> Fact {
         Fact {
             exprt: "(".to_string() + &self.exprt + "|" + &other.exprt + ")",
-            imply: Vec::new(),
             value: self.value || other.value,
+            imply: None,
         }
     }
 }
@@ -128,8 +120,8 @@ impl <'a> std::ops::BitXor for Fact<'a> {
     fn bitxor(self, other: Fact) -> Fact {
         Fact {
             exprt: "(".to_string() + &self.exprt + "^" + &other.exprt + ")",
-            imply: Vec::new(),
             value: self.value ^ other.value,
+            imply: None,
         }
     }
 }
@@ -142,8 +134,8 @@ impl <'a> std::ops::Not for Fact<'a> {
     fn not(self) -> Fact <'a> {
         Fact {
             exprt: "!".to_string() + &self.exprt,
-            imply: Vec::new(),
             value: !self.value,
+            imply: None,
         }
     }
 }
