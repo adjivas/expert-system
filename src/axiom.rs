@@ -57,7 +57,7 @@ impl <'a> Axiom<'a> {
 impl <'a> std::ops::Deref for Axiom<'a> {
     type Target = bool;
 
-    /// The `deref` function returns information if the axiom is true.
+    /// The `deref` function returns the axiom value.
 
     fn deref(&self) -> &bool {
         match self.imply {
@@ -66,6 +66,31 @@ impl <'a> std::ops::Deref for Axiom<'a> {
         }
     }
 }
+
+impl <'a> std::ops::DerefMut for Axiom<'a> {
+
+    /// The `deref` function returns a mutable reference to axion value.
+
+    fn deref_mut(&mut self) -> &mut bool {
+        &mut self.value
+    }
+}
+
+impl <'a> PartialEq for Axiom<'a> {
+
+    /// The `eq` function returns a boolean for our axiom equal another axiom.
+
+    fn eq(&self, other: &Axiom<'a>) -> bool {
+        self.exprt == other.exprt &&
+        self.value == other.value &&
+        match (self.imply, other.imply) {
+            (Some(imply), Some(other)) if unsafe {*imply == *other} => true,
+            (None, None) => true,
+            (_, _) => false,
+        }
+    }
+}
+
 /*
 impl <'a> std::ops::Add for Axiom<'a> {
     type Output = Axiom<'a>;

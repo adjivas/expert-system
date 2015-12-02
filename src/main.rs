@@ -12,5 +12,7 @@ fn main () {
     let mut b: expert_sys::Axiom = expert_sys::Axiom::new_imply('b', &mut a as *mut expert_sys::Axiom);
     let c: expert_sys::Axiom = expert_sys::Axiom::new_imply('c', &mut b as *mut expert_sys::Axiom);
 
+    *a = true;
+    println!("{}", c == c);
     println!("{}", c);
 }
