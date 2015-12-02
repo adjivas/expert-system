@@ -5,8 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-mod fact;
+mod axiom;
 
-pub use fact::Fact;
+pub use axiom::Axiom;
 #[cfg(feature = "verbose")] const FACT_DEREF_LAST: &'static str = "We know that ";
 #[cfg(feature = "verbose")] const FACT_FIRSTS_LAST: &'static str = "Since we know";

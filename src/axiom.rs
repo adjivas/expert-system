@@ -7,20 +7,20 @@
 
 extern crate std;
 
-/// The `Fact` structure is a binary axiom.
+/// The `Axiom` structure is a binary axiom.
 
-pub struct Fact<'a> {
-    pub exprt: String, // logical expression.
-    pub value: bool, // result.
-    pub imply: Option<std::cell::UnsafeCell<&'a Fact<'a>>>, // dependencies.
+pub struct Axiom<'a> {
+    exprt: char, // logical expression.
+    value: bool, // result.
+    imply: Option<*mut Axiom<'a>>, // dependencies.
 }
 
-impl <'a> Fact<'a> {
+impl <'a> Axiom<'a> {
 
     /// The `new` constructor function returns a default false axiom.
 
-    pub fn new (exprt: String) -> Self {
-        Fact {
+    pub fn new (exprt: char) -> Self {
+        Axiom {
             exprt: exprt,
             value: false,
             imply: None,
@@ -29,59 +29,52 @@ impl <'a> Fact<'a> {
 
     /// The `new_imply` constructor function returns a default false axiom with dependencies.
 
-    pub fn new_imply (exprt: String, imply: std::cell::UnsafeCell<&'a Fact<'a>>) -> Self {
-        Fact {
+    pub fn new_imply (exprt: char, imply: *mut Axiom<'a>) -> Self {
+        Axiom {
             exprt: exprt,
             value: false,
             imply: Some(imply),
         }
     }
 
-    pub fn new_fact (fact: Fact<'a>) -> Self {
-        Fact {
+    pub fn new_fact (fact: Axiom<'a>) -> Self {
+        Axiom {
             exprt: fact.exprt,
             value: fact.value,
             imply: fact.imply,
         }
     }
 
-    pub fn new_fact_imply (fact: Fact<'a>, imply: std::cell::UnsafeCell<&'a Fact<'a>>) -> Self {
-        Fact {
+    pub fn new_fact_imply (fact: Axiom<'a>, imply: *mut Axiom<'a>) -> Self {
+        Axiom {
             exprt: fact.exprt,
             value: fact.value,
             imply: Some(imply),
         }
     }
-
-    /// The `new_rev` constructor function returns a true axiom.
-
-    pub fn new_rev (exprt: String) -> Self {
-        Fact {
-            exprt: exprt,
-            value: true,
-            imply: None,
-        }
-    }
 }
 
-impl <'a> std::ops::Deref for Fact<'a> {
+impl <'a> std::ops::Deref for Axiom<'a> {
     type Target = bool;
 
     /// The `deref` function returns information if the axiom is true.
 
     fn deref(&self) -> &bool {
-        &self.value
+        match self.imply {
+            Some(imply) => unsafe { &**imply },
+            None => &self.value,
+        }
     }
 }
-
-impl <'a> std::ops::Add for Fact<'a> {
-    type Output = Fact<'a>;
+/*
+impl <'a> std::ops::Add for Axiom<'a> {
+    type Output = Axiom<'a>;
 
     /// The `add` function returns axiom AND axiom.
 
     #[cfg(not(feature = "and"))]
-    fn add(self, other: Fact) -> Fact {
-        Fact {
+    fn add(self, other: Axiom) -> Axiom {
+        Axiom {
             exprt: "(".to_string() + &self.exprt + &other.exprt + ")",
             value: self.value && other.value,
             imply: None,
@@ -89,8 +82,8 @@ impl <'a> std::ops::Add for Fact<'a> {
     }
 
     #[cfg(feature = "and")]
-    fn add(self, other: Fact) -> Fact {
-        Fact {
+    fn add(self, other: Axiom) -> Axiom {
+        Axiom {
             exprt: "(".to_string() + &self.exprt + "+" + &other.exprt + ")",
             value: self.value && other.value,
             imply: None,
@@ -98,13 +91,13 @@ impl <'a> std::ops::Add for Fact<'a> {
     }
 }
 
-impl <'a> std::ops::BitOr for Fact<'a> {
-    type Output = Fact<'a>;
+impl <'a> std::ops::BitOr for Axiom<'a> {
+    type Output = Axiom<'a>;
 
     /// The `bitor` function returns axiom OR axiom.
 
-    fn bitor(self, other: Fact) -> Fact {
-        Fact {
+    fn bitor(self, other: Axiom) -> Axiom {
+        Axiom {
             exprt: "(".to_string() + &self.exprt + "|" + &other.exprt + ")",
             value: self.value || other.value,
             imply: None,
@@ -112,13 +105,13 @@ impl <'a> std::ops::BitOr for Fact<'a> {
     }
 }
 
-impl <'a> std::ops::BitXor for Fact<'a> {
-    type Output = Fact<'a>;
+impl <'a> std::ops::BitXor for Axiom<'a> {
+    type Output = Axiom<'a>;
 
     /// The `bitxor` function returns axiom XOR axiom.
 
-    fn bitxor(self, other: Fact) -> Fact {
-        Fact {
+    fn bitxor(self, other: Axiom) -> Axiom {
+        Axiom {
             exprt: "(".to_string() + &self.exprt + "^" + &other.exprt + ")",
             value: self.value ^ other.value,
             imply: None,
@@ -126,21 +119,21 @@ impl <'a> std::ops::BitXor for Fact<'a> {
     }
 }
 
-impl <'a> std::ops::Not for Fact<'a> {
-    type Output = Fact<'a>;
+impl <'a> std::ops::Not for Axiom<'a> {
+    type Output = Axiom<'a>;
 
     /// The `not` function returns not axiom.
 
-    fn not(self) -> Fact <'a> {
-        Fact {
+    fn not(self) -> Axiom <'a> {
+        Axiom {
             exprt: "!".to_string() + &self.exprt,
             value: !self.value,
             imply: None,
         }
     }
 }
-
-impl <'a> std::fmt::Display for Fact<'a> {
+*/
+impl <'a> std::fmt::Display for Axiom<'a> {
 
     /// The `fmt` function prints the axiom.
 
@@ -148,15 +141,37 @@ impl <'a> std::fmt::Display for Fact<'a> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-		write!(f, "{} => {}", self.exprt, self.value)
+        match self.imply {
+            Some(_) => write!(f, "{} => {}, c => ... => {}", self.exprt, self.value, **self),
+            None => write!(f, "{} => {}", self.exprt, self.value),
+        }
 	}
 }
 
-impl <'a> Default for Fact<'a> {
+impl <'a> std::fmt::Debug for Axiom<'a> {
+
+    /// The `fmt` function prints the axiom.
+
+	fn fmt (
+	    &self,
+	    f: &mut std::fmt::Formatter,
+	) -> Result<(), std::fmt::Error> {
+        match self.imply {
+            Some(imply) => write!(f, "{} => {:?}", self.exprt, unsafe { &*imply }),
+            None => write!(f, "{} => {}", self.exprt, self.value),
+        }
+	}
+}
+
+impl <'a> Default for Axiom<'a> {
 
     /// The `default` constructor function returns a false axiom.
 
     fn default() -> Self {
-		Fact::new("_".to_string())
+        Axiom {
+            exprt: '_',
+            value: false,
+            imply: None,
+        }
     }
 }

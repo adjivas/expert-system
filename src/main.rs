@@ -8,7 +8,9 @@
 extern crate expert_sys;
 
 fn main () {
-    let a: expert_sys::Fact = expert_sys::Fact::new_rev("a".to_string());
-    let b: expert_sys::Fact = expert_sys::Fact::new_imply("b".to_string(), std::cell::UnsafeCell::new(&a));
-    let c: expert_sys::Fact = expert_sys::Fact::new_imply("c".to_string(), std::cell::UnsafeCell::new(&a));
+    let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
+    let mut b: expert_sys::Axiom = expert_sys::Axiom::new_imply('b', &mut a as *mut expert_sys::Axiom);
+    let c: expert_sys::Axiom = expert_sys::Axiom::new_imply('c', &mut b as *mut expert_sys::Axiom);
+
+    println!("{}", c);
 }
