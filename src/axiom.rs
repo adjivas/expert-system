@@ -37,7 +37,7 @@ impl <'a> Axiom<'a> {
         }
     }
 
-    pub fn new_fact (fact: Axiom<'a>) -> Self {
+    pub fn new_axiom (fact: Axiom<'a>) -> Self {
         Axiom {
             exprt: fact.exprt,
             value: fact.value,
@@ -45,12 +45,16 @@ impl <'a> Axiom<'a> {
         }
     }
 
-    pub fn new_fact_imply (fact: Axiom<'a>, imply: *mut Axiom<'a>) -> Self {
+    pub fn new_axiom_imply (fact: Axiom<'a>, imply: *mut Axiom<'a>) -> Self {
         Axiom {
             exprt: fact.exprt,
             value: fact.value,
             imply: Some(imply),
         }
+    }
+
+    pub fn get_exprt (&self) -> &char {
+        &self.exprt
     }
 }
 

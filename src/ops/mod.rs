@@ -5,7 +5,6 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-mod axiom;
-pub mod ops;
+mod not;
 
-pub use axiom::Axiom;
+pub use self::not::Not;
