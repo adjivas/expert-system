@@ -19,8 +19,8 @@ fn main () {
     );
 
     let a_and_b__and__a_and_b = expert_sys::ops::And::new (
-        &a_and_b as *const expert_sys::ops::And<*mut expert_sys::Axiom>,
-        &a_and_b as *const expert_sys::ops::And<*mut expert_sys::Axiom>
+        &a_and_b as *const expert_sys::ops::And<*mut expert_sys::Axiom, *mut expert_sys::Axiom>,
+        &a_and_b as *const expert_sys::ops::And<*mut expert_sys::Axiom, *mut expert_sys::Axiom>
     );
 
     println!("{}", a_and_b__and__a_and_b);

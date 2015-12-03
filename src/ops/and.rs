@@ -11,16 +11,16 @@ use axiom::Axiom;
 
 /// The `And` structure is a binary And.
 
-pub struct And <T>  {
-    infer: T, // dependencies.
-    other: T, // other dependencies.
+pub struct And <A, B>  {
+    infer: A, // dependencies.
+    other: B, // other dependencies.
 }
 
-impl <T> And <T> {
+impl <A, B> And <A, B> {
 
     /// The `new` constructor function returns a default false And.
 
-    pub fn new (infer: T, other: T) -> Self {
+    pub fn new (infer: A, other: B) -> Self {
         And {
             infer: infer,
             other: other,
@@ -28,7 +28,7 @@ impl <T> And <T> {
     }
 }
 
-impl <'a> And <*mut Axiom<'a>> {
+impl <'a, 'b> And <*mut Axiom<'a>, *mut Axiom<'b>> {
 
     /// The `get_value` function returns the value.
 
@@ -48,7 +48,7 @@ impl <'a> And <*mut Axiom<'a>> {
 
     /// The `get_infer` function returns the two axiom.
 
-    fn get_infer (&self) -> (&Axiom<'a>, &Axiom<'a>) {
+    fn get_infer (&self) -> (&Axiom<'a>, &Axiom<'b>) {
         (
             unsafe { &*self.infer },
             unsafe { &*self.other }
@@ -56,7 +56,7 @@ impl <'a> And <*mut Axiom<'a>> {
     }
 }
 
-impl <'a> std::fmt::Display for And<*mut Axiom<'a>> {
+impl <'a, 'b> std::fmt::Display for And<*mut Axiom<'a>, *mut Axiom<'b>> {
 
     /// The `fmt` function prints the And.
 
@@ -70,7 +70,7 @@ impl <'a> std::fmt::Display for And<*mut Axiom<'a>> {
 	}
 }
 
-impl <'a> std::fmt::Debug for And<*mut Axiom<'a>> {
+impl <'a, 'b> std::fmt::Debug for And<*mut Axiom<'a>, *mut Axiom<'b>> {
 
     /// The `fmt` function prints the And.
 
@@ -84,7 +84,7 @@ impl <'a> std::fmt::Debug for And<*mut Axiom<'a>> {
 	}
 }
 
-impl <'a> And<*const And<*mut Axiom<'a>>> {
+impl <'a1, 'a2, 'b1, 'b2> And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
 
     /// The `get_value` function returns the value.
 
@@ -95,7 +95,7 @@ impl <'a> And<*const And<*mut Axiom<'a>>> {
 
     /// The `get_infer` function returns the two axiom.
 
-    fn get_infer (&self) -> (&And<*mut Axiom<'a>>, &And<*mut Axiom<'a>>) {
+    fn get_infer (&self) -> (&And<*mut Axiom<'a1>, *mut Axiom<'a2>>, &And<*mut Axiom<'b1>, *mut Axiom<'b2>>) {
         (
             unsafe { &*self.infer },
             unsafe { &*self.other }
@@ -103,7 +103,7 @@ impl <'a> And<*const And<*mut Axiom<'a>>> {
     }
 }
 
-impl <'a> std::fmt::Display for And<*const And<*mut Axiom<'a>>> {
+impl <'a1, 'a2, 'b1, 'b2> std::fmt::Display for And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
 
     /// The `fmt` function prints the And.
 
@@ -117,7 +117,7 @@ impl <'a> std::fmt::Display for And<*const And<*mut Axiom<'a>>> {
 	}
 }
 
-impl <'a> std::fmt::Debug for And<*const And<*mut Axiom<'a>>> {
+impl <'a1, 'a2, 'b1, 'b2> std::fmt::Debug for And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
 
     /// The `fmt` function prints the And.
 
