@@ -31,13 +31,13 @@ impl <'a> Not <*mut Axiom<'a>> {
     /// The `get_value` function returns the value.
 
     pub fn get_value (&self) -> bool {
-        !unsafe {**self.infer}
+        !unsafe { **self.infer }
     }
 
     /// The `get_exprt` function returns the arithmetic expression.
 
     fn get_exprt (&self) -> &char {
-        unsafe {&*self.infer}.get_exprt()
+        unsafe { &*self.infer }.get_exprt()
     }
 
     /// The `get_infer` function returns the axiom.

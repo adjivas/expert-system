@@ -88,7 +88,7 @@ impl <'a> PartialEq for Axiom<'a> {
         self.exprt == other.exprt &&
         self.value == other.value &&
         match (self.imply, other.imply) {
-            (Some(imply), Some(other)) if unsafe {*imply == *other} => true,
+            (Some(imply), Some(other)) if unsafe { *imply == *other } => true,
             (None, None) => true,
             (_, _) => false,
         }
