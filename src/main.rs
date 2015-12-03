@@ -23,7 +23,7 @@ fn main () {
         &a_and_b as *const expert_sys::ops::And<*mut expert_sys::Axiom>
     );
 
-    println!("{:?}", a_and_b__and__a_and_b);
+    println!("{}", a_and_b__and__a_and_b);
     /*let mut b: expert_sys::Axiom = expert_sys::Axiom::new('b');
     let mut a: expert_sys::Axiom = expert_sys::Axiom::new_imply('a', &mut b as *mut expert_sys::Axiom);
     let not_a = expert_sys::ops::Not::new(&mut a as *mut expert_sys::Axiom);

@@ -64,7 +64,7 @@ impl <'a> std::fmt::Display for And<*mut Axiom<'a>> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-        let (infer, other): (&char, &char) = self.get_exprt();
+        let (infer, other) = self.get_exprt();
 
         write!(f, "({}+{}) => {}", infer, other, self.get_value())
 	}
@@ -111,7 +111,7 @@ impl <'a> std::fmt::Display for And<*const And<*mut Axiom<'a>>> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-        let (infer, other): (&And<*mut Axiom<'a>>, &And<*mut Axiom<'a>>) = self.get_infer();
+        let (infer, other) = self.get_infer();
 
         write!(f, "(({})+({})) => {}", infer, other, self.get_value())
 	}
