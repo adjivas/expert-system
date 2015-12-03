@@ -112,6 +112,6 @@ impl <'a> std::fmt::Debug for Not<*const Not<*mut Axiom<'a>>> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-        write!(f, "!({:?}) => {}", *self.get_infer(), self.get_value())
+        write!(f, "!({:?}) => {:?}", *self.get_infer(), self.get_value())
 	}
 }

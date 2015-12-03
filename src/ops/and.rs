@@ -64,7 +64,7 @@ impl <'a> std::fmt::Display for And<*mut Axiom<'a>> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_exprt();
+        let (infer, other): (&char, &char) = self.get_exprt();
 
         write!(f, "({}+{}) => {}", infer, other, self.get_value())
 	}
@@ -80,7 +80,7 @@ impl <'a> std::fmt::Debug for And<*mut Axiom<'a>> {
 	) -> Result<(), std::fmt::Error> {
         let (infer, other) = self.get_infer();
 
-        write!(f, "({}+{}) => {}", infer, other, self.get_value())
+        write!(f, "(({:?})+({:?})) => {:?}", infer, other, self.get_value())
 	}
 }
 
@@ -91,15 +91,6 @@ impl <'a> And<*const And<*mut Axiom<'a>>> {
     pub fn get_value (&self) -> bool {
         unsafe { &*self.infer }.get_value() &&
         unsafe { &*self.other }.get_value()
-    }
-
-    /// The `get_exprt` function returns the two arithmetic expression.
-
-    fn get_exprt (&self) -> ((&char, &char), (&char, &char)) {
-        (
-            unsafe { &*self.infer }.get_exprt(),
-            unsafe { &*self.other }.get_exprt()
-        )
     }
 
     /// The `get_infer` function returns the two axiom.
@@ -120,9 +111,9 @@ impl <'a> std::fmt::Display for And<*const And<*mut Axiom<'a>>> {
 	    &self,
 	    f: &mut std::fmt::Formatter,
 	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_exprt();
+        let (infer, other): (&And<*mut Axiom<'a>>, &And<*mut Axiom<'a>>) = self.get_infer();
 
-        write!(f, "({:?}+{:?}) => {}", infer, other, self.get_value())
+        write!(f, "(({})+({})) => {}", infer, other, self.get_value())
 	}
 }
 
@@ -136,6 +127,6 @@ impl <'a> std::fmt::Debug for And<*const And<*mut Axiom<'a>>> {
 	) -> Result<(), std::fmt::Error> {
         let (infer, other) = self.get_infer();
 
-        write!(f, "({:?}+{:?}) => {}", infer, other, self.get_value())
+        write!(f, "(({:?})+({:?})) => {:?}", infer, other, self.get_value())
 	}
 }
