@@ -1,36 +1,39 @@
-
----
 sudo: false
 language: rust
 rust:
-  - 1.3.0
-  - stable
-  - nightly
-  - beta
-
+- 1.3.0
+- stable
+- nightly
+- beta
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 branches:
   only:
-    - master
-
+  - master
 env:
+  matrix:
   - ARCH=x86_64
   - ARCH=i686
-
+  global:
+    secure: bfAQ/AiBKXrRsiKkHnsTAYWFpUhKm7E7bqwhrDgxF/tcdWjkT/E/RoRD42otBBgUnFKjkw+5NwgwJs0wICeTjvxL48yNh79EshwHnKb3aOvZddOoSqBkaKK49WaDoZ8XSZceMvjUXsa+YGe3R2eNwDlenTzxcdk+4kMjFJlfva3FHqZOapbEPgftYV6f68fTRd0M70XbYq/YC4VCiqomYz71OdN+gyuTgDq5QgC5ecHXign1bTx5ttc8yw7e0l5ZXvI5pDEN8UZtPwSq+EqK/yz4C3kMSaIFKtYqiXDYZCD37ENxHFd0jmm0SD1YrqHVrgWhvwreEauhbeUdC/XVvFs0YTZKiGi/LtnT8XPmqlOFXF5uC5L9qVqQrGCLfBkmyOsKiDfDxHB8xFwwX+yU1bSNK9OlwHvx8P9aZJ5V5aJ8KBRWo4aDlrOEUftp8Sqa/TgCjQePCG/TKfkdg3He/BFH7hScSJVH+Wzhiq2O4+Tyhn/YCnger1Y95MW6/JYJgvlqfSWp5qY0Vy1NZY/hJE4r56KNGSa2rKNK/K2y0jRpBp7rNJteR8sr61xk8QK1esVhUedYtvUq5T1jIlg78iKCTESrXL0uzf3tssRy4+ZizZkgz9vwzjbxAtTaDEOHHbpFqZleycTAClTehjhP8XHkpgDToFPRvoOXkZJ3bnU=
 matrix:
   allow_failures:
-    - rust: 1.3.0
-    - rust: stable
-    - rust: beta
-
+  - rust: 1.3.0
+  - rust: stable
+  - rust: beta
 script:
-  - cargo build --verbose
-  - cargo test
-
+- cargo build --verbose
+- cargo test
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  cargo doc &&
+  echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html &&
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
 addons:
   apt:
     packages:
-      - gcc-multilib
+    - gcc-multilib

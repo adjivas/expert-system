@@ -7,7 +7,11 @@
 
 mod exp;
 mod axiom;
+mod set;
+mod axioms;
 pub mod ops;
 
 pub use exp::Exp;
 pub use axiom::Axiom;
+pub use axioms::Axioms;
+pub use set::Set;

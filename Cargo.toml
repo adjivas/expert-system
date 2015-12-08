@@ -10,7 +10,3 @@ repository = "https://github.com/adjivas/expert-system"
 readme = "README.md"
 keywords = ["expert-system"]
 license = "GPL-3.0"
-
-[features]
-verbose = []
-and = []

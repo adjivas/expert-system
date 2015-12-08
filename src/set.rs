@@ -5,16 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate expert_sys;
+/// The `Set` Trait is all the axiomatic collection.
 
-use expert_sys::Axiom;
-use expert_sys::Axioms;
-use expert_sys::Set;
-use expert_sys::ops::Unary;
-use expert_sys::ops::Binary;
-
-fn main () {
-    let alphabet = Axioms::new();
-
-    println!("{}", alphabet.0);
+pub trait Set {
+    fn new() -> Self;
 }
