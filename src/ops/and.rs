@@ -7,126 +7,74 @@
 
 extern crate std;
 
-use axiom::Axiom;
+use exp::Exp;
 
 /// The `And` structure is a binary And.
 
-pub struct And <A, B>  {
-    infer: A, // dependencies.
-    other: B, // other dependencies.
+pub struct And<'a, 'b, 'c> {
+    left: *mut Exp<'a>, // left dependency.
+    right: *mut Exp<'b>, // right dependency.
+    imply: Option<*mut Exp<'c>>, // implication.
 }
 
-impl <A, B> And <A, B> {
+impl <'a, 'b, 'c> And<'a, 'b, 'c> {
 
-    /// The `new` constructor function returns a default false And.
+    /// The `new` constructor function returns And opperation.
 
-    pub fn new (infer: A, other: B) -> Self {
+    pub fn new (
+        left: *mut Exp<'a>,
+        right: *mut Exp<'b>,
+    ) -> Self {
         And {
-            infer: infer,
-            other: other,
+            left: left,
+            right: right,
+            imply: None,
         }
     }
 }
 
-impl <'a, 'b> And <*mut Axiom<'a>, *mut Axiom<'b>> {
+impl <'a, 'b, 'c, 'd> Exp<'d> for And<'a, 'b, 'c> {
 
-    /// The `get_value` function returns the value.
+    /// The `get_value` function returns the result.
 
-    pub fn get_value (&self) -> bool {
-        *unsafe { &**self.infer } &&
-        *unsafe { &**self.other }
+    fn get_value (&'d self) -> bool {
+        match self.imply {
+            Some(imply) => unsafe { &*imply }.get_value(),
+            None => {
+                unsafe { &*self.left }.get_value() &&
+                unsafe { &*self.right }.get_value()
+            },
+        }
     }
 
-    /// The `get_exprt` function returns the two arithmetic expression.
+    /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_exprt (&self) -> (&char, &char) {
-        (
-            unsafe { &*self.infer }.get_exprt(),
-            unsafe { &*self.other }.get_exprt()
+    fn get_ident (&'d self) -> String {
+        match self.imply {
+            Some(imply) => format! ("({}+{}=>{})",
+                &unsafe { &*self.left }.get_ident(),
+                &unsafe { &*self.right }.get_ident(),
+                &unsafe { &*imply }.get_ident(),
+            ),
+            None => format! ("({}+{})",
+                &unsafe { &*self.left }.get_ident(),
+                &unsafe { &*self.right }.get_ident(),
+            ),
+        }
+    }
+}
+
+impl <'a, 'b, 'c> std::fmt::Display for And<'a, 'b, 'c> {
+
+    /// The `fmt` function prints the And Door.
+
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write! (f, "{}=>{}",
+            self.get_ident(),
+            self.get_value()
         )
     }
-
-    /// The `get_infer` function returns the two axiom.
-
-    fn get_infer (&self) -> (&Axiom<'a>, &Axiom<'b>) {
-        (
-            unsafe { &*self.infer },
-            unsafe { &*self.other }
-        )
-    }
-}
-
-impl <'a, 'b> std::fmt::Display for And<*mut Axiom<'a>, *mut Axiom<'b>> {
-
-    /// The `fmt` function prints the And.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_exprt();
-
-        write!(f, "({}+{}) => {}", infer, other, self.get_value())
-	}
-}
-
-impl <'a, 'b> std::fmt::Debug for And<*mut Axiom<'a>, *mut Axiom<'b>> {
-
-    /// The `fmt` function prints the And.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_infer();
-
-        write!(f, "(({:?})+({:?})) => {:?}", infer, other, self.get_value())
-	}
-}
-
-impl <'a1, 'a2, 'b1, 'b2> And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
-
-    /// The `get_value` function returns the value.
-
-    pub fn get_value (&self) -> bool {
-        unsafe { &*self.infer }.get_value() &&
-        unsafe { &*self.other }.get_value()
-    }
-
-    /// The `get_infer` function returns the two axiom.
-
-    fn get_infer (&self) -> (&And<*mut Axiom<'a1>, *mut Axiom<'a2>>, &And<*mut Axiom<'b1>, *mut Axiom<'b2>>) {
-        (
-            unsafe { &*self.infer },
-            unsafe { &*self.other }
-        )
-    }
-}
-
-impl <'a1, 'a2, 'b1, 'b2> std::fmt::Display for And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
-
-    /// The `fmt` function prints the And.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_infer();
-
-        write!(f, "(({})+({})) => {}", infer, other, self.get_value())
-	}
-}
-
-impl <'a1, 'a2, 'b1, 'b2> std::fmt::Debug for And<*const And<*mut Axiom<'a1>, *mut Axiom<'a2>>, *const And<*mut Axiom<'b1>, *mut Axiom<'b2>>> {
-
-    /// The `fmt` function prints the And.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        let (infer, other) = self.get_infer();
-
-        write!(f, "(({:?})+({:?})) => {:?}", infer, other, self.get_value())
-	}
 }

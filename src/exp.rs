@@ -5,9 +5,12 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-mod exp;
-mod axiom;
-pub mod ops;
+extern crate std;
 
-pub use exp::Exp;
-pub use axiom::Axiom;
+/// The `Exp` Trait is a expression implemented.
+/// for: axiom, not, and, or, xor.
+
+pub trait Exp <'a> {
+    fn get_value(&'a self) -> bool;
+    fn get_ident(&'a self) -> String;
+}

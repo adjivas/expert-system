@@ -7,54 +7,32 @@
 
 extern crate std;
 
-/// The `Axiom` structure is a binary axiom.
+use exp::Exp;
+
+/// The `Axiom` structure is a primitive.
 
 pub struct Axiom<'a> {
-    exprt: char, // logical expression.
+    ident: char, // logical expression.
     value: bool, // result.
-    imply: Option<*mut Axiom<'a>>, // dependencies.
+    imply: Option<*mut Axiom<'a>>, // implication.
 }
 
 impl <'a> Axiom<'a> {
 
     /// The `new` constructor function returns a default false axiom.
 
-    pub fn new (exprt: char) -> Self {
+    pub fn new (ident: char) -> Self {
         Axiom {
-            exprt: exprt,
+            ident: ident,
             value: false,
             imply: None,
         }
     }
 
-    /// The `new_imply` constructor function returns a default false axiom with dependencies.
+    /// The `set_imply` function changes the axiom implication.
 
-    pub fn new_imply (exprt: char, imply: *mut Axiom<'a>) -> Self {
-        Axiom {
-            exprt: exprt,
-            value: false,
-            imply: Some(imply),
-        }
-    }
-
-    pub fn new_axiom (fact: Axiom<'a>) -> Self {
-        Axiom {
-            exprt: fact.exprt,
-            value: fact.value,
-            imply: fact.imply,
-        }
-    }
-
-    pub fn new_axiom_imply (fact: Axiom<'a>, imply: *mut Axiom<'a>) -> Self {
-        Axiom {
-            exprt: fact.exprt,
-            value: fact.value,
-            imply: Some(imply),
-        }
-    }
-
-    pub fn get_exprt (&self) -> &char {
-        &self.exprt
+    pub fn set_imply<'b> (&'b mut self, imply: *mut Axiom<'a>) {
+        self.imply = Some(imply);
     }
 }
 
@@ -85,7 +63,7 @@ impl <'a> PartialEq for Axiom<'a> {
     /// The `eq` function returns a boolean for our axiom equal another axiom.
 
     fn eq(&self, other: &Axiom<'a>) -> bool {
-        self.exprt == other.exprt &&
+        self.ident == other.ident &&
         self.value == other.value &&
         match (self.imply, other.imply) {
             (Some(imply), Some(other)) if unsafe { *imply == *other } => true,
@@ -95,112 +73,65 @@ impl <'a> PartialEq for Axiom<'a> {
     }
 }
 
-/*
-impl <'a> std::ops::Add for Axiom<'a> {
-    type Output = Axiom<'a>;
-
-    /// The `add` function returns axiom AND axiom.
-
-    #[cfg(not(feature = "and"))]
-    fn add(self, other: Axiom) -> Axiom {
-        Axiom {
-            exprt: "(".to_string() + &self.exprt + &other.exprt + ")",
-            value: self.value && other.value,
-            imply: None,
-        }
-    }
-
-    #[cfg(feature = "and")]
-    fn add(self, other: Axiom) -> Axiom {
-        Axiom {
-            exprt: "(".to_string() + &self.exprt + "+" + &other.exprt + ")",
-            value: self.value && other.value,
-            imply: None,
-        }
-    }
-}
-
-impl <'a> std::ops::BitOr for Axiom<'a> {
-    type Output = Axiom<'a>;
-
-    /// The `bitor` function returns axiom OR axiom.
-
-    fn bitor(self, other: Axiom) -> Axiom {
-        Axiom {
-            exprt: "(".to_string() + &self.exprt + "|" + &other.exprt + ")",
-            value: self.value || other.value,
-            imply: None,
-        }
-    }
-}
-
-impl <'a> std::ops::BitXor for Axiom<'a> {
-    type Output = Axiom<'a>;
-
-    /// The `bitxor` function returns axiom XOR axiom.
-
-    fn bitxor(self, other: Axiom) -> Axiom {
-        Axiom {
-            exprt: "(".to_string() + &self.exprt + "^" + &other.exprt + ")",
-            value: self.value ^ other.value,
-            imply: None,
-        }
-    }
-}
-
-impl <'a> std::ops::Not for Axiom<'a> {
-    type Output = Axiom<'a>;
-
-    /// The `not` function returns not axiom.
-
-    fn not(self) -> Axiom <'a> {
-        Axiom {
-            exprt: "!".to_string() + &self.exprt,
-            value: !self.value,
-            imply: None,
-        }
-    }
-}
-*/
-impl <'a> std::fmt::Display for Axiom<'a> {
-
-    /// The `fmt` function prints the axiom.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        match self.imply {
-            Some(_) => write!(f, "{} => {}, c => ... => {}", self.exprt, self.value, **self),
-            None => write!(f, "{} => {}", self.exprt, self.value),
-        }
-	}
-}
-
-impl <'a> std::fmt::Debug for Axiom<'a> {
-
-    /// The `fmt` function prints the axiom.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        match self.imply {
-            Some(imply) => write!(f, "{} => {:?}", self.exprt, unsafe { &*imply }),
-            None => write!(f, "{} => {}", self.exprt, self.value),
-        }
-	}
-}
-
 impl <'a> Default for Axiom<'a> {
 
     /// The `default` constructor function returns a false axiom.
 
-    fn default() -> Self {
+    fn default () -> Self {
         Axiom {
-            exprt: '_',
+            ident: '_',
             value: false,
             imply: None,
         }
+    }
+}
+
+impl <'a, 'b> Exp<'b> for Axiom<'a> {
+
+    /// The `get_value` function returns the result.
+
+    fn get_value (&'b self) -> bool {
+        match self.imply {
+            Some(imply) => unsafe { &*imply }.get_value(),
+            None => self.value,
+        }
+    }
+
+    /// The `get_ident` function returns the arithmetic formule.
+
+    fn get_ident (&'b self) -> String {
+        match self.imply {
+            Some(imply) => format! ("({}=>{})",
+                self.ident,
+                &unsafe { &*imply }.get_ident(),
+            ),
+            None => format! ("{}",
+                self.ident,
+            ),
+        }
+    }
+}
+
+impl <'a> std::fmt::Display for &'a Axiom<'a> {
+
+    /// The `fmt` function prints the Axiom.
+
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write!(f, "{}=>{}", self.get_ident(), self.get_value())
+    }
+}
+
+impl <'a> std::fmt::Debug for &'a Axiom<'a> {
+
+    /// The `fmt` function prints the Axiom.
+
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write!(f, "{:?}=>{:?}", self.get_ident(), self.get_value())
     }
 }

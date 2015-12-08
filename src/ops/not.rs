@@ -7,111 +7,54 @@
 
 extern crate std;
 
-use axiom::Axiom;
+use exp::Exp;
 
 /// The `Not` structure is a binary Not.
 
-pub struct Not <T>  {
-    infer: T, // dependencies.
+pub struct Not<'a, 'b>  {
+    infer: *mut Exp<'a>, // infer dependencies.
+    imply: Option<*mut Exp<'b>>, // implication.
 }
 
-impl <T> Not <T> {
+impl <'a, 'b> Not<'a, 'b> {
 
-    /// The `new` constructor function returns a default false Not.
+    /// The `new` constructor function returns Not opperation.
 
-    pub fn new (infer: T) -> Self {
+    pub fn new (infer: *mut Exp<'a>) -> Self {
         Not {
             infer: infer,
+            imply: None,
         }
     }
 }
 
-impl <'a> Not <*mut Axiom<'a>> {
+impl <'a, 'b> Exp <'a> for Not<'a, 'b> {
 
-    /// The `get_value` function returns the value.
+    /// The `get_value` function returns the result.
 
-    pub fn get_value (&self) -> bool {
-        !unsafe { **self.infer }
+    fn get_value (&'a self) -> bool {
+        match self.imply {
+            Some(imply) => unsafe { &*imply }.get_value(),
+            None => !unsafe { &*self.infer }.get_value(),
+        }
     }
 
-    /// The `get_exprt` function returns the arithmetic expression.
+    /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_exprt (&self) -> &char {
-        unsafe { &*self.infer }.get_exprt()
-    }
-
-    /// The `get_infer` function returns the axiom.
-
-    fn get_infer (&self) -> &Axiom<'a> {
-        unsafe { &*self.infer }
+    fn get_ident (&'a self) -> String {
+        "!".to_string() +
+        &unsafe { &*self.infer }.get_ident()
     }
 }
 
-impl <'a> std::fmt::Display for Not<*mut Axiom<'a>> {
+impl <'a, 'b> std::fmt::Display for &'a Not<'a, 'b> {
 
     /// The `fmt` function prints the Not.
 
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        write!(f, "!{} => {}", self.get_exprt(), self.get_value())
-	}
-}
-
-impl <'a> std::fmt::Debug for Not<*mut Axiom<'a>> {
-
-    /// The `fmt` function prints the Not.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        write!(f, "!({:?}) => {}", self.get_infer(), self.get_value())
-	}
-}
-
-impl <'a> Not<*const Not<*mut Axiom<'a>>> {
-
-    /// The `get_value` function returns the value.
-
-    pub fn get_value (&self) -> bool {
-        !unsafe { &*self.infer }.get_value()
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write!(f, "{}=>{}", self.get_ident(), self.get_value())
     }
-
-    /// The `get_exprt` function returns the arithmetic expression.
-
-    fn get_exprt (&self) -> &char {
-        unsafe { &*self.infer }.get_exprt()
-    }
-
-    /// The `get_infer` function returns the axiom.
-
-    fn get_infer (&self) -> &Not<*mut Axiom<'a>> {
-        unsafe { &*self.infer }
-    }
-}
-
-impl <'a> std::fmt::Display for Not<*const Not<*mut Axiom<'a>>> {
-
-    /// The `fmt` function prints the Not.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        write!(f, "!{} => {}", self.get_exprt(), self.get_value())
-	}
-}
-
-impl <'a> std::fmt::Debug for Not<*const Not<*mut Axiom<'a>>> {
-
-    /// The `fmt` function prints the Not.
-
-	fn fmt (
-	    &self,
-	    f: &mut std::fmt::Formatter,
-	) -> Result<(), std::fmt::Error> {
-        write!(f, "!({:?}) => {:?}", *self.get_infer(), self.get_value())
-	}
 }

@@ -5,9 +5,13 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-mod exp;
-mod axiom;
-pub mod ops;
+extern crate expert_sys;
 
-pub use exp::Exp;
-pub use axiom::Axiom;
+#[allow(unused_variables)]
+fn main () {
+    let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
+    let not_a = expert_sys::ops::Not::new (
+        &mut a as *mut expert_sys::Axiom,
+    );
+    //println!("{}", not_a);
+}
