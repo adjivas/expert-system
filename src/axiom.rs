@@ -36,6 +36,45 @@ impl <'a> Axiom<'a> {
     }
 }
 
+impl <'a> Exp<'a> for Axiom<'a> {
+
+    /// The `get_value` function returns the result.
+
+    fn get_value (&self) -> bool {
+        match self.imply {
+            Some(imply) => unsafe { &*imply }.get_value(),
+            None => self.value,
+        }
+    }
+
+    /// The `get_ident` function returns the arithmetic formule.
+
+    fn get_ident (&self) -> String {
+        match self.imply {
+            Some(imply) => format! ("({}=>{})",
+                self.ident,
+                &unsafe { &*imply }.get_ident(),
+            ),
+            None => format! ("{}",
+                self.ident,
+            ),
+        }
+    }
+}
+
+impl <'a> Default for Axiom<'a> {
+
+    /// The `default` constructor function returns a false axiom.
+
+    fn default () -> Self {
+        Axiom {
+            ident: '_',
+            value: false,
+            imply: None,
+        }
+    }
+}
+
 impl <'a> std::ops::Deref for Axiom<'a> {
     type Target = bool;
 
@@ -73,46 +112,7 @@ impl <'a> PartialEq for Axiom<'a> {
     }
 }
 
-impl <'a> Default for Axiom<'a> {
-
-    /// The `default` constructor function returns a false axiom.
-
-    fn default () -> Self {
-        Axiom {
-            ident: '_',
-            value: false,
-            imply: None,
-        }
-    }
-}
-
-impl <'a, 'b> Exp<'b> for Axiom<'a> {
-
-    /// The `get_value` function returns the result.
-
-    fn get_value (&'b self) -> bool {
-        match self.imply {
-            Some(imply) => unsafe { &*imply }.get_value(),
-            None => self.value,
-        }
-    }
-
-    /// The `get_ident` function returns the arithmetic formule.
-
-    fn get_ident (&'b self) -> String {
-        match self.imply {
-            Some(imply) => format! ("({}=>{})",
-                self.ident,
-                &unsafe { &*imply }.get_ident(),
-            ),
-            None => format! ("{}",
-                self.ident,
-            ),
-        }
-    }
-}
-
-impl <'a> std::fmt::Display for &'a Axiom<'a> {
+impl <'a> std::fmt::Display for Axiom<'a> {
 
     /// The `fmt` function prints the Axiom.
 
@@ -124,7 +124,7 @@ impl <'a> std::fmt::Display for &'a Axiom<'a> {
     }
 }
 
-impl <'a> std::fmt::Debug for &'a Axiom<'a> {
+impl <'a> std::fmt::Debug for Axiom<'a> {
 
     /// The `fmt` function prints the Axiom.
 

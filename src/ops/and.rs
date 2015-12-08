@@ -33,11 +33,11 @@ impl <'a, 'b, 'c> And<'a, 'b, 'c> {
     }
 }
 
-impl <'a, 'b, 'c, 'd> Exp<'d> for And<'a, 'b, 'c> {
+impl <'a, 'b, 'c> Exp<'c> for And<'a, 'b, 'c> {
 
     /// The `get_value` function returns the result.
 
-    fn get_value (&'d self) -> bool {
+    fn get_value (&self) -> bool {
         match self.imply {
             Some(imply) => unsafe { &*imply }.get_value(),
             None => {
@@ -49,7 +49,7 @@ impl <'a, 'b, 'c, 'd> Exp<'d> for And<'a, 'b, 'c> {
 
     /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_ident (&'d self) -> String {
+    fn get_ident (&self) -> String {
         match self.imply {
             Some(imply) => format! ("({}+{}=>{})",
                 &unsafe { &*self.left }.get_ident(),
@@ -73,6 +73,21 @@ impl <'a, 'b, 'c> std::fmt::Display for And<'a, 'b, 'c> {
         f: &mut std::fmt::Formatter,
     ) -> Result<(), std::fmt::Error> {
         write! (f, "{}=>{}",
+            self.get_ident(),
+            self.get_value()
+        )
+    }
+}
+
+impl <'a, 'b, 'c> std::fmt::Debug for And<'a, 'b, 'c> {
+
+    /// The `fmt` function prints the And Door.
+
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write! (f, "{:?}=>{:?}",
             self.get_ident(),
             self.get_value()
         )

@@ -28,11 +28,11 @@ impl <'a, 'b> Not<'a, 'b> {
     }
 }
 
-impl <'a, 'b> Exp <'a> for Not<'a, 'b> {
+impl <'a, 'b, 'c> Exp <'c> for Not<'a, 'b> {
 
     /// The `get_value` function returns the result.
 
-    fn get_value (&'a self) -> bool {
+    fn get_value (&self) -> bool {
         match self.imply {
             Some(imply) => unsafe { &*imply }.get_value(),
             None => !unsafe { &*self.infer }.get_value(),
@@ -41,13 +41,13 @@ impl <'a, 'b> Exp <'a> for Not<'a, 'b> {
 
     /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_ident (&'a self) -> String {
+    fn get_ident (&self) -> String {
         "!".to_string() +
         &unsafe { &*self.infer }.get_ident()
     }
 }
 
-impl <'a, 'b> std::fmt::Display for &'a Not<'a, 'b> {
+impl <'a, 'b> std::fmt::Display for Not<'a, 'b> {
 
     /// The `fmt` function prints the Not.
 
@@ -56,5 +56,17 @@ impl <'a, 'b> std::fmt::Display for &'a Not<'a, 'b> {
         f: &mut std::fmt::Formatter,
     ) -> Result<(), std::fmt::Error> {
         write!(f, "{}=>{}", self.get_ident(), self.get_value())
+    }
+}
+
+impl <'a, 'b> std::fmt::Debug for Not<'a, 'b> {
+
+    /// The `fmt` function prints the Not.
+
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        write!(f, "{:?}=>{:?}", self.get_ident(), self.get_value())
     }
 }

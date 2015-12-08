@@ -6,3 +6,5 @@
 // except according to those terms.
 
 mod axiom;
+mod not;
+mod and;

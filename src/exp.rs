@@ -11,6 +11,6 @@ extern crate std;
 /// for: axiom, not, and, or, xor.
 
 pub trait Exp <'a> {
-    fn get_value(&'a self) -> bool;
-    fn get_ident(&'a self) -> String;
+    fn get_value(&self) -> bool;
+    fn get_ident(&self) -> String;
 }

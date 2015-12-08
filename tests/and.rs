@@ -7,11 +7,16 @@
 
 extern crate expert_sys;
 
-#[allow(unused_variables)]
-fn main () {
+#[test]
+fn test_value () {
     let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
-    let not_a = expert_sys::ops::Not::new (
+    let mut b: expert_sys::Axiom = expert_sys::Axiom::new('b');
+    /*let a_and_b: expert_sys::ops::And = expert_sys::ops::And::new (
         &mut a as *mut expert_sys::Axiom,
+        &mut b as *mut expert_sys::Axiom
     );
-    println!("{}", not_a);
+
+    a.set_imply(&mut b as *mut expert_sys::Axiom);
+    *b = true;
+    //assert_eq!(a_and_b.get_value(), true);*/
 }

@@ -8,15 +8,11 @@
 extern crate expert_sys;
 
 #[test]
-fn test_constructor () {
-    assert_eq!(expert_sys::Axiom::default(), expert_sys::Axiom::new('_'));
-}
-
-#[test]
 fn test_value () {
-    let mut a: expert_sys::Axiom = expert_sys::Axiom::default();
+    let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
+    let not_a: expert_sys::ops::Not = expert_sys::ops::Not::new (
+        &mut a as *mut expert_sys::Axiom
+    );
 
-    assert_eq!(*a, false);
-    *a = true;
-    assert_eq!(*a, true);
+    //assert_eq!(not_a.get_value(), true);
 }
