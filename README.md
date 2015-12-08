@@ -14,13 +14,32 @@ cargo build
 |__ Cargo.toml
 |__ LICENSE
 |__ README.md
-|__ tests
-|   |__ fact.rs
-|   \__ lib.rs
-\__ src
-    |__ fact.rs
+|__ examples
+│   |__ axiom.rs
+│   |__ and.rs
+│   |__ or.rs
+│   |__ xor.rs
+│   \__ not.rs
+|__ src
+│   |__ lib.rs
+│   |__ main.rs
+│   |__ exp.rs
+│   |__ axiom.rs
+│   \__ ops
+│       |__ unary.rs
+│       |__ and.rs
+│       |__ or.rs
+│       |__ xor.rs
+│       |__ binary.rs
+│       |__ not.rs
+│       \__ mod.rs
+\__ tests
     |__ lib.rs
-    \__ main.rs
+    |__ and.rs
+    |__ or.rs
+    |__ xor.rs
+    |__ not.rs
+    \__ axiom.rs
 ```
 
 #### License:
