@@ -7,6 +7,9 @@
 
 extern crate expert_sys;
 
+use expert_sys::Exp;
+use expert_sys::ops::Unary;
+
 #[test]
 fn test_value () {
     let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
@@ -14,5 +17,5 @@ fn test_value () {
         &mut a as *mut expert_sys::Axiom
     );
 
-    //assert_eq!(not_a.get_value(), true);
+    assert_eq!(not_a.get_value(), true);
 }

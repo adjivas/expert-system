@@ -5,6 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+extern crate expert_sys;
+
 mod axiom;
 mod not;
 mod and;

@@ -7,6 +7,7 @@
 
 extern crate std;
 
+use super::Unary;
 use exp::Exp;
 
 /// The `Not` structure is a binary Not.
@@ -16,15 +17,21 @@ pub struct Not<'a, 'b>  {
     imply: Option<*mut Exp<'b>>, // implication.
 }
 
-impl <'a, 'b> Not<'a, 'b> {
+impl <'a, 'b, 'c> Unary<'a, 'b, 'c> for Not<'a, 'b> {
 
     /// The `new` constructor function returns Not opperation.
 
-    pub fn new (infer: *mut Exp<'a>) -> Self {
+    fn new (infer: *mut Exp<'a>) -> Self {
         Not {
             infer: infer,
             imply: None,
         }
+    }
+
+    /// The `set_imply` function changes the And implication.
+
+    fn set_imply (&mut self, imply: *mut Exp<'b>) {
+        self.imply = Some(imply);
     }
 }
 
@@ -42,8 +49,15 @@ impl <'a, 'b, 'c> Exp <'c> for Not<'a, 'b> {
     /// The `get_ident` function returns the arithmetic formule.
 
     fn get_ident (&self) -> String {
-        "!".to_string() +
-        &unsafe { &*self.infer }.get_ident()
+        match self.imply {
+            Some(imply) => format! ("(!{}=>{})",
+                &unsafe { &*self.infer }.get_ident(),
+                &unsafe { &*imply }.get_ident(),
+            ),
+            None => format! ("!{}",
+                &unsafe { &*self.infer }.get_ident(),
+            ),
+        }
     }
 }
 

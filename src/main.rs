@@ -7,6 +7,9 @@
 
 extern crate expert_sys;
 
+use expert_sys::ops::Unary;
+use expert_sys::ops::Binary;
+
 fn main () {
     let mut b: expert_sys::Axiom = expert_sys::Axiom::new('b');
     let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');

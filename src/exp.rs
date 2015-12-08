@@ -5,10 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate std;
-
 /// The `Exp` Trait is a expression implemented.
-/// for: axiom, not, and, or, xor.
+/// for the axiom Structure, Unary and Binary Traits.
 
 pub trait Exp <'a> {
     fn get_value(&self) -> bool;

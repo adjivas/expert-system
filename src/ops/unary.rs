@@ -5,15 +5,12 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate expert_sys;
+/// The `Unary` Trait is a expression implemented.
+/// for: not.
 
-use expert_sys::Exp;
+use exp::Exp;
 
-fn main () {
-    let mut a = expert_sys::Axiom::new('a');
-    let mut b = expert_sys::Axiom::new('b');
-
-    a.set_imply(&mut b);
-    *b = true;
-    println!("{} {}", a, a.get_value());
+pub trait Unary<'a, 'b, 'c> : Exp<'c> {
+    fn new (infer: *mut Exp<'a>) -> Self;
+    fn set_imply (&mut self, imply: *mut Exp<'b>);
 }

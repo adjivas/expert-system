@@ -7,7 +7,8 @@
 
 extern crate std;
 
-use exp::Exp;
+use super::Binary;
+use Exp;
 
 /// The `And` structure is a binary And.
 
@@ -17,19 +18,22 @@ pub struct And<'a, 'b, 'c> {
     imply: Option<*mut Exp<'c>>, // implication.
 }
 
-impl <'a, 'b, 'c> And<'a, 'b, 'c> {
+impl <'a, 'b, 'c> Binary<'a, 'b, 'c> for And<'a, 'b, 'c> {
 
     /// The `new` constructor function returns And opperation.
 
-    pub fn new (
-        left: *mut Exp<'a>,
-        right: *mut Exp<'b>,
-    ) -> Self {
+    fn new (left: *mut Exp<'a>, right: *mut Exp<'b>) -> Self {
         And {
             left: left,
             right: right,
             imply: None,
         }
+    }
+
+    /// The `set_imply` function changes the And implication.
+
+    fn set_imply<'e> (&'e mut self, imply: *mut Exp<'c>) {
+        self.imply = Some(imply);
     }
 }
 
