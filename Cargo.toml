@@ -10,3 +10,7 @@ repository = "https://github.com/adjivas/expert-system"
 readme = "README.md"
 keywords = ["expert-system"]
 license = "GPL-3.0"
+
+[[bin]]
+name = "expert_sys"
+doc = false
