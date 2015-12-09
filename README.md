@@ -15,16 +15,18 @@ cargo build
 |__ LICENSE
 |__ README.md
 |__ examples
-│   |__ axiom.rs
 │   |__ and.rs
 │   |__ or.rs
 │   |__ xor.rs
-│   \__ not.rs
+│   |__ not.rs
+│   \__ axiom.rs
 |__ src
 │   |__ lib.rs
 │   |__ main.rs
 │   |__ exp.rs
 │   |__ axiom.rs
+│   |__ set.rs
+│   |__ axioms.rs
 │   \__ ops
 │       |__ unary.rs
 │       |__ and.rs
@@ -46,7 +48,7 @@ cargo build
 *expert-system*'s code in this repo uses the [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) [license][license].
 
 [docs-badge]: https://img.shields.io/badge/API-docs-blue.svg?style=flat-square
-[docs]: http://adjivas.github.io/expert-system/expert-system
+[docs]: http://adjivas.github.io/expert-system/expert_sys
 [license-badge]: http://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square
 [license]: https://github.com/adjivas/expert-system/blob/master/LICENSE
 [travis-badge]: https://travis-ci.org/adjivas/expert-system.svg?style=flat-square
