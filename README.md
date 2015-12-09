@@ -1,6 +1,6 @@
 # Expert-System
 
-[![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis] [![circle-badge][]][circle]
+[![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis]
 
 #### How to build:
 ```shell
@@ -54,4 +54,3 @@ cargo build
 [travis-badge]: https://travis-ci.org/adjivas/expert-system.svg?style=flat-square
 [travis]: https://travis-ci.org/adjivas/expert-system
 [circle-badge]: https://circleci.com/gh/adjivas/expert-system/tree/master.svg?style=svg
-[circle]: https://circleci.com/gh/adjivas/expert-system/tree/master
