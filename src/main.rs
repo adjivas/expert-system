@@ -7,14 +7,16 @@
 
 extern crate expert_sys;
 
-use expert_sys::Axiom;
 use expert_sys::Axioms;
 use expert_sys::Set;
 use expert_sys::ops::Unary;
 use expert_sys::ops::Binary;
 
 fn main () {
-    let alphabet = Axioms::new();
-
-    println!("{}", alphabet.0);
+    let mut alphabet = Axioms::new();
+    let a_and_b = expert_sys::ops::And::new (
+        &mut alphabet.0,
+        &mut alphabet.1
+    );
+    println!("{}", a_and_b);
 }
