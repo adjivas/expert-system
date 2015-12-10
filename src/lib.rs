@@ -8,10 +8,11 @@
 mod exp;
 mod axiom;
 mod set;
-mod axioms;
+mod solver;
+pub mod command;
 pub mod ops;
 
 pub use exp::Exp;
-pub use axiom::Axiom;
-pub use axioms::Axioms;
 pub use set::Set;
+pub use axiom::Axiom;
+pub use solver::Branch;
