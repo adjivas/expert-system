@@ -12,5 +12,4 @@ use exp::Exp;
 
 pub trait Binary<'a, 'b, 'c> : Exp<'c> {
     fn new (left: *mut Exp<'a>, right: *mut Exp<'b>) -> Self;
-    fn set_imply<'d>(&'d mut self, imply: *mut Exp<'c>);
 }

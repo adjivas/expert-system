@@ -29,15 +29,15 @@ impl <'a, 'b, 'c> Binary<'a, 'b, 'c> for And<'a, 'b, 'c> {
             imply: None,
         }
     }
-
-    /// The `set_imply` function changes the And implication.
-
-    fn set_imply<'e> (&'e mut self, imply: *mut Exp<'c>) {
-        self.imply = Some(imply);
-    }
 }
 
 impl <'a, 'b, 'c> Exp<'c> for And<'a, 'b, 'c> {
+
+    /// The `set_imply` function changes the And implication.
+
+    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'c>) {
+        self.imply = Some(imply);
+    }
 
     /// The `get_value` function returns the result.
 

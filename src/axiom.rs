@@ -38,6 +38,12 @@ impl <'a> Axiom<'a> {
 
 impl <'a> Exp<'a> for Axiom<'a> {
 
+    /// The `set_imply` function changes the axiom implication.
+
+    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'a>) {
+        self.set_imply(imply as *mut Axiom);
+    }
+
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> bool {

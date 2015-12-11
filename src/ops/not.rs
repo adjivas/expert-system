@@ -17,7 +17,7 @@ pub struct Not<'a, 'b>  {
     imply: Option<*mut Exp<'b>>, // implication.
 }
 
-impl <'a, 'b, 'c> Unary<'a, 'b, 'c> for Not<'a, 'b> {
+impl <'a, 'b> Unary<'a, 'b> for Not<'a, 'b> {
 
     /// The `new` constructor function returns Not opperation.
 
@@ -27,15 +27,15 @@ impl <'a, 'b, 'c> Unary<'a, 'b, 'c> for Not<'a, 'b> {
             imply: None,
         }
     }
+}
+
+impl <'a, 'b, 'c> Exp <'b> for Not<'a, 'b> {
 
     /// The `set_imply` function changes the And implication.
 
-    fn set_imply (&mut self, imply: *mut Exp<'b>) {
+    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'b>) {
         self.imply = Some(imply);
     }
-}
-
-impl <'a, 'b, 'c> Exp <'c> for Not<'a, 'b> {
 
     /// The `get_value` function returns the result.
 

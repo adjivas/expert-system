@@ -15,4 +15,4 @@ pub mod ops;
 pub use exp::Exp;
 pub use set::Set;
 pub use axiom::Axiom;
-pub use solver::Branch;
+pub use solver::Solver;

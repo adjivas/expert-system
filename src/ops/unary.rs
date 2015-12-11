@@ -10,7 +10,6 @@
 
 use exp::Exp;
 
-pub trait Unary<'a, 'b, 'c> : Exp<'c> {
+pub trait Unary<'a, 'b> : Exp<'b> {
     fn new (infer: *mut Exp<'a>) -> Self;
-    fn set_imply (&mut self, imply: *mut Exp<'b>);
 }

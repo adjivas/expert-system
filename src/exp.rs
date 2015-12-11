@@ -11,4 +11,5 @@
 pub trait Exp <'a> {
     fn get_value(&self) -> bool;
     fn get_ident(&self) -> String;
+    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'a>);
 }
