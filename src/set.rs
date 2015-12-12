@@ -9,34 +9,54 @@ extern crate std;
 
 use axiom::Axiom;
 
-/// The `Set` type is the collection of all Set.
-
-pub struct Set<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm,
-            'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y, 'z> {
-    pub a: Axiom<'a>, pub b: Axiom<'b>, pub c: Axiom<'c>, pub d: Axiom<'d>, pub e: Axiom<'e>,
-    pub f: Axiom<'f>, pub g: Axiom<'g>, pub h: Axiom<'h>, pub i: Axiom<'i>, pub j: Axiom<'j>,
-    pub k: Axiom<'k>, pub l: Axiom<'l>, pub m: Axiom<'m>, pub n: Axiom<'n>, pub o: Axiom<'o>,
-    pub p: Axiom<'p>, pub q: Axiom<'q>, pub r: Axiom<'r>, pub s: Axiom<'s>, pub t: Axiom<'t>,
-    pub u: Axiom<'u>, pub v: Axiom<'v>, pub w: Axiom<'w>, pub x: Axiom<'x>, pub y: Axiom<'y>,
-    pub z: Axiom<'z>
+pub struct Set <'a> {
+    axioms: [Axiom<'a>; 26],
 }
 
-impl <'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h,
-      'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y, 'z> Default for Set
-     <'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h,
-      'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y, 'z> {
+impl <'a> std::ops::Index<char> for Set<'a> {
+    type Output = Axiom<'a>;
+
+    /// The `index` function returns the axiom from set.
+
+    fn index (&self, index: char) -> &Axiom<'a> {
+        match {index as usize} {
+            i @ 65...90 => &self.axioms[i - 65],
+            i @ 97...122 => &self.axioms[i - 97],
+            _ => unimplemented!(),
+        }
+    }
+}
+
+impl <'a> std::ops::IndexMut<char> for Set<'a> {
+
+    /// The `index_mut` function returns a mutable axiom from set.
+
+    fn index_mut (&mut self, index: char) -> &mut Axiom<'a> {
+        match {index as usize} {
+            i @ 65...90 => &mut self.axioms[i - 65],
+            i @ 97...122 => &mut self.axioms[i - 97],
+            _ => unimplemented!(),
+        }
+    }
+}
+
+impl <'a> Default for Set <'a> {
 
     /// The `default` constructor function returns the axiom set.
 
     fn default () -> Self {
         Set {
-            a: Axiom::new('a'), b: Axiom::new('b'), c: Axiom::new('c'), d: Axiom::new('d'),
-            e: Axiom::new('e'), f: Axiom::new('f'), g: Axiom::new('g'), h: Axiom::new('h'),
-            i: Axiom::new('i'), j: Axiom::new('j'), k: Axiom::new('k'), l: Axiom::new('l'),
-            m: Axiom::new('m'), n: Axiom::new('n'), o: Axiom::new('o'), p: Axiom::new('p'),
-            q: Axiom::new('q'), r: Axiom::new('r'), s: Axiom::new('s'), t: Axiom::new('t'),
-            u: Axiom::new('u'), v: Axiom::new('v'), w: Axiom::new('w'), x: Axiom::new('x'),
-            y: Axiom::new('y'), z: Axiom::new('z')
+            axioms: [
+                Axiom::new('a'), Axiom::new('b'), Axiom::new('c'),
+                Axiom::new('d'), Axiom::new('e'), Axiom::new('f'),
+                Axiom::new('g'), Axiom::new('h'), Axiom::new('i'),
+                Axiom::new('j'), Axiom::new('k'), Axiom::new('l'),
+                Axiom::new('m'), Axiom::new('n'), Axiom::new('o'),
+                Axiom::new('p'), Axiom::new('q'), Axiom::new('r'),
+                Axiom::new('s'), Axiom::new('t'), Axiom::new('u'),
+                Axiom::new('v'), Axiom::new('w'), Axiom::new('x'),
+                Axiom::new('y'), Axiom::new('z')
+            ]
         }
     }
 }

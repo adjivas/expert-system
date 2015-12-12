@@ -11,40 +11,14 @@ use expert_sys::Set;
 
 fn main () {
     let mut axioms: expert_sys::Set = Set::default();
-    let mut solver = expert_sys::Solver::new (
-        &mut axioms.a,
-        &mut axioms.b,
-        &mut axioms.c,
-        &mut axioms.d,
-        &mut axioms.e,
-        &mut axioms.f,
-        &mut axioms.g,
-        &mut axioms.h,
-        &mut axioms.i,
-        &mut axioms.j,
-        &mut axioms.k,
-        &mut axioms.l,
-        &mut axioms.m,
-        &mut axioms.n,
-        &mut axioms.o,
-        &mut axioms.p,
-        &mut axioms.q,
-        &mut axioms.r,
-        &mut axioms.s,
-        &mut axioms.t,
-        &mut axioms.u,
-        &mut axioms.v,
-        &mut axioms.w,
-        &mut axioms.x,
-        &mut axioms.y,
-        &mut axioms.z,
+    let mut solver = expert_sys::Solver::new (&mut axioms);
+    /*
+    solver.set_imply (
+        &mut axioms['a'],
+        &mut axioms['b'],
     );
     solver.set_imply (
-        &mut axioms.a,
-        &mut axioms.b,
-    );
-    solver.set_imply (
-        &mut axioms.c,
-        &mut axioms.d,
-    );
+        &mut axioms['c'],
+        &mut axioms['d'],
+    );*/
 }

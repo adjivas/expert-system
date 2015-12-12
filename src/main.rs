@@ -14,12 +14,12 @@ use expert_sys::ops::Binary;
 fn main () {
     let mut axioms = Set::default();
     let a_and_b = expert_sys::ops::And::new (
-        &mut axioms.a,
-        &mut axioms.b,
+        &mut axioms['a'],
+        &mut axioms['b'],
     );
 
     expert_sys::command::escutcheon();
-    *axioms.a = true;
-    *axioms.b = true;
+    *axioms['a'] = true;
+    *axioms['b'] = true;
     println!("{}", a_and_b);
 }
