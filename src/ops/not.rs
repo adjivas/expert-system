@@ -12,37 +12,39 @@ use exp::Exp;
 
 /// The `Not` structure is a binary Not.
 
-pub struct Not<'a, 'b>  {
-    infer: *mut Exp<'a>, // infer dependencies.
-    imply: Option<*mut Exp<'b>>, // implication.
+pub struct Not {
+    infer: Box<Exp>, // infer dependencies.
+    imply: Option<Box<Exp>>, // implication.
 }
 
-impl <'a, 'b> Unary<'a, 'b> for Not<'a, 'b> {
+impl Unary for Not {
 
     /// The `new` constructor function returns Not opperation.
 
-    fn new (infer: *mut Exp<'a>) -> Self {
+    fn new (infer: *mut Exp) -> Self {
         Not {
-            infer: infer,
+            infer: unsafe { Box::from_raw(infer) },
             imply: None,
         }
     }
 }
 
-impl <'a, 'b, 'c> Exp <'b> for Not<'a, 'b> {
+impl Exp for Not {
 
     /// The `set_imply` function changes the And implication.
 
-    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'b>) {
-        self.imply = Some(imply);
+    fn set_imply (&mut self, imply: *mut Exp) {
+        self.imply = Some (
+            unsafe { Box::from_raw(imply) },
+        );
     }
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> bool {
         match self.imply {
-            Some(imply) => unsafe { &*imply }.get_value(),
-            None => !unsafe { &*self.infer }.get_value(),
+            Some(ref imply) => imply.get_value(),
+            None => !self.infer.get_value(),
         }
     }
 
@@ -50,18 +52,18 @@ impl <'a, 'b, 'c> Exp <'b> for Not<'a, 'b> {
 
     fn get_ident (&self) -> String {
         match self.imply {
-            Some(imply) => format! ("(!{}=>{})",
-                &unsafe { &*self.infer }.get_ident(),
-                &unsafe { &*imply }.get_ident(),
+            Some(ref imply) => format! ("(!{}=>{})",
+                self.infer.get_ident(),
+                imply.get_ident(),
             ),
             None => format! ("!{}",
-                &unsafe { &*self.infer }.get_ident(),
+                self.infer.get_ident(),
             ),
         }
     }
 }
 
-impl <'a, 'b> std::fmt::Display for Not<'a, 'b> {
+impl std::fmt::Display for Not {
 
     /// The `fmt` function prints the Not.
 
@@ -73,7 +75,7 @@ impl <'a, 'b> std::fmt::Display for Not<'a, 'b> {
     }
 }
 
-impl <'a, 'b> std::fmt::Debug for Not<'a, 'b> {
+impl std::fmt::Debug for Not {
 
     /// The `fmt` function prints the Not.
 

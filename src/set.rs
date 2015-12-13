@@ -9,16 +9,16 @@ extern crate std;
 
 use axiom::Axiom;
 
-pub struct Set <'a> {
-    axioms: [Axiom<'a>; 26],
+pub struct Set {
+    axioms: [Axiom; 26],
 }
 
-impl <'a> std::ops::Index<char> for Set<'a> {
-    type Output = Axiom<'a>;
+impl std::ops::Index<char> for Set {
+    type Output = Axiom;
 
     /// The `index` function returns the axiom from set.
 
-    fn index (&self, index: char) -> &Axiom<'a> {
+    fn index (&self, index: char) -> &Axiom {
         match {index as usize} {
             i @ 65...90 => &self.axioms[i - 65],
             i @ 97...122 => &self.axioms[i - 97],
@@ -27,11 +27,11 @@ impl <'a> std::ops::Index<char> for Set<'a> {
     }
 }
 
-impl <'a> std::ops::IndexMut<char> for Set<'a> {
+impl std::ops::IndexMut<char> for Set {
 
     /// The `index_mut` function returns a mutable axiom from set.
 
-    fn index_mut (&mut self, index: char) -> &mut Axiom<'a> {
+    fn index_mut (&mut self, index: char) -> &mut Axiom {
         match {index as usize} {
             i @ 65...90 => &mut self.axioms[i - 65],
             i @ 97...122 => &mut self.axioms[i - 97],
@@ -40,7 +40,7 @@ impl <'a> std::ops::IndexMut<char> for Set<'a> {
     }
 }
 
-impl <'a> Default for Set <'a> {
+impl Default for Set {
 
     /// The `default` constructor function returns the axiom set.
 

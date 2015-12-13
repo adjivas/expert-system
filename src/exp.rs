@@ -8,8 +8,8 @@
 /// The `Exp` Trait is a expression implemented.
 /// for the axiom Structure, Unary and Binary Traits.
 
-pub trait Exp <'a> {
-    fn get_value(&self) -> bool;
-    fn get_ident(&self) -> String;
-    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'a>);
+pub trait Exp {
+    fn get_value (&self) -> bool;
+    fn get_ident (&self) -> String;
+    fn set_imply (&mut self, imply: *mut Exp);
 }

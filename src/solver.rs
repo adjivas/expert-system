@@ -8,16 +8,16 @@
 use exp::Exp;
 use set::Set;
 
-pub struct Solver <'a> {
-    branchs: [*mut Exp<'a>; 26],
+pub struct Solver {
+    branchs: [Box<Exp>; 26],
 }
 
-impl <'a> Solver<'a> {
+impl Solver {
 
     /// The `new` constructor function returns a solvable table.
 
     pub fn new (
-        axioms: &mut Set<'a>,
+        axioms: &mut Set,
     ) /*-> Self*/ {
         /*Solver {
             branchs: [

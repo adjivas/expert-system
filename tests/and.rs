@@ -4,7 +4,7 @@
 //
 // This file may not be copied, modified, or distributed
 // except according to those terms.
-
+/*
 extern crate expert_sys;
 
 use expert_sys::Exp;
@@ -24,7 +24,6 @@ fn test_value () {
     *b = true;
     assert_eq!(a_and_b.get_value(), true);
 }
-
 /*
 B => A
 D + E => B
@@ -97,3 +96,4 @@ fn test_correction () {
     *o = true;
     *p = true;
 }
+*/

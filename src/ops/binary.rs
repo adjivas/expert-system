@@ -10,6 +10,6 @@
 
 use exp::Exp;
 
-pub trait Binary<'a, 'b, 'c> : Exp<'c> {
-    fn new (left: *mut Exp<'a>, right: *mut Exp<'b>) -> Self;
+pub trait Binary : Exp {
+    fn new (left: *mut Exp, right: *mut Exp) -> Self;
 }

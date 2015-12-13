@@ -11,13 +11,13 @@ use exp::Exp;
 
 /// The `Axiom` structure is a primitive.
 
-pub struct Axiom<'a> {
+pub struct Axiom {
     ident: char, // logical expression.
     value: bool, // result.
-    imply: Option<*mut Axiom<'a>>, // implication.
+    imply: Option<Box<Axiom>>, // implication.
 }
 
-impl <'a> Axiom<'a> {
+impl Axiom {
 
     /// The `new` constructor function returns a default false axiom.
 
@@ -31,24 +31,30 @@ impl <'a> Axiom<'a> {
 
     /// The `set_imply` function changes the axiom implication.
 
-    pub fn set_imply<'b> (&'b mut self, imply: *mut Axiom<'a>) {
-        self.imply = Some(imply);
+    pub fn set_imply (&mut self, imply: *mut Axiom) {
+        self.imply = Some (
+            unsafe {
+                Box::from_raw(imply)
+            }
+        );
     }
 }
 
-impl <'a> Exp<'a> for Axiom<'a> {
+impl Exp for Axiom {
 
     /// The `set_imply` function changes the axiom implication.
 
-    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'a>) {
-        self.set_imply(imply as *mut Axiom);
+    fn set_imply (&mut self, imply: *mut Exp) {
+        self.set_imply (
+            imply as *mut Axiom
+        );
     }
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> bool {
         match self.imply {
-            Some(imply) => unsafe { &*imply }.get_value(),
+            Some(box ref imply) => **imply,
             None => self.value,
         }
     }
@@ -57,9 +63,9 @@ impl <'a> Exp<'a> for Axiom<'a> {
 
     fn get_ident (&self) -> String {
         match self.imply {
-            Some(imply) => format! ("({}=>{})",
+            Some(box ref imply) => format! ("({}=>{})",
                 self.ident,
-                &unsafe { &*imply }.get_ident(),
+                imply.get_ident(),
             ),
             None => format! ("{}",
                 self.ident,
@@ -68,7 +74,8 @@ impl <'a> Exp<'a> for Axiom<'a> {
     }
 }
 
-impl <'a> Default for Axiom<'a> {
+
+impl Default for Axiom {
 
     /// The `default` constructor function returns a false axiom.
 
@@ -81,20 +88,20 @@ impl <'a> Default for Axiom<'a> {
     }
 }
 
-impl <'a> std::ops::Deref for Axiom<'a> {
+impl std::ops::Deref for Axiom {
     type Target = bool;
 
     /// The `deref` function returns the axiom value.
 
     fn deref(&self) -> &bool {
         match self.imply {
-            Some(imply) => unsafe { &**imply },
+            Some(box ref imply) => &*imply,
             None => &self.value,
         }
     }
 }
 
-impl <'a> std::ops::DerefMut for Axiom<'a> {
+impl std::ops::DerefMut for Axiom {
 
     /// The `deref` function returns a mutable reference to axion value.
 
@@ -103,22 +110,18 @@ impl <'a> std::ops::DerefMut for Axiom<'a> {
     }
 }
 
-impl <'a> PartialEq for Axiom<'a> {
+impl PartialEq for Axiom {
 
     /// The `eq` function returns a boolean for our axiom equal another axiom.
 
-    fn eq(&self, other: &Axiom<'a>) -> bool {
+    fn eq(&self, other: &Axiom) -> bool {
         self.ident == other.ident &&
         self.value == other.value &&
-        match (self.imply, other.imply) {
-            (Some(imply), Some(other)) if unsafe { *imply == *other } => true,
-            (None, None) => true,
-            (_, _) => false,
-        }
+        self.imply == other.imply
     }
 }
 
-impl <'a> std::fmt::Display for Axiom<'a> {
+impl std::fmt::Display for Axiom {
 
     /// The `fmt` function prints the Axiom.
 
@@ -130,7 +133,7 @@ impl <'a> std::fmt::Display for Axiom<'a> {
     }
 }
 
-impl <'a> std::fmt::Debug for Axiom<'a> {
+impl std::fmt::Debug for Axiom {
 
     /// The `fmt` function prints the Axiom.
 

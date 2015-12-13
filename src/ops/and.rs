@@ -12,41 +12,44 @@ use Exp;
 
 /// The `And` structure is a binary And.
 
-pub struct And<'a, 'b, 'c> {
-    left: *mut Exp<'a>, // left dependency.
-    right: *mut Exp<'b>, // right dependency.
-    imply: Option<*mut Exp<'c>>, // implication.
+pub struct And {
+    left: Box<Exp>, // left dependency.
+    right: Box<Exp>, // right dependency.
+    imply: Option<Box<Exp>>, // implication.
 }
 
-impl <'a, 'b, 'c> Binary<'a, 'b, 'c> for And<'a, 'b, 'c> {
+impl Binary for And {
 
     /// The `new` constructor function returns And opperation.
 
-    fn new (left: *mut Exp<'a>, right: *mut Exp<'b>) -> Self {
+    fn new (left: *mut Exp, right: *mut Exp) -> Self {
         And {
-            left: left,
-            right: right,
+            left: unsafe { Box::from_raw(left) },
+            right: unsafe { Box::from_raw(right) },
             imply: None,
         }
     }
 }
 
-impl <'a, 'b, 'c> Exp<'c> for And<'a, 'b, 'c> {
+
+impl Exp for And {
 
     /// The `set_imply` function changes the And implication.
 
-    fn set_imply<'d> (&'d mut self, imply: *mut Exp<'c>) {
-        self.imply = Some(imply);
+    fn set_imply (&mut self, imply: *mut Exp) {
+        self.imply = Some (
+            unsafe { Box::from_raw(imply) },
+        );
     }
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> bool {
         match self.imply {
-            Some(imply) => unsafe { &*imply }.get_value(),
+            Some(ref imply) => imply.get_value(),
             None => {
-                unsafe { &*self.left }.get_value() &&
-                unsafe { &*self.right }.get_value()
+                 self.left.get_value() &&
+                 self.right.get_value()
             },
         }
     }
@@ -55,20 +58,20 @@ impl <'a, 'b, 'c> Exp<'c> for And<'a, 'b, 'c> {
 
     fn get_ident (&self) -> String {
         match self.imply {
-            Some(imply) => format! ("({}+{}=>{})",
-                &unsafe { &*self.left }.get_ident(),
-                &unsafe { &*self.right }.get_ident(),
-                &unsafe { &*imply }.get_ident(),
+            Some(ref imply) => format! ("({}+{}=>{})",
+                self.left.get_ident(),
+                self.right.get_ident(),
+                imply.get_ident(),
             ),
             None => format! ("({}+{})",
-                &unsafe { &*self.left }.get_ident(),
-                &unsafe { &*self.right }.get_ident(),
+                self.left.get_ident(),
+                self.right.get_ident(),
             ),
         }
     }
 }
 
-impl <'a, 'b, 'c> std::fmt::Display for And<'a, 'b, 'c> {
+impl std::fmt::Display for And {
 
     /// The `fmt` function prints the And Door.
 
@@ -83,7 +86,7 @@ impl <'a, 'b, 'c> std::fmt::Display for And<'a, 'b, 'c> {
     }
 }
 
-impl <'a, 'b, 'c> std::fmt::Debug for And<'a, 'b, 'c> {
+impl std::fmt::Debug for And {
 
     /// The `fmt` function prints the And Door.
 

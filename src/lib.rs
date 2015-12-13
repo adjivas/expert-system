@@ -5,6 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#![feature(box_patterns)]
+
 mod exp;
 mod axiom;
 mod set;
