@@ -13,6 +13,10 @@ fn main () {
     let mut axioms: expert_sys::Set = Set::default();
     let mut solver = expert_sys::Solver::new (&mut axioms);
 
+    /*solver.set_branch (
+        &mut axioms['a'],
+        &mut axioms['b'],
+    );*/
     /*solver.set_imply (
         &mut axioms['a'],
         &mut axioms['b'],

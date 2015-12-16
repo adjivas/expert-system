@@ -13,3 +13,13 @@ pub trait Exp {
     fn get_ident (&self) -> String;
     fn set_imply (&mut self, imply: *mut Exp);
 }
+
+/*impl PartialEq for Exp {
+
+    /// The `eq` function returns a boolean for our axiom equal another axiom.
+
+    fn eq(&self, other: &Exp) -> bool {
+        self.get_ident() == other.get_ident()
+    }
+}
+*/

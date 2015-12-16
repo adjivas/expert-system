@@ -54,7 +54,7 @@ impl Exp for Axiom {
 
     fn get_value (&self) -> bool {
         match self.imply {
-            Some(box ref imply) => **imply,
+            Some(box ref imply) => imply.get_value(),
             None => self.value,
         }
     }

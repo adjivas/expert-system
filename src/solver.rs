@@ -14,6 +14,24 @@ pub struct Solver {
 
 impl Solver {
 
+    fn get_branch (
+        &mut self,
+        exp: &mut Exp,
+    ) -> Option<&Box<Exp>> {
+        self.branchs.iter().find (|ref branch|
+            branch.get_ident() == exp.get_ident()
+        )
+    }
+
+    pub fn set_branch (
+        &mut self,
+        top: &mut Exp,
+        bottom: &mut Exp,
+    ) {
+        //println!("{}",*top.get_ident());
+        // /self.get_branch(top);
+    }
+
     /// The `new` constructor function returns a solvable table.
 
     pub fn new (
