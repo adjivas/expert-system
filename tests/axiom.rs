@@ -5,18 +5,16 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-/*extern crate expert_sys;
-
-#[test]
-fn test_constructor () {
-    assert_eq!(expert_sys::Axiom::default(), expert_sys::Axiom::new('_'));
-}
+extern crate expert_sys;
 
 #[test]
 fn test_value () {
-    let mut a: expert_sys::Axiom = expert_sys::Axiom::default();
+    let mut axioms: expert_sys::Set = expert_sys::Set::default();
 
-    assert_eq!(*a, false);
-    *a = true;
-    assert_eq!(*a, true);
-}*/
+    axioms.set_value('a', true);
+    axioms.set_imply('b', 'a');
+    assert_eq!(axioms.get_value('a'), Some(true));
+    assert_eq!(axioms.get_value('b'), Some(true));
+    assert_eq!(axioms.get_value('c'), Some(false));
+    assert_eq!(axioms.get_value('_'), None);
+}

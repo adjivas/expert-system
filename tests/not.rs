@@ -7,16 +7,27 @@
 
 extern crate expert_sys;
 
+use expert_sys::ops::Unary;
 use expert_sys::Exp;
-//use expert_sys::ops::Unary;
 
-/*#[test]
+#[test]
 fn test_value () {
-    let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
-    let not_a: expert_sys::ops::Not = expert_sys::ops::Not::new (
-        &mut a
-    );
+    let mut axioms: expert_sys::Set = expert_sys::Set::default();
+    axioms.set_imply('b', 'a');
+    axioms.set_imply('c', 'b');
 
-    assert_eq!(not_a.get_value(), true);
+    let not_not_a: expert_sys::ops::Not = expert_sys::ops::Not::new (
+        std::rc::Rc::new(expert_sys::ops::Not::new (
+            axioms.get_exp('a').unwrap(),
+        )),
+    );
+    let not_b: expert_sys::ops::Not = expert_sys::ops::Not::new (
+        axioms.get_exp('b').unwrap(),
+    );
+    let not_c: expert_sys::ops::Not = expert_sys::ops::Not::new (
+        axioms.get_exp('c').unwrap(),
+    );
+    assert_eq!(not_not_a.get_value(), Some(false));
+    assert_eq!(not_b.get_value(), Some(true));
+    assert_eq!(not_c.get_value(), Some(true));
 }
-*/

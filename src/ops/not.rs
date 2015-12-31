@@ -7,6 +7,7 @@
 
 extern crate std;
 
+use super::Unary;
 use exp::Exp;
 
 /// The `Not` structure is a binary Not.
@@ -16,11 +17,11 @@ pub struct Not {
     imply: Option<std::rc::Rc<Exp>>, // implication.
 }
 
-impl Not {
+impl Unary for Not {
 
     /// The `new` constructor function returns Not opperation.
 
-    pub fn new (infer: std::rc::Rc<Exp>) -> Self {
+    fn new (infer: std::rc::Rc<Exp>) -> Self {
         Not {
             infer: infer,
             imply: None,

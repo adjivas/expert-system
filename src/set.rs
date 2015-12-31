@@ -20,7 +20,7 @@ impl Set {
 
     /// The `get_value` function returns the axiom's boolean.
 
-    fn get_value (&self, index: char) -> Option<bool> {
+    pub fn get_value (&self, index: char) -> Option<bool> {
         match {index as usize} {
             i @ 65...90 => {
                 if let Some(grade) = std::rc::Rc::downgrade (
@@ -44,7 +44,7 @@ impl Set {
 
     /// The `get_ident` function returns the axiom's expression.
 
-    fn get_ident (&self, index: char) -> Option<String> {
+    pub fn get_ident (&self, index: char) -> Option<String> {
         match {index as usize} {
             i @ 65...90 => {
                 if let Some(axiom) = std::rc::Rc::downgrade (

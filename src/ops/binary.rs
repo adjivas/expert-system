@@ -5,15 +5,13 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! The `ops` module is a collection of operators
-//! like: Axiom, And, Or, Xor, Not, [...].
+extern crate std;
 
-mod binary;
-mod unary;
-mod and;
-mod not;
+/// The `Binary` Trait is a expression implemented.
+/// for: and, or, xor.
 
-pub use self::binary::Binary;
-pub use self::unary::Unary;
-pub use self::and::And;
-pub use self::not::Not;
+use exp::Exp;
+
+pub trait Binary: Exp {
+    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self;
+}

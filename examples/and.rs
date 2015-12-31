@@ -7,6 +7,8 @@
 
 extern crate expert_sys;
 
+use expert_sys::ops::Binary;
+
 /// The `main` start function examples how to
 /// use Axiom with door And.
 
