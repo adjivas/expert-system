@@ -5,6 +5,9 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+//! The `ops` module is a collection of operators
+//! like: Axiom, And, Or, Xor, Not, [...].
+
 mod and;
 mod not;
 

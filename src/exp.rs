@@ -7,8 +7,7 @@
 
 extern crate std;
 
-/// The `Exp` Trait is a expression implemented.
-/// for the axiom Structure, Unary and Binary Traits.
+/// The `Exp` Trait is a expression's implemention.
 
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;

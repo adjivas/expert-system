@@ -10,6 +10,8 @@ extern crate std;
 use axiom::Axiom;
 use exp::Exp;
 
+/// The `Set` structure is all alphabet axioms.
+
 pub struct Set {
     axioms: [std::rc::Rc<Axiom>; 26],
 }

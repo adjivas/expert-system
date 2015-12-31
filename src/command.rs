@@ -5,6 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+//! The `command` module is a User Interface.
+
 #[cfg(not(feature = "color256"))]
 pub fn escutcheon () {
     match env!("TERM") {

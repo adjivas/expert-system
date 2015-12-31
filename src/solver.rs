@@ -10,6 +10,8 @@ extern crate std;
 use exp::Exp;
 use set::Set;
 
+/// The `Solver` structure is all alphabet expression tree.
+
 pub struct Solver {
     tree: [Vec<std::rc::Rc<Exp>>; 26],
 }
