@@ -166,23 +166,6 @@ impl Solver {
     }
 }
 
-macro_rules! format_exp {
-    ($exp: expr) => {
-        match $exp {
-            Some(axioms) => {
-                axioms.iter().map(|ref g|
-                    format!("{}=>", g)
-                ).collect::<String>() + match axioms.last() {
-                    Some(axiom) if axiom.get_value() == Some(true) => "true",
-                    Some(axiom) if axiom.get_value() == Some(false) => "false",
-                    _ => "None",
-                }
-            },
-            _ => format!("None=>None"),
-        }
-    };
-}
-
 impl std::fmt::Display for Solver {
 
     /// The `fmt` function prints all the tree dependencies.

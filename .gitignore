@@ -16,3 +16,6 @@ Cargo.lock
 # Swap
 *.rs.swp
 *.swp
+
+# OSX
+*.DS_Store
