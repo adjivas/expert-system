@@ -12,112 +12,81 @@ use exp::Exp;
 /// The `Axiom` structure is a primitive.
 
 pub struct Axiom {
-    ident: char, // logical expression.
+    ident: char, // name.
     value: bool, // result.
-    imply: Option<Box<Axiom>>, // implication.
+    imply: Option<std::rc::Rc<Axiom>>, // implication.
 }
 
 impl Axiom {
 
     /// The `new` constructor function returns a default false axiom.
 
-    pub fn new (ident: char) -> Self {
-        Axiom {
-            ident: ident,
-            value: false,
-            imply: None,
-        }
+    pub fn new (ident: char) -> std::rc::Rc<Axiom> {
+        std::rc::Rc::new (
+            Axiom {
+                ident: ident,
+                value: false,
+                imply: None,
+            }
+        )
     }
 
-    /// The `set_imply` function changes the axiom implication.
+    /// The `set_value` function updates the axiom's value.
 
-    pub fn set_imply (&mut self, imply: *mut Axiom) {
-        self.imply = Some (
-            unsafe {
-                Box::from_raw(imply)
-            }
-        );
+    pub fn set_value (
+        &mut self,
+        value: bool,
+    ) {
+        self.value = value;
+    }
+
+    /// The `set_imply` function adds/updates the axiom's implication.
+
+    pub fn set_imply (
+        &mut self,
+        imply: std::rc::Rc<Axiom>,
+    ) {
+        self.imply = Some(imply);
     }
 }
 
 impl Exp for Axiom {
 
-    /// The `set_imply` function changes the axiom implication.
-
-    fn set_imply (&mut self, imply: *mut Exp) {
-        self.set_imply (
-            imply as *mut Axiom
-        );
-    }
-
     /// The `get_value` function returns the result.
 
-    fn get_value (&self) -> bool {
+    fn get_value (&self) -> Option<bool> {
         match self.imply {
-            Some(box ref imply) => imply.get_value(),
-            None => self.value,
+            Some(ref imply) => {
+                if let Some(grade) = std::rc::Rc::downgrade(imply).upgrade() {
+                    grade.get_value()
+                }
+                else { None }
+            },
+            None => Some(self.value),
         }
     }
 
     /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_ident (&self) -> String {
+    fn get_ident (&self) -> Option<String> {
         match self.imply {
-            Some(box ref imply) => format! ("({}=>{})",
-                self.ident,
-                imply.get_ident(),
-            ),
-            None => format! ("{}",
-                self.ident,
-            ),
+            Some(ref imply) => {
+                if let Some(grade) = std::rc::Rc::downgrade(imply).upgrade() {
+                    if let Some(result) = grade.get_ident() {
+                        Some(format!("{}=>{}", self.ident, result))
+                    }
+                    else { None }
+                }
+                else { None }
+            },
+            None => Some(format!("{}", self.ident)),
         }
     }
-}
 
+    /// The `set_imply` function changes the Axiom implication.
 
-impl Default for Axiom {
-
-    /// The `default` constructor function returns a false axiom.
-
-    fn default () -> Self {
-        Axiom {
-            ident: '_',
-            value: false,
-            imply: None,
-        }
-    }
-}
-
-impl std::ops::Deref for Axiom {
-    type Target = bool;
-
-    /// The `deref` function returns the axiom value.
-
-    fn deref(&self) -> &bool {
-        match self.imply {
-            Some(box ref imply) => &*imply,
-            None => &self.value,
-        }
-    }
-}
-
-impl std::ops::DerefMut for Axiom {
-
-    /// The `deref` function returns a mutable reference to axion value.
-
-    fn deref_mut(&mut self) -> &mut bool {
-        &mut self.value
-    }
-}
-
-impl PartialEq for Axiom {
-
-    /// The `eq` function returns a boolean for our axiom equal another axiom.
-
-    fn eq(&self, other: &Axiom) -> bool {
-        self.ident == other.ident &&
-        self.value == other.value &&
-        self.imply == other.imply
+    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) {
+        //self.set_imply(imply);
     }
 }
 
@@ -129,18 +98,10 @@ impl std::fmt::Display for Axiom {
         &self,
         f: &mut std::fmt::Formatter,
     ) -> Result<(), std::fmt::Error> {
-        write!(f, "{}=>{}", self.get_ident(), self.get_value())
-    }
-}
+        match (self.get_ident(), self.get_value()) {
+            (Some(ident), Some(value)) => write!(f, "{}=>{}", ident, value),
+            (_, _) => write!(f, "None"),
+        }
 
-impl std::fmt::Debug for Axiom {
-
-    /// The `fmt` function prints the Axiom.
-
-    fn fmt (
-        &self,
-        f: &mut std::fmt::Formatter,
-    ) -> Result<(), std::fmt::Error> {
-        write!(f, "{:?}=>{:?}", self.get_ident(), self.get_value())
     }
 }

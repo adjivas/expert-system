@@ -8,6 +8,12 @@ git clone https://github.com/adjivas/expert-system expert_sys && cd expert_sys
 cargo build
 ```
 
+#### Rules:
+* An axiom can imply another axiom and has a boolean value.
+* An axiom is a axiom and a expression.
+* A expression can imply another expression.
+* A expression can be the result of another expressions.
+
 #### Directory-Tree:
 ```shell
 .

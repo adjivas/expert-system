@@ -5,7 +5,7 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate expert_sys;
+/*extern crate expert_sys;
 
 #[test]
 fn test_constructor () {
@@ -19,4 +19,4 @@ fn test_value () {
     assert_eq!(*a, false);
     *a = true;
     assert_eq!(*a, true);
-}
+}*/

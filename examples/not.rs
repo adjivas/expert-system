@@ -7,11 +7,11 @@
 
 extern crate expert_sys;
 
-use expert_sys::Exp;
-use expert_sys::ops::Unary;
+//use expert_sys::Exp;
+//use expert_sys::ops::Unary;
 
 fn main () {
-    let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
+    /*let mut a: expert_sys::Axiom = expert_sys::Axiom::new('a');
     let mut b: expert_sys::Axiom = expert_sys::Axiom::new('b');
     let mut not_a = expert_sys::ops::Not::new(&mut a);
     let not_b = expert_sys::ops::Not::new(&mut b);
@@ -19,5 +19,5 @@ fn main () {
     *a = true;
     not_a.set_imply(&mut b);
     println!("{}=>{}", not_a.get_ident(), not_a.get_value());
-    println!("{}=>{}", not_b.get_ident(), not_b.get_value());
+    println!("{}=>{}", not_b.get_ident(), not_b.get_value());*/
 }

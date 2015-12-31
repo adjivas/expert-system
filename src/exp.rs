@@ -5,21 +5,28 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+extern crate std;
+
 /// The `Exp` Trait is a expression implemented.
 /// for the axiom Structure, Unary and Binary Traits.
 
 pub trait Exp {
-    fn get_value (&self) -> bool;
-    fn get_ident (&self) -> String;
-    fn set_imply (&mut self, imply: *mut Exp);
+    fn get_ident(&self) -> Option<String>;
+    fn get_value(&self) -> Option<bool>;
+    fn set_imply(&mut self, imply: std::rc::Rc<Exp>);
 }
 
-/*impl PartialEq for Exp {
+impl std::fmt::Display for Exp {
 
-    /// The `eq` function returns a boolean for our axiom equal another axiom.
+    /// The `fmt` function prints a generic expression.
 
-    fn eq(&self, other: &Exp) -> bool {
-        self.get_ident() == other.get_ident()
+    fn fmt (
+        &self,
+        f: &mut std::fmt::Formatter,
+    ) -> Result<(), std::fmt::Error> {
+        match (self.get_ident(), self.get_value()) {
+            (Some(ident), Some(value)) => write!(f, "({}=>{})", ident, value),
+            (_, _) => write!(f, "None"),
+        }
     }
 }
-*/

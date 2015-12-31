@@ -13,60 +13,73 @@ use Exp;
 /// The `And` structure is a binary And.
 
 pub struct And {
-    left: Box<Exp>, // left dependency.
-    right: Box<Exp>, // right dependency.
-    imply: Option<Box<Exp>>, // implication.
+    left: std::rc::Rc<Exp>, // left dependency.
+    right: std::rc::Rc<Exp>, // right dependency.
+    imply: Option<std::rc::Rc<Exp>>, // implication.
 }
 
 impl Binary for And {
 
     /// The `new` constructor function returns And opperation.
 
-    fn new (left: *mut Exp, right: *mut Exp) -> Self {
+    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self {
         And {
-            left: unsafe { Box::from_raw(left) },
-            right: unsafe { Box::from_raw(right) },
+            left: left,
+            right: right,
             imply: None,
         }
     }
 }
 
-
 impl Exp for And {
 
     /// The `set_imply` function changes the And implication.
 
-    fn set_imply (&mut self, imply: *mut Exp) {
-        self.imply = Some (
-            unsafe { Box::from_raw(imply) },
-        );
+    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) {
+        self.imply = Some(imply);
     }
 
     /// The `get_value` function returns the result.
 
-    fn get_value (&self) -> bool {
+    fn get_value (&self) -> Option<bool> {
         match self.imply {
             Some(ref imply) => imply.get_value(),
-            None => {
-                 self.left.get_value() &&
-                 self.right.get_value()
+            None if self.left.get_value() == None => {
+                None
             },
+            None if self.left.get_value() == Some(true)
+                 && self.right.get_value() == Some(true) => {
+                Some(true)
+            },
+            _ => Some(false),
         }
     }
 
     /// The `get_ident` function returns the arithmetic formule.
 
-    fn get_ident (&self) -> String {
+    fn get_ident (&self) -> Option<String> {
         match self.imply {
-            Some(ref imply) => format! ("({}+{}=>{})",
+            Some(ref imply) => {
+                if let (Some(left), Some(right), Some(imply)) = (
+                    self.left.get_ident(),
+                    self.right.get_ident(),
+                    imply.get_ident(),
+                ) {
+                    Some(format!("({}+{}=>{})", left, right, imply))
+                }
+                else {
+                    None
+                }
+            },
+            None => if let (Some(left), Some(right)) = (
                 self.left.get_ident(),
                 self.right.get_ident(),
-                imply.get_ident(),
-            ),
-            None => format! ("({}+{})",
-                self.left.get_ident(),
-                self.right.get_ident(),
-            ),
+            ) {
+                Some(format!("({}+{})", left, right))
+            }
+            else {
+                None
+            },
         }
     }
 }
@@ -79,24 +92,9 @@ impl std::fmt::Display for And {
         &self,
         f: &mut std::fmt::Formatter,
     ) -> Result<(), std::fmt::Error> {
-        write! (f, "{}=>{}",
-            self.get_ident(),
-            self.get_value()
-        )
-    }
-}
-
-impl std::fmt::Debug for And {
-
-    /// The `fmt` function prints the And Door.
-
-    fn fmt (
-        &self,
-        f: &mut std::fmt::Formatter,
-    ) -> Result<(), std::fmt::Error> {
-        write! (f, "{:?}=>{:?}",
-            self.get_ident(),
-            self.get_value()
-        )
+        match (self.get_ident(), self.get_value()) {
+            (Some(ident), Some(value)) => write!(f, "{}=>{}", ident, value),
+            (_, _) => write!(f, "None"),
+        }
     }
 }

@@ -5,11 +5,13 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+extern crate std;
+
 /// The `Unary` Trait is a expression implemented.
 /// for: not.
 
 use exp::Exp;
 
 pub trait Unary: Exp {
-    fn new (infer: *mut Exp) -> Self;
+    fn new (infer: std::rc::Rc<Exp>) -> Self;
 }

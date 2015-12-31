@@ -7,7 +7,19 @@
 
 extern crate expert_sys;
 
-use expert_sys::Set;
+fn main () {
+    let mut axioms = expert_sys::Set::default();
+    println!("{}", axioms);
+    axioms.set_imply('b', 'a');
+    axioms.set_imply('c', 'b');
+    println!("{}", axioms);
+
+    let mut solver = expert_sys::Solver::new(&axioms);
+    solver.set_branch_imply('e', axioms.get_exp('c').unwrap());
+    println!("{}", solver);
+}
+
+/*use expert_sys::Set;
 use expert_sys::ops::Unary;
 use expert_sys::ops::Binary;
 
@@ -22,4 +34,4 @@ fn main () {
     *axioms['a'] = true;
     *axioms['b'] = true;
     println!("{}", a_and_b);
-}
+}*/

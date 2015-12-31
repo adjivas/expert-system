@@ -13,7 +13,7 @@ fn main () {
     let mut a = expert_sys::Axiom::new('a');
     let mut b = expert_sys::Axiom::new('b');
 
-    a.set_imply(&mut b);
-    *b = true;
-    println!("{} {}", a, a.get_value());
+    /*a.set_imply(&mut b);
+    *b = true;*/
+    println!("{}", a);
 }

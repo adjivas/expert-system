@@ -7,11 +7,11 @@
 
 extern crate expert_sys;
 
-use expert_sys::Exp;
-use expert_sys::ops::Binary;
+//use expert_sys::Exp;
+//use expert_sys::ops::Binary;
 
 fn main () {
-    let mut a = expert_sys::Axiom::new('a');
+    /*let mut a = expert_sys::Axiom::new('a');
     let mut b = expert_sys::Axiom::new('b');
     let mut c = expert_sys::Axiom::new('c');
 
@@ -28,5 +28,5 @@ fn main () {
 
     b_and_c.set_imply(&mut a_and_b);
     println!("{} {}", a_and_b.get_ident(), a_and_b.get_value());
-    println!("{} {}", b_and_c.get_ident(), b_and_c.get_value());
+    println!("{} {}", b_and_c.get_ident(), b_and_c.get_value());*/
 }

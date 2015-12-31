@@ -8,7 +8,7 @@
 extern crate expert_sys;
 
 use expert_sys::Exp;
-use expert_sys::ops::Unary;
+//use expert_sys::ops::Unary;
 
 /*#[test]
 fn test_value () {
