@@ -7,13 +7,13 @@
 
 extern crate expert_sys;
 
-use expert_sys::Exp;
+/// The `main` start function examples how to use Axiom.
 
 fn main () {
-    let mut a = expert_sys::Axiom::new('a');
-    let mut b = expert_sys::Axiom::new('b');
+    let mut axioms = expert_sys::Set::default();
 
-    /*a.set_imply(&mut b);
-    *b = true;*/
-    println!("{}", a);
+    axioms.set_value('a', true);
+    axioms.set_imply('b', 'a');
+    println!("{}", axioms);
+    println!("{}", axioms['a']);
 }

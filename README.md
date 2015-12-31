@@ -25,20 +25,18 @@ cargo build
 │   |__ or.rs
 │   |__ xor.rs
 │   |__ not.rs
+│   |__ solver.rs
 │   \__ axiom.rs
 |__ src
 │   |__ lib.rs
 │   |__ main.rs
-│   |__ exp.rs
 │   |__ axiom.rs
 │   |__ set.rs
-│   |__ axioms.rs
+│   |__ exp.rs
 │   \__ ops
-│       |__ unary.rs
 │       |__ and.rs
 │       |__ or.rs
 │       |__ xor.rs
-│       |__ binary.rs
 │       |__ not.rs
 │       \__ mod.rs
 \__ tests

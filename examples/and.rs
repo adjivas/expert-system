@@ -7,26 +7,21 @@
 
 extern crate expert_sys;
 
-//use expert_sys::Exp;
-//use expert_sys::ops::Binary;
+/// The `main` start function examples how to
+/// use Axiom with door And.
 
 fn main () {
-    /*let mut a = expert_sys::Axiom::new('a');
-    let mut b = expert_sys::Axiom::new('b');
-    let mut c = expert_sys::Axiom::new('c');
+    let mut axioms = expert_sys::Set::default();
 
-    a.set_imply(&mut b);
-    *b = true;
-    let mut a_and_b = expert_sys::ops::And::new (
-        &mut a,
-        &mut b
+    axioms.set_value('a', true);
+    axioms.set_value('b', true);
+    let a_and_b = expert_sys::ops::And::new (
+        axioms.get_exp('a').unwrap(),
+        axioms.get_exp('b').unwrap()
     );
-    let mut b_and_c = expert_sys::ops::And::new (
-        &mut b,
-        &mut c
+    let b_and_c = expert_sys::ops::And::new (
+        axioms.get_exp('b').unwrap(),
+        axioms.get_exp('c').unwrap()
     );
-
-    b_and_c.set_imply(&mut a_and_b);
-    println!("{} {}", a_and_b.get_ident(), a_and_b.get_value());
-    println!("{} {}", b_and_c.get_ident(), b_and_c.get_value());*/
+    println!("{}, {}", a_and_b, b_and_c);
 }

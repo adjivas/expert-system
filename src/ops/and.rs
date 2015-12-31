@@ -7,7 +7,6 @@
 
 extern crate std;
 
-use super::Binary;
 use Exp;
 
 /// The `And` structure is a binary And.
@@ -18,11 +17,11 @@ pub struct And {
     imply: Option<std::rc::Rc<Exp>>, // implication.
 }
 
-impl Binary for And {
+impl And {
 
     /// The `new` constructor function returns And opperation.
 
-    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self {
+    pub fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self {
         And {
             left: left,
             right: right,

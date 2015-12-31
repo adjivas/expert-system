@@ -7,22 +7,15 @@
 
 extern crate expert_sys;
 
-use expert_sys::Set;
+/// The `main` start function examples how to
+/// use Solver with dependency.
 
 fn main () {
-    let mut axioms: expert_sys::Set = Set::default();
-    let mut solver = expert_sys::Solver::new (&mut axioms);
+    let mut axioms = expert_sys::Set::default();
+    let mut solver = expert_sys::Solver::new(&mut axioms);
 
-    /*solver.set_branch (
-        &mut axioms['a'],
-        &mut axioms['b'],
-    );*/
-    /*solver.set_imply (
-        &mut axioms['a'],
-        &mut axioms['b'],
+    solver.set_branch_imply ('a',
+        axioms.get_exp('b').unwrap(),
     );
-    solver.set_imply (
-        &mut axioms['c'],
-        &mut axioms['d'],
-    );*/
+    println!("{}", solver);
 }
