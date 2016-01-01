@@ -13,5 +13,5 @@ extern crate std;
 use exp::Exp;
 
 pub trait Binary: Exp {
-    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self;
+    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> std::rc::Rc<Self>;
 }

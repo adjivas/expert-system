@@ -21,7 +21,7 @@ impl Axiom {
 
     /// The `new` constructor function returns a default false axiom.
 
-    pub fn new (ident: char) -> std::rc::Rc<Axiom> {
+    pub fn new (ident: char) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
             Axiom {
                 ident: ident,
@@ -36,8 +36,9 @@ impl Axiom {
     pub fn set_value (
         &mut self,
         value: bool,
-    ) {
+    ) -> bool {
         self.value = value;
+        true
     }
 
     /// The `set_imply` function adds/updates the axiom's implication.
@@ -85,8 +86,8 @@ impl Exp for Axiom {
 
     /// The `set_imply` function changes the Axiom implication.
 
-    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) {
-        //self.set_imply(imply);
+    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) -> bool {
+        false
     }
 }
 

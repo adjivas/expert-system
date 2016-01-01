@@ -21,11 +21,13 @@ impl Unary for Not {
 
     /// The `new` constructor function returns Not opperation.
 
-    fn new (infer: std::rc::Rc<Exp>) -> Self {
-        Not {
-            infer: infer,
-            imply: None,
-        }
+    fn new (infer: std::rc::Rc<Exp>) -> std::rc::Rc<Self> {
+        std::rc::Rc::new (
+            Not {
+                infer: infer,
+                imply: None,
+            }
+        )
     }
 }
 
@@ -68,8 +70,9 @@ impl Exp for Not {
 
     /// The `set_imply` function changes the Not implication.
 
-    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) {
+    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) -> bool {
         self.imply = Some(imply);
+        true
     }
 }
 

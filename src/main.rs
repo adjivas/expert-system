@@ -13,6 +13,8 @@ fn main () {
     axioms.set_imply('c', 'b');
 
     let mut solver = expert_sys::Solver::new(&axioms);
-    solver.set_branch_imply('e', axioms.get_exp('c').unwrap());
+    //solver.set_branch_imply('e', axioms.get_exp('c').unwrap());
     println!("{}", solver);
+
+    //let mut rules = Vec::<std::rc::Rc<expert_sys::Exp>>::new();
 }

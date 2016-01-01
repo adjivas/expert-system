@@ -57,6 +57,14 @@ impl Solver {
         index: char,
     ) -> Option<bool> {
         match {index as usize} {
+            i @ 0...25 => {
+                if let Some(grade) = std::rc::Rc::downgrade (
+                    &self.tree[i].last().unwrap()
+                ).upgrade() {
+                    grade.get_value()
+                }
+                else { None }
+            },
             i @ 65...90 => {
                 if let Some(grade) = std::rc::Rc::downgrade (
                     &self.tree[i - 65].last().unwrap()
@@ -81,6 +89,14 @@ impl Solver {
 
     fn get_branch_ident (&self, index: char) -> Option<String> {
         match {index as usize} {
+            i @ 0...25 => {
+                if let Some(axiom) = std::rc::Rc::downgrade (
+                    &self.tree[i].last().unwrap()
+                ).upgrade() {
+                    axiom.get_ident()
+                }
+                else { None }
+            },
             i @ 65...90 => {
                 if let Some(axiom) = std::rc::Rc::downgrade (
                     &self.tree[i - 65].last().unwrap()
@@ -101,8 +117,16 @@ impl Solver {
         }
     }
 
-    fn get_branch_exp (&self, index: char) -> Option<std::rc::Rc<Exp>> {
+    pub fn get_branch_exp (&self, index: char) -> Option<std::rc::Rc<Exp>> {
         match {index as usize} {
+            i @ 0...25 => {
+                if let Some(grade) = std::rc::Rc::downgrade (
+                    &self.tree[i].last().unwrap()
+                ).upgrade() {
+                    Some(grade)
+                }
+                else { None }
+            },
             i @ 65...90 => {
                 if let Some(grade) = std::rc::Rc::downgrade (
                     &self.tree[i - 65].last().unwrap()
@@ -125,6 +149,15 @@ impl Solver {
 
     fn get_branch_exps (&self, index: char) -> Option<Vec<std::rc::Rc<Exp>>> {
         match {index as usize} {
+            t @ 0...25 => {
+                Some(self.tree[t].iter().filter_map (|ref b|
+                    if let Some(grade) = std::rc::Rc::downgrade (
+                        &b
+                    ).upgrade() {
+                        Some(grade)
+                    } else { None }
+                ).collect::<Vec<std::rc::Rc<Exp>>>())
+            },
             t @ 65...90 => {
                 Some(self.tree[t - 65].iter().filter_map (|ref b|
                     if let Some(grade) = std::rc::Rc::downgrade (
@@ -149,20 +182,19 @@ impl Solver {
 
     pub fn set_branch_imply (
         &mut self,
-        top: char,
         bottom: std::rc::Rc<Exp>,
+        top: String,
     ) -> bool {
-        match {top as usize} {
-            t @ 65...90 => {
-                self.tree[t - 65].push(bottom);
-                true
-            },
-            t @ 97...122 => {
-                self.tree[t - 97].push(bottom);
-                true
-            },
-            _ => false,
+        for index in 0u8..25u8 {
+            return match self.get_branch_ident(index as char) {
+                Some(ref ident) if *ident == top => {
+                    self.tree[index as usize].push(bottom);
+                    true
+                },
+                _ => continue ,
+            }
         }
+        false
     }
 }
 

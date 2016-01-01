@@ -12,7 +12,7 @@ extern crate std;
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;
     fn get_value(&self) -> Option<bool>;
-    fn set_imply(&mut self, imply: std::rc::Rc<Exp>);
+    fn set_imply(&mut self, imply: std::rc::Rc<Exp>) -> bool;
 }
 
 impl std::fmt::Display for Exp {

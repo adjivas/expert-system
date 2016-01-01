@@ -13,5 +13,5 @@ extern crate std;
 use exp::Exp;
 
 pub trait Unary: Exp {
-    fn new (infer: std::rc::Rc<Exp>) -> Self;
+    fn new (infer: std::rc::Rc<Exp>) -> std::rc::Rc<Self>;
 }

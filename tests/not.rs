@@ -16,15 +16,17 @@ fn test_value () {
     axioms.set_imply('b', 'a');
     axioms.set_imply('c', 'b');
 
-    let not_not_a: expert_sys::ops::Not = expert_sys::ops::Not::new (
-        std::rc::Rc::new(expert_sys::ops::Not::new (
-            axioms.get_exp('a').unwrap(),
-        )),
+    let not_a: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
+        axioms.get_exp('a').unwrap(),
     );
-    let not_b: expert_sys::ops::Not = expert_sys::ops::Not::new (
+    assert_eq!(not_a.get_value(), Some(true));
+    let not_not_a: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
+        not_a
+    );
+    let not_b: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
         axioms.get_exp('b').unwrap(),
     );
-    let not_c: expert_sys::ops::Not = expert_sys::ops::Not::new (
+    let not_c: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
         axioms.get_exp('c').unwrap(),
     );
     assert_eq!(not_not_a.get_value(), Some(false));

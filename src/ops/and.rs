@@ -22,22 +22,21 @@ impl Binary for And {
 
     /// The `new` constructor function returns And opperation.
 
-    fn new (left: std::rc::Rc<Exp>, right: std::rc::Rc<Exp>) -> Self {
-        And {
-            left: left,
-            right: right,
-            imply: None,
-        }
+    fn new (
+        left: std::rc::Rc<Exp>,
+        right: std::rc::Rc<Exp>
+    ) -> std::rc::Rc<Self> {
+        std::rc::Rc::new (
+            And {
+                left: left,
+                right: right,
+                imply: None,
+            }
+        )
     }
 }
 
 impl Exp for And {
-
-    /// The `set_imply` function changes the And implication.
-
-    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) {
-        self.imply = Some(imply);
-    }
 
     /// The `get_value` function returns the result.
 
@@ -81,6 +80,13 @@ impl Exp for And {
                 None
             },
         }
+    }
+
+    /// The `set_imply` function changes the And implication.
+
+    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) -> bool {
+        self.imply = Some(imply);
+        true
     }
 }
 

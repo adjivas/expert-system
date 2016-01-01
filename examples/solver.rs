@@ -14,8 +14,8 @@ fn main () {
     let mut axioms = expert_sys::Set::default();
     let mut solver = expert_sys::Solver::new(&mut axioms);
 
-    solver.set_branch_imply ('a',
+    /*solver.set_branch_imply ('a',
         axioms.get_exp('b').unwrap(),
-    );
+    );*/
     println!("{}", solver);
 }
