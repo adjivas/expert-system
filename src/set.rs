@@ -20,71 +20,76 @@ impl Set {
 
     /// The `get_value` function returns the axiom's boolean.
 
-    pub fn get_value (&self, index: char) -> Option<bool> {
-        match {index as usize} {
-            i @ 65...90 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.axioms[i - 65]
-                ).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(grade) = std::rc::Rc::downgrade(
-                    &self.axioms[i - 97]
-                ).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
+    pub fn get_value (
+        &self,
+        index: char,
+    ) -> Option<bool> {
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
             _ => None,
+        } {
+            if let Some(grade) = std::rc::Rc::downgrade (
+                &self.axioms[i]
+            ).upgrade() {
+                grade.get_value()
+            }
+            else {
+                None
+            }
+        }
+        else {
+            None
         }
     }
 
-    /// The `get_ident` function returns the axiom's expression.
+    /// The `get_ident` function returns the axiom's name.
 
     pub fn get_ident (&self, index: char) -> Option<String> {
-        match {index as usize} {
-            i @ 65...90 => {
-                if let Some(axiom) = std::rc::Rc::downgrade (
-                    &self.axioms[i - 65]
-                ).upgrade() {
-                    axiom.get_ident()
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(axiom) = std::rc::Rc::downgrade (
-                    &self.axioms[i - 97]
-                ).upgrade() {
-                    axiom.get_ident()
-                }
-                else { None }
-            },
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
             _ => None,
+        } {
+            if let Some(axiom) = std::rc::Rc::downgrade (
+                &self.axioms[i]
+            ).upgrade() {
+                axiom.get_ident()
+            }
+            else {
+                None
+            }
+        }
+        else {
+            None
         }
     }
 
-    pub fn get_exp (&self, index: char) -> Option<std::rc::Rc<Exp>> {
-        match {index as usize} {
-            i @ 65...90 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.axioms[i - 65]
-                ).upgrade() {
-                    Some(grade)
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(grade) = std::rc::Rc::downgrade(
-                    &self.axioms[i - 97]
-                ).upgrade() {
-                    Some(grade)
-                }
-                else { None }
-            },
+    /// The `get_exp` function returns the expression.
+
+    pub fn get_exp (
+        &self,
+        index: char
+    ) -> Option<std::rc::Rc<Exp>> {
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
             _ => None,
+        } {
+            if let Some(grade) = std::rc::Rc::downgrade (
+                &self.axioms[i]
+            ).upgrade() {
+                Some(grade)
+            }
+            else {
+                None
+            }
+        }
+        else {
+            None
         }
     }
 
@@ -95,64 +100,59 @@ impl Set {
         index: char,
         value: bool
     ) -> bool {
-        match {index as usize} {
-            i @ 65...90 => {
-                if let Some(axiom) = std::rc::Rc::get_mut (
-                    &mut self.axioms[i - 65]
-                ) {
-                    axiom.set_value(value);
-                    true
-                }
-                else { false }
-            },
-            i @ 97...122 => {
-                if let Some(axiom) = std::rc::Rc::get_mut (
-                    &mut self.axioms[i - 97]
-                ) {
-                    axiom.set_value(value);
-                    true
-                }
-                else { false }
-            },
-            _ => false,
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
+            _ => None,
+        } {
+            if let Some(axiom) = std::rc::Rc::get_mut (
+                &mut self.axioms[i]
+            ) {
+                axiom.set_value(value);
+                true
+            }
+            else {
+                false
+            }
+        }
+        else {
+            false
         }
     }
 
-    pub fn set_imply (&mut self, index_left: char, index_right: char) -> bool {
-        match ({index_left as usize}, {index_right as usize}) {
-            (l @ 65...90, r @ 65...90) => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.axioms[r - 65]
-                ).upgrade() {
-                    if let Some(axiom) = std::rc::Rc::get_mut (
-                        &mut self.axioms[l - 65]
-                    ) {
-                        axiom.set_imply(grade);
-                        true
-                    }
-                    else {
-                        false
-                    }
+    /// The `set_imply` function inserts/updates the dependency axiom.
+
+    pub fn set_imply (
+        &mut self,
+        left: char,
+        right: char
+    ) -> bool {
+        if let Some((l, r)) = match (left as usize, right as usize) {
+            (l @ 0...25, r @ 0...25) => Some((l, r)),
+            (l @ 65...90, r @ 65...90) => Some((l-65, r-65)),
+            (l @ 97...122, r @ 97...122) => Some((l-97, r-97)),
+            _ => None,
+        } {
+            if let Some(grade) = std::rc::Rc::downgrade (
+                &self.axioms[r]
+            ).upgrade() {
+                if let Some(axiom) = std::rc::Rc::get_mut (
+                    &mut self.axioms[l]
+                ) {
+                    axiom.set_imply(grade);
+                    true
                 }
-                else { false }
-            },
-            (l @ 97...122, r @ 97...122) => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.axioms[r - 97]
-                ).upgrade() {
-                    if let Some(axiom) = std::rc::Rc::get_mut (
-                        &mut self.axioms[l - 97]
-                    ) {
-                        axiom.set_imply(grade);
-                        true
-                    }
-                    else {
-                        false
-                    }
+                else {
+                    false
                 }
-                else { false }
-            },
-            _ => false,
+            }
+            else {
+                false
+            }
+        }
+        else {
+            false
         }
     }
 }
@@ -185,8 +185,9 @@ impl std::ops::Index<char> for Set {
 
     fn index (&self, index: char) -> &Axiom {
         match {index as usize} {
-            i @ 65...90 => &self.axioms[i - 65],
-            i @ 97...122 => &self.axioms[i - 97],
+            i @ 0...25 => &self.axioms[i],
+            i @ 65...90 => &self.axioms[i-65],
+            i @ 97...122 => &self.axioms[i-97],
             _ => unimplemented!(),
         }
     }

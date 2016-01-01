@@ -17,6 +17,8 @@ pub struct Solver {
 }
 
 impl Solver {
+
+    /// The `new` constructor function returns the tree solver.
     pub fn new (
         axioms: &Set,
     ) -> Self {
@@ -52,149 +54,157 @@ impl Solver {
         }
     }
 
+    /// The `get_branch_value` function returns the axiom's value.
+
     pub fn get_branch_value (
         &mut self,
         index: char,
     ) -> Option<bool> {
-        match {index as usize} {
-            i @ 0...25 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.tree[i].last().unwrap()
-                ).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
-            i @ 65...90 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.tree[i - 65].last().unwrap()
-                ).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(grade) = std::rc::Rc::downgrade(
-                    &self.tree[i - 97].last().unwrap()
-                ).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
             _ => None,
+        } {
+            if let Some(grade) = std::rc::Rc::downgrade (
+                &self.tree[i].last().unwrap()
+            ).upgrade() {
+                grade.get_value()
+            }
+            else {
+                None
+            }
+        }
+        else {
+            None
         }
     }
 
     /// The `get_ident` function returns the axiom's expression.
 
-    fn get_branch_ident (&self, index: char) -> Option<String> {
-        match {index as usize} {
-            i @ 0...25 => {
-                if let Some(axiom) = std::rc::Rc::downgrade (
-                    &self.tree[i].last().unwrap()
-                ).upgrade() {
-                    axiom.get_ident()
-                }
-                else { None }
-            },
-            i @ 65...90 => {
-                if let Some(axiom) = std::rc::Rc::downgrade (
-                    &self.tree[i - 65].last().unwrap()
-                ).upgrade() {
-                    axiom.get_ident()
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(axiom) = std::rc::Rc::downgrade (
-                    &self.tree[i - 97].last().unwrap()
-                ).upgrade() {
-                    axiom.get_ident()
-                }
-                else { None }
-            },
+    fn get_branch_ident (
+        &self,
+        index: char,
+    ) -> Option<String> {
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
             _ => None,
-        }
-    }
-
-    pub fn get_branch_exp (&self, index: char) -> Option<std::rc::Rc<Exp>> {
-        match {index as usize} {
-            i @ 0...25 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.tree[i].last().unwrap()
-                ).upgrade() {
-                    Some(grade)
-                }
-                else { None }
-            },
-            i @ 65...90 => {
-                if let Some(grade) = std::rc::Rc::downgrade (
-                    &self.tree[i - 65].last().unwrap()
-                ).upgrade() {
-                    Some(grade)
-                }
-                else { None }
-            },
-            i @ 97...122 => {
-                if let Some(grade) = std::rc::Rc::downgrade(
-                    &self.tree[i - 97].last().unwrap()
-                ).upgrade() {
-                    Some(grade)
-                }
-                else { None }
-            },
-            _ => None,
-        }
-    }
-
-    fn get_branch_exps (&self, index: char) -> Option<Vec<std::rc::Rc<Exp>>> {
-        match {index as usize} {
-            t @ 0...25 => {
-                Some(self.tree[t].iter().filter_map (|ref b|
-                    if let Some(grade) = std::rc::Rc::downgrade (
-                        &b
-                    ).upgrade() {
-                        Some(grade)
-                    } else { None }
-                ).collect::<Vec<std::rc::Rc<Exp>>>())
-            },
-            t @ 65...90 => {
-                Some(self.tree[t - 65].iter().filter_map (|ref b|
-                    if let Some(grade) = std::rc::Rc::downgrade (
-                        &b
-                    ).upgrade() {
-                        Some(grade)
-                    } else { None }
-                ).collect::<Vec<std::rc::Rc<Exp>>>())
-            },
-            t @ 97...122 => {
-                Some(self.tree[t - 97].iter().filter_map (|ref b|
-                    if let Some(grade) = std::rc::Rc::downgrade (
-                        &b
-                    ).upgrade() {
-                        Some(grade)
-                    } else { None }
-                ).collect::<Vec<std::rc::Rc<Exp>>>())
-            },
-            _ => None,
-        }
-    }
-
-    pub fn set_branch_imply (
-        &mut self,
-        bottom: std::rc::Rc<Exp>,
-        top: String,
-    ) -> bool {
-        for index in 0u8..25u8 {
-            return match self.get_branch_ident(index as char) {
-                Some(ref ident) if *ident == top => {
-                    self.tree[index as usize].push(bottom);
-                    true
-                },
-                _ => continue ,
+        } {
+            if let Some(axiom) = std::rc::Rc::downgrade (
+                &self.tree[i].last().unwrap()
+            ).upgrade() {
+                axiom.get_ident()
+            }
+            else {
+                None
             }
         }
-        false
+        else {
+            None
+        }
+    }
+
+    /// The `get_branch_exp` function returns the last axiom's branch.
+
+    pub fn get_branch_exp (
+        &self,
+        index: char,
+    ) -> Option<std::rc::Rc<Exp>> {
+        if let Some(i) = match {index as usize} {
+            i @ 0...25 => Some(i),
+            i @ 65...90 => Some(i-65),
+            i @ 97...122 => Some(i-97),
+            _ => None,
+        } {
+            if let Some(grade) = std::rc::Rc::downgrade (
+                &self.tree[i].last().unwrap()
+            ).upgrade() {
+                Some(grade)
+            }
+            else {
+                None
+            }
+        }
+        else {
+            None
+        }
+    }
+
+    /// The `get_branch_exp` function returns the all axiom' branch.
+
+    fn get_branch_exps (
+        &self,
+        index: char
+    ) -> Option<Vec<std::rc::Rc<Exp>>> {
+        if let Some(t) = match {index as usize} {
+            t @ 0...25 => Some(t),
+            t @ 65...90 => Some(t-65),
+            t @ 97...122 => Some(t-97),
+            _ => None,
+        } {
+            Some(self.tree[t].iter().filter_map (|ref b|
+                if let Some(grade) = std::rc::Rc::downgrade (
+                    &b
+                ).upgrade() {
+                    Some(grade)
+                } else { None }
+            ).collect::<Vec<std::rc::Rc<Exp>>>())
+        }
+        else {
+            None
+        }
+    }
+
+    /// The `set_branch_imply` function pushs the expression to
+    /// the targeted branch.
+
+    fn set_branch_imply (
+        &mut self,
+        top: char,
+        bottom: std::rc::Rc<Exp>,
+    ) -> bool {
+        if let Some(t) = match {top as usize} {
+            t @ 0...25 => Some(t),
+            t @ 65...90 => Some(t-65),
+            t @ 97...122 => Some(t-97),
+            _ => None,
+        } {
+            self.tree[t].push(bottom);
+            true
+        }
+        else {
+            false
+        }
+    }
+
+    /// The `add_branch_exp` function pushs the expression
+    /// to the last targeted branch.
+
+    pub fn add_branch_exp (
+        &mut self,
+        top: std::rc::Rc<Exp>,
+        bottom: String,
+    ) -> bool {
+        if let Some(index) = {
+            (0u8..25u8).zip (
+                self.tree.iter()
+            ).scan(bottom, |ident, (index, branch)| {
+                match branch.last() {
+                    Some(ref axiom) if axiom.get_ident().is_some()
+                                    && axiom.get_ident().unwrap() == *ident => {
+                        Some((index)-1)
+                    },
+                    _ => None,
+                }
+            }).collect::<Vec<u8>>().last()
+        } {
+            self.set_branch_imply((*index) as char, top)
+        }
+        else {
+            false
+        }
     }
 }
 

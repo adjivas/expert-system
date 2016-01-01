@@ -86,7 +86,7 @@ impl Exp for Axiom {
 
     /// The `set_imply` function changes the Axiom implication.
 
-    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) -> bool {
+    fn set_imply (&mut self, _: std::rc::Rc<Exp>) -> bool {
         false
     }
 }

@@ -48,7 +48,7 @@ fn test_advanced () {
         solver.get_branch_exp('d').unwrap(),
         solver.get_branch_exp('e').unwrap()
     );
-    solver.set_branch_imply(e_and_d, "b".to_string());
+    solver.add_branch_exp(e_and_d, "b".to_string());
     assert_eq!(solver.get_branch_value('a'), Some(false));
     assert_eq!(solver.get_branch_value('b'), Some(true));
 }
