@@ -19,6 +19,7 @@ pub struct Solver {
 impl Solver {
 
     /// The `new` constructor function returns the tree solver.
+
     pub fn new (
         axioms: &Set,
     ) -> Self {
@@ -60,12 +61,7 @@ impl Solver {
         &mut self,
         index: char,
     ) -> Option<bool> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(grade) = std::rc::Rc::downgrade (
                 &self.tree[i].last().unwrap()
             ).upgrade() {
@@ -86,12 +82,7 @@ impl Solver {
         &self,
         index: char,
     ) -> Option<String> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(axiom) = std::rc::Rc::downgrade (
                 &self.tree[i].last().unwrap()
             ).upgrade() {
@@ -112,12 +103,7 @@ impl Solver {
         &self,
         index: char,
     ) -> Option<std::rc::Rc<Exp>> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(grade) = std::rc::Rc::downgrade (
                 &self.tree[i].last().unwrap()
             ).upgrade() {
@@ -136,14 +122,9 @@ impl Solver {
 
     fn get_branch_exps (
         &self,
-        index: char
+        index: char,
     ) -> Option<Vec<std::rc::Rc<Exp>>> {
-        if let Some(t) = match {index as usize} {
-            t @ 0...25 => Some(t),
-            t @ 65...90 => Some(t-65),
-            t @ 97...122 => Some(t-97),
-            _ => None,
-        } {
+        if let Some(t) = parse_index!(index) {
             Some(self.tree[t].iter().filter_map (|ref b|
                 if let Some(grade) = std::rc::Rc::downgrade (
                     &b
@@ -165,12 +146,7 @@ impl Solver {
         top: char,
         bottom: std::rc::Rc<Exp>,
     ) -> bool {
-        if let Some(t) = match {top as usize} {
-            t @ 0...25 => Some(t),
-            t @ 65...90 => Some(t-65),
-            t @ 97...122 => Some(t-97),
-            _ => None,
-        } {
+        if let Some(t) = parse_index!(top) {
             self.tree[t].push(bottom);
             true
         }

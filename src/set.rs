@@ -24,12 +24,7 @@ impl Set {
         &self,
         index: char,
     ) -> Option<bool> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(grade) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
@@ -46,13 +41,11 @@ impl Set {
 
     /// The `get_ident` function returns the axiom's name.
 
-    pub fn get_ident (&self, index: char) -> Option<String> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+    pub fn get_ident (
+        &self,
+        index: char,
+    ) -> Option<String> {
+        if let Some(i) = parse_index!(index) {
             if let Some(axiom) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
@@ -73,12 +66,7 @@ impl Set {
         &self,
         index: char
     ) -> Option<std::rc::Rc<Exp>> {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(grade) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
@@ -98,14 +86,9 @@ impl Set {
     pub fn set_value (
         &mut self,
         index: char,
-        value: bool
+        value: bool,
     ) -> bool {
-        if let Some(i) = match {index as usize} {
-            i @ 0...25 => Some(i),
-            i @ 65...90 => Some(i-65),
-            i @ 97...122 => Some(i-97),
-            _ => None,
-        } {
+        if let Some(i) = parse_index!(index) {
             if let Some(axiom) = std::rc::Rc::get_mut (
                 &mut self.axioms[i]
             ) {
@@ -125,15 +108,10 @@ impl Set {
 
     pub fn set_imply (
         &mut self,
-        left: char,
-        right: char
+        index_left: char,
+        index_right: char,
     ) -> bool {
-        if let Some((l, r)) = match (left as usize, right as usize) {
-            (l @ 0...25, r @ 0...25) => Some((l, r)),
-            (l @ 65...90, r @ 65...90) => Some((l-65, r-65)),
-            (l @ 97...122, r @ 97...122) => Some((l-97, r-97)),
-            _ => None,
-        } {
+        if let Some((l, r)) = parse_index!(index_left, index_right) {
             if let Some(grade) = std::rc::Rc::downgrade (
                 &self.axioms[r]
             ).upgrade() {
@@ -183,11 +161,12 @@ impl std::ops::Index<char> for Set {
 
     /// The `index` function returns the axiom from set.
 
-    fn index (&self, index: char) -> &Axiom {
-        match {index as usize} {
-            i @ 0...25 => &self.axioms[i],
-            i @ 65...90 => &self.axioms[i-65],
-            i @ 97...122 => &self.axioms[i-97],
+    fn index (
+        &self,
+        index: char,
+    ) -> &Axiom {
+        match parse_index!(index) {
+            Some(i) => &self.axioms[i],
             _ => unimplemented!(),
         }
     }
