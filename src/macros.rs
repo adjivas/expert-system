@@ -7,6 +7,7 @@
 
 /// The `parse_index` macro returns a formated Index or Nothing.
 
+#[macro_export]
 macro_rules! parse_index {
     ($index: expr) => {
         match {$index as usize} {
