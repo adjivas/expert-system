@@ -11,7 +11,7 @@ use expert_sys::ops::Unary;
 use expert_sys::Exp;
 
 #[test]
-fn test_value () {
+fn test_example () {
     let mut axioms: expert_sys::Set = expert_sys::Set::default();
     axioms.set_imply('b', 'a');
     axioms.set_imply('c', 'b');
@@ -30,6 +30,9 @@ fn test_value () {
         axioms.get_exp('c').unwrap(),
     );
     assert_eq!(not_not_a.get_value(), Some(false));
+    assert_eq!(not_not_a.get_ident(), Some("!(!(a))".to_string()));
     assert_eq!(not_b.get_value(), Some(true));
+    assert_eq!(not_b.get_ident(), Some("!(b=>a)".to_string()));
     assert_eq!(not_c.get_value(), Some(true));
+    assert_eq!(not_c.get_ident(), Some("!(c=>b=>a)".to_string()));
 }

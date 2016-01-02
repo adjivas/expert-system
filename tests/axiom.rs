@@ -8,13 +8,16 @@
 extern crate expert_sys;
 
 #[test]
-fn test_value () {
+fn test_example () {
     let mut axioms: expert_sys::Set = expert_sys::Set::default();
 
     axioms.set_value('a', true);
     axioms.set_imply('b', 'a');
     assert_eq!(axioms.get_value('a'), Some(true));
+    assert_eq!(axioms.get_ident('a'), Some("a".to_string()));
     assert_eq!(axioms.get_value('b'), Some(true));
+    assert_eq!(axioms.get_ident('b'), Some("b=>a".to_string()));
     assert_eq!(axioms.get_value('c'), Some(false));
+    assert_eq!(axioms.get_ident('c'), Some("c".to_string()));
     assert_eq!(axioms.get_value('_'), None);
 }

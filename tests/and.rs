@@ -27,7 +27,9 @@ fn test_example () {
         axioms.get_exp('c').unwrap()
     );
     assert_eq!(a_and_b.get_value(), Some(true));
+    assert_eq!(a_and_b.get_ident(), Some("(a+b)".to_string()));
     assert_eq!(b_and_c.get_value(), Some(false));
+    assert_eq!(b_and_c.get_ident(), Some("(b+c)".to_string()));
 }
 
 /// The `test_advanced` checks this graph:
@@ -37,6 +39,7 @@ fn test_example () {
 ///   D+E=>B    G+H=>F I+J=>G     L+M=>K
 ///                           O+P=>(L+N=>L+M)
 
+#[test]
 fn test_advanced () {
     let mut axioms = expert_sys::Set::default();
     axioms.set_value('d', true);
@@ -50,5 +53,5 @@ fn test_advanced () {
     );
     solver.add_branch_exp(e_and_d, "b".to_string());
     assert_eq!(solver.get_branch_value('a'), Some(false));
-    assert_eq!(solver.get_branch_value('b'), Some(true));
+    assert_eq!(solver.get_branch_value('b'), Some(false));
 }
