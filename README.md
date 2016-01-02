@@ -1,6 +1,6 @@
 # Expert-System
 
-[![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis]
+[![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis] [![coverage-badge][]][coverage]
 
 #### How to build:
 ```shell
@@ -57,4 +57,6 @@ cargo build
 [license]: https://github.com/adjivas/expert-system/blob/master/LICENSE
 [travis-badge]: https://travis-ci.org/adjivas/expert-system.svg?style=flat-square
 [travis]: https://travis-ci.org/adjivas/expert-system
+[coverage-badge]: https://coveralls.io/repos/adjivas/expert-system/badge.svg?branch=master&service=github
+[coverage]: hhttps://coveralls.io/github/adjivas/expert-system?branch=master
 [circle-badge]: https://circleci.com/gh/adjivas/expert-system/tree/master.svg?style=svg
