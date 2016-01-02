@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["And","The `And` structure is a binary And."],["Not","The `Not` structure is a binary Not."]],"trait":[["Binary",""],["Unary",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Solver","The `Solver` structure is all alphabet expression tree."]]});

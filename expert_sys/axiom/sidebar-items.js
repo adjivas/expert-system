@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Axiom","The `Axiom` structure is a primitive."]]});

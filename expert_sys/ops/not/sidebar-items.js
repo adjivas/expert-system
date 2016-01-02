@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Not","The `Not` structure is a binary Not."]]});

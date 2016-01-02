@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["And","The `And` structure is a binary And."]]});
