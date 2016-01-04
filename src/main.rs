@@ -4,17 +4,41 @@
 //
 // This file may not be copied, modified, or distributed
 // except according to those terms.
+#![feature(plugin)]
 
+#![plugin(regex_macros)]
+extern crate regex;
 extern crate expert_sys;
 
+mod parse;
+mod tokenizer;
+mod exp;
+mod fc_string;
+
+use std::fs::File;
+use std::env;
+use std::io::prelude::*;
+use parse::{Parser};
+
+fn file_as_string(filename: &String) -> String {
+    let mut f = File::open(filename).unwrap();
+    let mut s = String::new();
+    f.read_to_string(&mut s);
+    s
+}
+
+/// Return the file name to parse in this execution.
+fn args_parse() -> String {
+	let args: Vec<_> = env::args().collect();
+	if args.len() < 2 {
+		println!("usage: {} file_name", args[0]);
+		std::process::exit(1)
+	}
+	args[1].clone()
+}
+
 fn main () {
-    let mut axioms = expert_sys::Set::default();
-    axioms.set_imply('b', 'a');
-    axioms.set_imply('c', 'b');
-
-    let mut solver = expert_sys::Solver::new(&axioms);
-    //solver.set_branch_imply('e', axioms.get_exp('c').unwrap());
-    println!("{}", solver);
-
-    //let mut rules = Vec::<std::rc::Rc<expert_sys::Exp>>::new();
+	let filename = args_parse();
+	let instructions_str = file_as_string(&filename);
+	let instructions = Parser::parse(&instructions_str);
 }

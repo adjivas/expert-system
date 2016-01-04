@@ -7,7 +7,7 @@
 
 extern crate std;
 
-/// The `Exp` Trait is a expression's implemention.
+/// The `Exp` Trait is an expression's implemention.
 
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;
