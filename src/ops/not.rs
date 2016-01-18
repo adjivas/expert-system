@@ -14,7 +14,6 @@ use exp::Exp;
 
 pub struct Not {
     infer: std::rc::Rc<Exp>, // infer dependencies.
-    imply: Option<std::rc::Rc<Exp>>, // implication.
 }
 
 impl Unary for Not {
@@ -25,7 +24,6 @@ impl Unary for Not {
         std::rc::Rc::new (
             Not {
                 infer: infer,
-                imply: None,
             }
         )
     }
@@ -36,43 +34,20 @@ impl Exp for Not {
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
-        match self.imply {
-            Some(ref imply) => imply.get_value(),
-            None if self.infer.get_value() == Some(true) => Some(false),
-            None if self.infer.get_value() == Some(false) => Some(true),
-            _ => None,
+        match self.infer.get_value() {
+            Some(true) => Some(false),
+            Some(false) => Some(true),
+            None => None,
         }
     }
 
     /// The `get_ident` function returns the arithmetic formule.
 
     fn get_ident (&self) -> Option<String> {
-        match self.imply {
-            Some(ref imply) => {
-                if let (Some(infer), Some(imply)) = (
-                    self.infer.get_ident(),
-                    imply.get_ident()
-                ) {
-                    Some(format! ("(!{}=>{})", infer, imply))
-                }
-                else {
-                    None
-                }
-            },
-            None => if let Some(infer) = self.infer.get_ident() {
-                Some(format! ("!({})", infer))
-            }
-            else {
-                None
-            },
+        match self.infer.get_ident() {
+            Some(infer) => Some(format! ("!({})", infer)),
+            None => None,
         }
-    }
-
-    /// The `set_imply` function changes the Not implication.
-
-    fn set_imply (&mut self, imply: std::rc::Rc<Exp>) -> bool {
-        self.imply = Some(imply);
-        true
     }
 }
 

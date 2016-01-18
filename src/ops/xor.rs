@@ -1,8 +1,8 @@
 // @gbersac, @adjivas - github.com/adjivas. See the LICENSE
-// file at the top-level directory of this distribution and at
+// file at the top-level directory of this distribution Xor at
 // https://github.com/adjivas/expert-system
 //
-// This file may And be copied, modified, or distributed
+// This file may Xor be copied, modified, or distributed
 // except according to those terms.
 
 extern crate std;
@@ -10,23 +10,23 @@ extern crate std;
 use super::Binary;
 use Exp;
 
-/// The `And` structure is a binary And.
+/// The `Xor` structure is a binary Xor.
 
-pub struct And {
+pub struct Xor {
     left: std::rc::Rc<Exp>, // left dependency.
     right: std::rc::Rc<Exp>, // right dependency.
 }
 
-impl Binary for And {
+impl Binary for Xor {
 
-    /// The `new` constructor function returns And opperation.
+    /// The `new` constructor function returns Xor opperation.
 
     fn new (
         left: std::rc::Rc<Exp>,
         right: std::rc::Rc<Exp>
     ) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
-            And {
+            Xor {
                 left: left,
                 right: right,
             }
@@ -34,13 +34,14 @@ impl Binary for And {
     }
 }
 
-impl Exp for And {
+impl Exp for Xor {
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
         match (self.left.get_value(), self.right.get_value()) {
-            (Some(true), Some(true)) => Some(true),
+            (Some(true), Some(false)) => Some(true),
+            (Some(false), Some(true)) => Some(true),
             _ => Some(false),
         }
     }
@@ -49,15 +50,15 @@ impl Exp for And {
 
     fn get_ident (&self) -> Option<String> {
         match (self.left.get_ident(), self.right.get_ident()) {
-            (Some(left), Some(right)) => Some(format!("({}+{})", left, right)),
+            (Some(left), Some(right)) => Some(format!("({}^{})", left, right)),
             _ => None,
         }
     }
 }
 
-impl std::fmt::Display for And {
+impl std::fmt::Display for Xor {
 
-    /// The `fmt` function prints the And Door.
+    /// The `fmt` function prints the Xor Door.
 
     fn fmt (
         &self,

@@ -14,7 +14,6 @@ use exp::Exp;
 pub struct Axiom {
     ident: char, // name.
     value: bool, // result.
-    imply: Option<std::rc::Rc<Axiom>>, // implication.
 }
 
 impl Axiom {
@@ -26,7 +25,6 @@ impl Axiom {
             Axiom {
                 ident: ident,
                 value: false,
-                imply: None,
             }
         )
     }
@@ -40,15 +38,6 @@ impl Axiom {
         self.value = value;
         true
     }
-
-    /// The `set_imply` function adds/updates the axiom's implication.
-
-    pub fn set_imply (
-        &mut self,
-        imply: std::rc::Rc<Axiom>,
-    ) {
-        self.imply = Some(imply);
-    }
 }
 
 impl Exp for Axiom {
@@ -56,38 +45,13 @@ impl Exp for Axiom {
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
-        match self.imply {
-            Some(ref imply) => {
-                if let Some(grade) = std::rc::Rc::downgrade(imply).upgrade() {
-                    grade.get_value()
-                }
-                else { None }
-            },
-            None => Some(self.value),
-        }
+        Some(self.value)
     }
 
     /// The `get_ident` function returns the arithmetic formule.
 
     fn get_ident (&self) -> Option<String> {
-        match self.imply {
-            Some(ref imply) => {
-                if let Some(grade) = std::rc::Rc::downgrade(imply).upgrade() {
-                    if let Some(result) = grade.get_ident() {
-                        Some(format!("{}=>{}", self.ident, result))
-                    }
-                    else { None }
-                }
-                else { None }
-            },
-            None => Some(format!("{}", self.ident)),
-        }
-    }
-
-    /// The `set_imply` function changes the Axiom implication.
-
-    fn set_imply (&mut self, _: std::rc::Rc<Exp>) -> bool {
-        false
+        Some(format!("{}", self.ident))
     }
 }
 

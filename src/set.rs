@@ -89,44 +89,11 @@ impl Set {
         value: bool,
     ) -> bool {
         if let Some(i) = parse_index!(index) {
-            if let Some(axiom) = std::rc::Rc::get_mut (
+            match std::rc::Rc::get_mut (
                 &mut self.axioms[i]
             ) {
-                axiom.set_value(value);
-                true
-            }
-            else {
-                false
-            }
-        }
-        else {
-            false
-        }
-    }
-
-    /// The `set_imply` function inserts/updates the dependency axiom.
-
-    pub fn set_imply (
-        &mut self,
-        index_left: char,
-        index_right: char,
-    ) -> bool {
-        if let Some((l, r)) = parse_index!(index_left, index_right) {
-            if let Some(grade) = std::rc::Rc::downgrade (
-                &self.axioms[r]
-            ).upgrade() {
-                if let Some(axiom) = std::rc::Rc::get_mut (
-                    &mut self.axioms[l]
-                ) {
-                    axiom.set_imply(grade);
-                    true
-                }
-                else {
-                    false
-                }
-            }
-            else {
-                false
+                Some(axiom) => axiom.set_value(value),
+                None => false,
             }
         }
         else {
