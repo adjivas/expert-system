@@ -7,7 +7,6 @@
 
 extern crate std;
 
-use super::Unary;
 use exp::Exp;
 
 /// The `Not` structure is a binary Not.
@@ -16,11 +15,11 @@ pub struct Not {
     infer: std::rc::Rc<Exp>, // infer dependencies.
 }
 
-impl Unary for Not {
+impl Not {
 
     /// The `new` constructor function returns Not opperation.
 
-    fn new (infer: std::rc::Rc<Exp>) -> std::rc::Rc<Self> {
+    pub fn new (infer: std::rc::Rc<Exp>) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
             Not {
                 infer: infer,

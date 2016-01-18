@@ -7,7 +7,6 @@
 
 extern crate std;
 
-use super::Binary;
 use Exp;
 
 /// The `Xor` structure is a binary Xor.
@@ -17,11 +16,11 @@ pub struct Xor {
     right: std::rc::Rc<Exp>, // right dependency.
 }
 
-impl Binary for Xor {
+impl Xor {
 
     /// The `new` constructor function returns Xor opperation.
 
-    fn new (
+    pub fn new (
         left: std::rc::Rc<Exp>,
         right: std::rc::Rc<Exp>
     ) -> std::rc::Rc<Self> {

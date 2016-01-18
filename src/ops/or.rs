@@ -7,7 +7,6 @@
 
 extern crate std;
 
-use super::Binary;
 use Exp;
 
 /// The `Or` structure is a binary Or.
@@ -17,11 +16,11 @@ pub struct Or {
     right: std::rc::Rc<Exp>, // right dependency.
 }
 
-impl Binary for Or {
+impl Or {
 
     /// The `new` constructor function returns Or opperation.
 
-    fn new (
+    pub fn new (
         left: std::rc::Rc<Exp>,
         right: std::rc::Rc<Exp>
     ) -> std::rc::Rc<Self> {

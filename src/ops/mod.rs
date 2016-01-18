@@ -8,12 +8,14 @@
 //! The `ops` module is a collection of operators
 //! like: Axiom, And, Or, Xor, Not, [...].
 
-mod binary;
-mod unary;
 mod and;
 mod not;
+mod xor;
+mod or;
+mod imply;
 
-pub use self::binary::Binary;
-pub use self::unary::Unary;
 pub use self::and::And;
 pub use self::not::Not;
+pub use self::xor::Xor;
+pub use self::or::Or;
+pub use self::imply::Imply;

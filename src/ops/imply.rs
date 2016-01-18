@@ -7,7 +7,6 @@
 
 extern crate std;
 
-use super::Binary;
 use Exp;
 
 /// The `Imply` structure is a binary Imply.
@@ -17,18 +16,18 @@ pub struct Imply {
     to: std::rc::Rc<Exp>,
 }
 
-impl Binary for Imply {
+impl Imply {
 
     /// The `new` constructor function returns Imply opperation.
 
-    fn new (
+    pub fn new (
         from: std::rc::Rc<Exp>,
-        to:: std::rc::Rc<Exp>
+        to: std::rc::Rc<Exp>
     ) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
             Imply {
                 from: from,
-                to: to:,
+                to: to,
             }
         )
     }

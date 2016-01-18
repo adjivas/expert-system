@@ -8,20 +8,20 @@
 extern crate expert_sys;
 
 /// The `main` start function examples how to
-/// use Axiom with door And.
+/// use Axiom with door Xor.
 
 fn main () {
     let mut axioms = expert_sys::Set::default();
 
     axioms.set_value('a', true);
     axioms.set_value('b', true);
-    let a_and_b = expert_sys::ops::And::new (
+    let a_xor_b = expert_sys::ops::Xor::new (
         axioms.get_exp('a').unwrap(),
         axioms.get_exp('b').unwrap()
     );
-    let b_and_c = expert_sys::ops::And::new (
+    let b_xor_c = expert_sys::ops::Xor::new (
         axioms.get_exp('b').unwrap(),
         axioms.get_exp('c').unwrap()
     );
-    println!("{}, {}", a_and_b, b_and_c);
+    println!("{}, {}", a_xor_b, b_xor_c);
 }

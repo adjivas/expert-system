@@ -7,26 +7,16 @@
 
 extern crate expert_sys;
 
-use expert_sys::ops::Unary;
-
 /// The `main` start function examples how to
 /// use Axiom with door Not.
 
 fn main () {
-    let mut axioms = expert_sys::Set::default();
-    axioms.set_imply('b', 'a');
-    axioms.set_imply('c', 'b');
-
-    /*let not_not_a = expert_sys::ops::Not::new::<expert_sys::ops::unary::Unary> (
-        std::rc::Rc::new(expert_sys::ops::Not::new::<expert_sys::ops::unary::Unary> (
-            axioms.get_exp('a').unwrap(),
-        )),
-    );*/
+    let axioms = expert_sys::Set::default();
     let not_b = expert_sys::ops::Not::new (
         axioms.get_exp('b').unwrap(),
-    );/*
-    let not_c = expert_sys::ops::Not::new::<expert_sys::ops::unary::Unary> (
+    );
+    let not_c = expert_sys::ops::Not::new (
         axioms.get_exp('c').unwrap(),
     );
-    println!("{}, {}, {}", not_not_a, not_b, not_c);*/
+    println!("{}, {}", not_b, not_c);
 }

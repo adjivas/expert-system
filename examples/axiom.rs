@@ -13,7 +13,6 @@ fn main () {
     let mut axioms = expert_sys::Set::default();
 
     axioms.set_value('a', true);
-    axioms.set_imply('b', 'a');
     println!("{}", axioms);
     println!("{}", axioms['a']);
 }
