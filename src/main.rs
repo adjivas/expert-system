@@ -14,6 +14,8 @@ mod parse;
 mod tokenizer;
 mod exp;
 mod fc_string;
+#[cfg(test)]
+mod test_parse;
 
 use std::fs::File;
 use std::env;

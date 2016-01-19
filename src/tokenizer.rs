@@ -149,6 +149,10 @@ impl<E: Clone> Tokenizer<E>
 		while !to_split.is_empty() {
 			let tok = self.match_token(&mut to_split)
 					.expect("this string does not match any token type");
+			if tok.get_content().len() == 0 {
+				println!("Empty token : {:?}", to_split);
+				panic!("");
+			}
 			to_split = self.reduce_to_split(&to_split, tok.get_content().len());
 			tokens.push(tok);
 		}
@@ -172,7 +176,10 @@ fn test_tokenizer()
 		TokenInfo::new(TokenType::BBB, regex!("bbb")),
 		TokenInfo::new(TokenType::NONE, regex!("[^ \n\t]+")),
 	];
-	let tokenizer = Tokenizer::new(token_types);
+	let tokenizer = Tokenizer{
+		types_info: token_types,
+		discards: regex!("[ \t\n]+"),
+	};
 
 	// basic
 	let vec_token = tokenizer.split(&"aaa".to_string());
