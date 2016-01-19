@@ -28,10 +28,6 @@ pub struct Parser {
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
-
-	/// This is the copy of the previous state to restore if nescessary
-	/// using Parser::restore_state
-	old_state: usize
 }
 
 impl Parser {
@@ -65,13 +61,13 @@ impl Parser {
 	    }
 	}
 
-	fn save_state(&mut self) {
-		self.old_state = self.index
+	fn save_state(&mut self) -> usize {
+		self.index
 	}
 
-	fn restore_state(&mut self, restore: bool) {
+	fn restore_state(&mut self, restore: bool, old_state: usize) {
 		if !restore {
-			self.index = self.old_state;
+			self.index = old_state;
 		}
 	}
 
@@ -88,30 +84,67 @@ impl Parser {
 	    found
 	}
 
+	fn rule_not(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::Not) &&
+				self.tok_is_type(TokenType::Axiom);
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
+	fn rule_axiom(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.rule_not() ||
+				self.tok_is_type(TokenType::Axiom);
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
+	fn rule_plus(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::And) &&
+				self.rule_axiom();
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
+	fn rule_or(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::Or) &&
+				self.rule_axiom();
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
 	fn rule_expr(&mut self) -> bool {
-		self.save_state();
-		let to_return =	self.tok_is_type(TokenType::Axiom);
-		self.restore_state(to_return);
+		let old_state = self.save_state();
+		let mut to_return =	true;
+		to_return = self.rule_axiom();
+		let mut carry_on = to_return;
+		while to_return && carry_on {
+			carry_on = self.rule_plus() || self.rule_or();
+		}
+		self.restore_state(to_return, old_state);
 		to_return
 	}
 
 	fn rule_instruction(&mut self) -> bool {
-		self.save_state();
+		let old_state = self.save_state();
 		let to_return = self.rule_expr() &&
 				self.tok_is_type(TokenType::Implies) &&
 				self.rule_expr() &&
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
-		self.restore_state(to_return);
+		self.restore_state(to_return, old_state);
 		to_return
 	}
 
 	fn rule_empty_line(&mut self) -> bool {
-		self.save_state();
+		let old_state = self.save_state();
 		let to_return =
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
-		self.restore_state(to_return);
+		self.restore_state(to_return, old_state);
 		to_return
 	}
 
@@ -124,7 +157,6 @@ impl Parser {
 		let mut parser = Parser{
 			index: 0,
 			instrs: Vec::new(),
-			old_state: 0,
 			tokens: tokens
 		};
 
@@ -135,7 +167,6 @@ impl Parser {
 		}
 
 		// return value
-		println!("{:?} {:?}", carry_on, parser.reached_end());
 		if carry_on {
 		    Some(parser.instrs)
 		} else {
