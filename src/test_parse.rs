@@ -1,6 +1,8 @@
 use parse::{Parser};
+use exp::{Exp};
+use ops::{And, Not, Xor, Or, Imply};
 
-fn test_one(s: &str, is_correct: bool) {
+fn test_parsability(s: &str, is_correct: bool) {
 	println!("\nFor : {:?}", s);
 	let result = Parser::parse(&s.to_string());
 	if is_correct {
@@ -12,33 +14,45 @@ fn test_one(s: &str, is_correct: bool) {
 
 #[test]
 fn test_parser_basics() {
-    test_one("", true);
-    test_one("A => B", true);
-    test_one("A + B => C", true);
-    test_one("A + B + C => D", true);
-    test_one("A + B + C + D => E", true);
-    test_one("A + B + !C + !D => E", true);
-    test_one("A | B => C", true);
-    test_one("A | B + !C | !D => E", true);
-    test_one("A ^ B => C", true);
-    test_one("A ^ B ^ !C + !D => E", true);
-    test_one("!A => !B", true);
-    test_one("A => B #blabla", true);
+    test_parsability("", true);
+    test_parsability("A => B", true);
+    test_parsability("A + B => C", true);
+    test_parsability("A + B + C => D", true);
+    test_parsability("A + B + C + D => E", true);
+    test_parsability("A + B + !C + !D => E", true);
+    test_parsability("A | B => C", true);
+    test_parsability("A | B + !C | !D => E", true);
+    test_parsability("A ^ B => C", true);
+    test_parsability("A ^ B ^ !C + !D => E", true);
+    test_parsability("!A => !B", true);
+    test_parsability("A => B #blabla", true);
 
-    test_one("A ", false);
-    test_one("A #blabla", false);
-    test_one("A B => C #blabla", false);
-    test_one("=> C #blabla", false);
-    test_one("A + => C #blabla", false);
-    test_one("A + B + => C #blabla", false);
+    test_parsability("A ", false);
+    test_parsability("A #blabla", false);
+    test_parsability("A B => C #blabla", false);
+    test_parsability("=> C #blabla", false);
+    test_parsability("A + => C #blabla", false);
+    test_parsability("A + B + => C #blabla", false);
 }
 
 #[test]
 fn test_parser_parenthesis() {
-    test_one("(A) => C", true);
-    test_one("((A)) => C", true);
-    test_one("(A + B) => C", true);
-    test_one("(A + B) ^ (C + D) => E", true);
+    test_parsability("(A) => C", true);
+    test_parsability("((A)) => C", true);
+    test_parsability("(A + B) => C", true);
+    test_parsability("(A + B) ^ (C + D) => E", true);
 
-    test_one("(A + B => C", false);
+    test_parsability("(A + B => C", false);
 }
+
+// fn test_tree(s: &str, tree: Box<Exp>) {
+// 	println!("\nFor : {:?}", s);
+// 	let result = Parser::parse(&s.to_string());
+// 	match result {
+// 	    Some(expr) => {
+// 	    	let result = expr[0];
+// 	    	assert!(*result == tree);
+// 	    },
+// 	    None => panic!("The expr #{:?}# is false.", s),
+// 	};
+// }

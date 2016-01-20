@@ -1,6 +1,10 @@
+use ops::{And, Not, Xor, Or, Imply};
+use axiom::{Axiom};
 use tokenizer::{Tokenizer, TokenInfo, Token};
 use exp::{Exp};
 use regex::Regex;
+use std::collections::VecDeque;
+use std::rc::Rc;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType
@@ -28,6 +32,9 @@ pub struct Parser {
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
+
+	/// The stack for generating the abstract syntax tree
+	stack: VecDeque<Rc<Exp>>
 }
 
 impl Parser {
@@ -61,10 +68,12 @@ impl Parser {
 	    }
 	}
 
+	// TODO save also the stack
 	fn save_state(&mut self) -> usize {
 		self.index
 	}
 
+	// TODO restore also the stack
 	fn restore_state(&mut self, restore: bool, old_state: usize) {
 		if !restore {
 			self.index = old_state;
@@ -84,10 +93,39 @@ impl Parser {
 	    found
 	}
 
+	fn pop_stack_two(&mut self) -> (Rc<Exp>, Rc<Exp>) {
+		if self.stack.len() <= 1 {
+		    panic!("parse error: stack is too short");
+		}
+		(self.stack.pop_front().unwrap(), self.stack.pop_front().unwrap())
+	}
+
+	///////////////////////////////////////////////////////////////////// RULES
+
+	fn rule_axiom(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::Axiom);
+		if to_return {
+			let mut axiom_letter = self.tokens[self.index - 1].get_content();
+			let axiom_letter = axiom_letter.chars().next().unwrap();
+			self.stack.push_front(Axiom::new(axiom_letter));
+		}
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
 	fn rule_not(&mut self) -> bool {
 		let old_state = self.save_state();
+		// TODO replace tok_is_type by a rule_value ?
 		let to_return =	self.tok_is_type(TokenType::Not) &&
-				self.tok_is_type(TokenType::Axiom);
+				self.rule_axiom();
+		if to_return {
+			if self.stack.len() == 0 {
+			    println!("parse error, stack is empty");
+			}
+		    let val = self.stack.pop_front().unwrap();
+		    self.stack.push_front(Not::new(val));
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
@@ -97,15 +135,14 @@ impl Parser {
 		let to_return =	self.tok_is_type(TokenType::OpenParenthesis) &&
 				self.rule_expr() &&
 				self.tok_is_type(TokenType::CloseParenthesis);
-				println!("rule_parenthesis {}", self.index);
 		self.restore_state(to_return, old_state);
 		to_return
 	}
 
-	fn rule_axiom(&mut self) -> bool {
+	fn rule_value(&mut self) -> bool {
 		let old_state = self.save_state();
 		let to_return =	self.rule_not() ||
-				self.tok_is_type(TokenType::Axiom) ||
+				self.rule_axiom() ||
 				self.rule_parenthesis();
 		self.restore_state(to_return, old_state);
 		to_return
@@ -114,7 +151,11 @@ impl Parser {
 	fn rule_and(&mut self) -> bool {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::And) &&
-				self.rule_axiom();
+				self.rule_value();
+		if to_return {
+		    let (lf, rg) = self.pop_stack_two();
+		    self.stack.push_front(And::new(lf, rg));
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
@@ -122,7 +163,11 @@ impl Parser {
 	fn rule_or(&mut self) -> bool {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::Or) &&
-				self.rule_axiom();
+				self.rule_value();
+		if to_return {
+		    let (lf, rg) = self.pop_stack_two();
+		    self.stack.push_front(Or::new(lf, rg));
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
@@ -130,7 +175,11 @@ impl Parser {
 	fn rule_xor(&mut self) -> bool {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::Xor) &&
-				self.rule_axiom();
+				self.rule_value();
+		if to_return {
+		    let (lf, rg) = self.pop_stack_two();
+		    self.stack.push_front(Xor::new(lf, rg));
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
@@ -138,7 +187,7 @@ impl Parser {
 	fn rule_expr(&mut self) -> bool {
 		let old_state = self.save_state();
 		let mut to_return =	true;
-		to_return = self.rule_axiom();
+		to_return = self.rule_value();
 		let mut carry_on = to_return;
 		while to_return && carry_on {
 			carry_on = self.rule_and() || self.rule_or() || self.rule_xor();
@@ -154,6 +203,10 @@ impl Parser {
 				self.rule_expr() &&
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
+		if to_return {
+		    let (lf, rg) = self.pop_stack_two();
+		    self.stack.push_front(Imply::new(lf, rg));
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
@@ -177,7 +230,8 @@ impl Parser {
 		let mut parser = Parser{
 			index: 0,
 			instrs: Vec::new(),
-			tokens: tokens
+			tokens: tokens,
+			stack: VecDeque::new()
 		};
 
 		// test tokens against rules
