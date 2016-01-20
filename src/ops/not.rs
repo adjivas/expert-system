@@ -44,7 +44,7 @@ impl Exp for Not {
 
     fn get_ident (&self) -> Option<String> {
         match self.infer.get_ident() {
-            Some(infer) => Some(format! ("!({})", infer)),
+            Some(infer) => Some(format! ("!{}", infer)),
             None => None,
         }
     }

@@ -28,7 +28,7 @@ pub struct Parser {
 	index: usize,
 
 	/// Instructions parsed. This is the result of the parsing.
-	instrs: Vec<Box<Exp>>,
+	instrs: Vec<Rc<Exp>>,
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
@@ -153,7 +153,7 @@ impl Parser {
 		let to_return =	self.tok_is_type(TokenType::And) &&
 				self.rule_value();
 		if to_return {
-		    let (lf, rg) = self.pop_stack_two();
+		    let (rg, lf) = self.pop_stack_two();
 		    self.stack.push_front(And::new(lf, rg));
 		}
 		self.restore_state(to_return, old_state);
@@ -165,7 +165,7 @@ impl Parser {
 		let to_return =	self.tok_is_type(TokenType::Or) &&
 				self.rule_value();
 		if to_return {
-		    let (lf, rg) = self.pop_stack_two();
+		    let (rg, lf) = self.pop_stack_two();
 		    self.stack.push_front(Or::new(lf, rg));
 		}
 		self.restore_state(to_return, old_state);
@@ -177,7 +177,7 @@ impl Parser {
 		let to_return =	self.tok_is_type(TokenType::Xor) &&
 				self.rule_value();
 		if to_return {
-		    let (lf, rg) = self.pop_stack_two();
+		    let (rg, lf) = self.pop_stack_two();
 		    self.stack.push_front(Xor::new(lf, rg));
 		}
 		self.restore_state(to_return, old_state);
@@ -204,8 +204,9 @@ impl Parser {
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
 		if to_return {
-		    let (lf, rg) = self.pop_stack_two();
-		    self.stack.push_front(Imply::new(lf, rg));
+		    let (rg, lf) = self.pop_stack_two();
+		    self.instrs.push(Imply::new(lf, rg));
+		    self.stack.clear();
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -221,7 +222,7 @@ impl Parser {
 	}
 
 	/// Parse the string into an equation and reduce it.
-	pub fn parse(to_parse: &String) -> Option<Vec<Box<Exp>>>
+	pub fn parse(to_parse: &String) -> Option<Vec<Rc<Exp>>>
 	{
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);

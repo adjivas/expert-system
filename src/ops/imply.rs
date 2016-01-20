@@ -45,7 +45,7 @@ impl Exp for Imply {
 
     fn get_ident (&self) -> Option<String> {
         match (self.from.get_ident(), self.to.get_ident()) {
-            (Some(from), Some(to)) => Some(format!("({}=>{})", from, to)),
+            (Some(from), Some(to)) => Some(format!("{}=>{}", from, to)),
             _ => None,
         }
     }

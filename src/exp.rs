@@ -7,11 +7,17 @@
 
 extern crate std;
 
+use std::rc::Rc;
+
 /// The `Exp` Trait is an expression's implemention.
 
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;
     fn get_value(&self) -> Option<bool>;
+
+    fn eq(&self, other: Rc<Exp>) -> bool {
+        self.get_ident() == other.get_ident()
+    }
 }
 
 impl std::fmt::Display for Exp {
