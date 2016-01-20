@@ -2,7 +2,7 @@ use tokenizer::{Tokenizer, TokenInfo, Token};
 use exp::{Exp};
 use regex::Regex;
 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType
 {
 	OpenParenthesis,
@@ -92,15 +92,26 @@ impl Parser {
 		to_return
 	}
 
-	fn rule_axiom(&mut self) -> bool {
+	fn rule_parenthesis(&mut self) -> bool {
 		let old_state = self.save_state();
-		let to_return =	self.rule_not() ||
-				self.tok_is_type(TokenType::Axiom);
+		let to_return =	self.tok_is_type(TokenType::OpenParenthesis) &&
+				self.rule_expr() &&
+				self.tok_is_type(TokenType::CloseParenthesis);
+				println!("rule_parenthesis {}", self.index);
 		self.restore_state(to_return, old_state);
 		to_return
 	}
 
-	fn rule_plus(&mut self) -> bool {
+	fn rule_axiom(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.rule_not() ||
+				self.tok_is_type(TokenType::Axiom) ||
+				self.rule_parenthesis();
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
+	fn rule_and(&mut self) -> bool {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::And) &&
 				self.rule_axiom();
@@ -116,13 +127,21 @@ impl Parser {
 		to_return
 	}
 
+	fn rule_xor(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::Xor) &&
+				self.rule_axiom();
+		self.restore_state(to_return, old_state);
+		to_return
+	}
+
 	fn rule_expr(&mut self) -> bool {
 		let old_state = self.save_state();
 		let mut to_return =	true;
 		to_return = self.rule_axiom();
 		let mut carry_on = to_return;
 		while to_return && carry_on {
-			carry_on = self.rule_plus() || self.rule_or();
+			carry_on = self.rule_and() || self.rule_or() || self.rule_xor();
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -153,7 +172,8 @@ impl Parser {
 	{
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
-		tokens.push(Token::new(TokenType::EndLine, "".to_string()));
+		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
+		println!("{:?}", tokens);
 		let mut parser = Parser{
 			index: 0,
 			instrs: Vec::new(),
