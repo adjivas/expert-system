@@ -60,6 +60,8 @@ impl Parser {
 			TokenInfo::new(TokenType::EndLine, Regex::new("\n").unwrap()),
 			TokenInfo::new(TokenType::Axiom, Regex::new("[a-zA-Z]").unwrap()),
 			TokenInfo::new(TokenType::Comment, Regex::new("#.*").unwrap()),
+			TokenInfo::new(TokenType::InitialFacts, Regex::new("=").unwrap()),
+			TokenInfo::new(TokenType::Queries, Regex::new(r"\?").unwrap()),
 			TokenInfo::new(TokenType::Unknow, Regex::new(".*").unwrap()),
 		];
 		let tokenizer = Tokenizer::new(token_types);
@@ -209,28 +211,29 @@ impl Parser {
 				self.rule_expr() &&
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
-		/*if to_return {
+		if to_return {
 		    let (rg, lf) = self.pop_stack_two();
-		    self.instrs.push(Imply::new(lf, rg));
+		    self.rules.add_instrs(Imply::new(lf, rg));
 		    self.stack.clear();
-		}*/
+		}
 		self.restore_state(to_return, old_state);
 		to_return
 	}
 
 	fn rule_query(&mut self) -> bool {
 		let old_state = self.save_state();
-		let to_return =	self.tok_is_type(TokenType::Queries);
+		let mut to_return =	self.tok_is_type(TokenType::Queries);
 		let mut tok_type = self.tokens[self.index].get_type().clone();
 		while tok_type == TokenType::Axiom {
+			// TODO add request only if to_return is true
 			self.rules.add_request(self.tokens[self.index].get_content());
 			self.index += 1;
 			tok_type = self.tokens[self.index].get_type().clone();
 		}
 		// in case there is a comment at the end of the line (discard it).
-		/*self.tok_is_type(TokenType::Comment);
-		to_return = self.tok_is_type(TokenType::EndLine);
-		self.restore_state(to_return, old_state);*/
+		self.tok_is_type(TokenType::Comment);
+		to_return = to_return && self.tok_is_type(TokenType::EndLine);
+		self.restore_state(to_return, old_state);
 		to_return
 	}
 
@@ -246,7 +249,7 @@ impl Parser {
 		}
 		// in case there is a comment at the end of the line (discard it).
 		self.tok_is_type(TokenType::Comment);
-		to_return = self.tok_is_type(TokenType::EndLine);
+		to_return = to_return && self.tok_is_type(TokenType::EndLine);
 		if to_return {
 		    self.rules.add_set(new_set);
 		}
