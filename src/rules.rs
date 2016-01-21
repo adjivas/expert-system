@@ -32,11 +32,15 @@ impl Rules {
 
     pub fn add_request(&mut self, new_req: &str) {
     	let req = new_req.chars().next().unwrap();
-        /*for c in request {
-            if c == req {
+        for c in &self.request {
+            if *c == req {
                 return ;
             }
         }
-        request.push(req);*/
+        self.request.push(req);
+    }
+
+    pub fn get_instrs(&self) -> &Vec<Rc<Exp>> {
+        &self.instrs
     }
 }

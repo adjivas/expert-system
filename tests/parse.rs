@@ -8,14 +8,12 @@
 extern crate expert_sys;
 
 use expert_sys::ops::{And, Not, Xor, Or, Imply};
-
 use expert_sys::Token;
 use expert_sys::TokenInfo;
 use expert_sys::Tokenizer;
 use expert_sys::Exp;
 use expert_sys::Axiom;
 use expert_sys::Parser;
-//use regex::Regex;
 use std::collections::VecDeque;
 use std::rc::Rc;
 use expert_sys::Set;
@@ -74,7 +72,7 @@ fn test_tree(s: &str, tree: Rc<Imply>) {
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-            let result_tree = expr.get(0).unwrap();
+            let result_tree = expr.get_instrs().get(0).unwrap();
             println!("tree {:?}", result_tree.get_ident());
             assert!(result_tree.eq(tree as Rc<Exp>));
         },
@@ -87,7 +85,7 @@ fn test_tree2(s: &str) {
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-            let result_tree = expr.get(0).unwrap();
+            let result_tree = expr.get_instrs().get(0).unwrap();
             println!("tree {:?}", result_tree.get_ident());
             assert!(result_tree.get_ident().unwrap() == s.to_string());
         },

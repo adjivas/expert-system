@@ -236,7 +236,7 @@ impl Parser {
 
 	fn rule_initial_facts(&mut self) -> bool {
 		let old_state = self.save_state();
-		let to_return =	self.tok_is_type(TokenType::InitialFacts);
+		let mut to_return =	self.tok_is_type(TokenType::InitialFacts);
 		let mut new_set = Set::new();
 		let mut tok_type = self.tokens[self.index].get_type().clone();
 		while tok_type == TokenType::Axiom {
@@ -246,11 +246,11 @@ impl Parser {
 		}
 		// in case there is a comment at the end of the line (discard it).
 		self.tok_is_type(TokenType::Comment);
-		/*to_return = self.tok_is_type(TokenType::EndLine);
+		to_return = self.tok_is_type(TokenType::EndLine);
 		if to_return {
 		    self.rules.add_set(new_set);
 		}
-		self.restore_state(to_return, old_state);*/
+		self.restore_state(to_return, old_state);
 		to_return
 	}
 
@@ -264,33 +264,33 @@ impl Parser {
 	}
 
 	/// Parse the string into an equation and reduce it.
-	pub fn parse(to_parse: &String) -> Option<Vec<Rc<Exp>>>
+	pub fn parse(to_parse: &String) -> Option<Rules>
 	{
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
 		println!("{:?}", tokens);
-		/*let mut parser = Parser{
+		let mut parser = Parser{
 			index: 0,
-			instrs: Vec::new(),
+			rules: Rules::new(),
 			tokens: tokens,
 			stack: VecDeque::new()
-		};*/
+		};
 
 		// test tokens against rules
 		let mut carry_on = true;
-		/*while carry_on && !parser.reached_end() {
+		while carry_on && !parser.reached_end() {
 			carry_on = parser.rule_empty_line() ||
 					parser.rule_instruction() ||
 					parser.rule_initial_facts() ||
 					parser.rule_query();
-		}*/
+		}
 
 		// return value
-		/*if carry_on {
-		    Some(parser.instrs)
-		} else {*/
+		if carry_on {
+		    Some(parser.rules)
+		} else {
 		    None
-		/*}*/
+		}
 	}
 }
