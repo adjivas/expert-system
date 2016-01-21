@@ -5,18 +5,11 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![feature(macro_reexport)]
+mod exp;
+mod axiom;
+mod set;
+pub mod ops;
 
-#[macro_reexport (
-    parse_index,
-	format_exp,
-)]
-#[macro_use]
-mod macros;
-mod solver;
-pub mod command;
-
-pub use solver::ops;
-pub use solver::Exp;
-pub use solver::Set;
-pub use solver::Axiom;
+pub use self::exp::Exp;
+pub use self::set::Set;
+pub use self::axiom::Axiom;

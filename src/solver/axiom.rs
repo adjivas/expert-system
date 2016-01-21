@@ -7,7 +7,7 @@
 
 extern crate std;
 
-use exp::Exp;
+use Exp;
 
 /// The `Axiom` structure is a primitive.
 

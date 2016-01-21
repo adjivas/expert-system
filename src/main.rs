@@ -4,7 +4,8 @@
 //
 // This file may not be copied, modified, or distributed
 // except according to those terms.
-#![feature(plugin)]
+
+/*#![feature(plugin)]
 
 #![plugin(regex_macros)]
 extern crate regex;
@@ -46,9 +47,9 @@ fn args_parse() -> String {
 	}
 	args[1].clone()
 }
-
+*/
 fn main () {
-	let filename = args_parse();
+/*	let filename = args_parse();
 	let instructions_str = file_as_string(&filename);
-	let instructions = Parser::parse(&instructions_str);
+	let instructions = Parser::parse(&instructions_str);*/
 }

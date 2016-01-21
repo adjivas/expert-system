@@ -11,10 +11,6 @@ readme = "README.md"
 keywords = ["expert-system"]
 license = "GPL-3.0"
 
-[dependencies]
-regex = "*"
-regex_macros = "*"
-
 [[bin]]
 name = "expert_sys"
 doc = false
