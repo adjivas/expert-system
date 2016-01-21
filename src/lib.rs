@@ -5,6 +5,12 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#![feature(macro_reexport)]
+
+#[macro_reexport (
+    parse_index,
+	format_exp,
+)]
 #[macro_use]
 mod macros;
 mod exp;

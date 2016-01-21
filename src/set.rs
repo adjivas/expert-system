@@ -9,14 +9,48 @@ extern crate std;
 
 use axiom::Axiom;
 use exp::Exp;
+use std::rc::Rc;
 
 /// The `Set` structure is all alphabet axioms.
 
 pub struct Set {
-    axioms: [std::rc::Rc<Axiom>; 26],
+    axioms: [Rc<Axiom>; 26],
 }
 
 impl Set {
+
+    pub fn new() -> Set {
+        Set {
+            axioms: [
+                Axiom::new('A'),
+                Axiom::new('B'),
+                Axiom::new('C'),
+                Axiom::new('D'),
+                Axiom::new('E'),
+                Axiom::new('F'),
+                Axiom::new('G'),
+                Axiom::new('H'),
+                Axiom::new('I'),
+                Axiom::new('J'),
+                Axiom::new('K'),
+                Axiom::new('L'),
+                Axiom::new('M'),
+                Axiom::new('N'),
+                Axiom::new('O'),
+                Axiom::new('P'),
+                Axiom::new('Q'),
+                Axiom::new('R'),
+                Axiom::new('S'),
+                Axiom::new('T'),
+                Axiom::new('U'),
+                Axiom::new('V'),
+                Axiom::new('W'),
+                Axiom::new('X'),
+                Axiom::new('Y'),
+                Axiom::new('Z'),
+            ]
+        }
+    }
 
     /// The `get_value` function returns the axiom's boolean.
 
@@ -25,7 +59,7 @@ impl Set {
         index: char,
     ) -> Option<bool> {
         if let Some(i) = parse_index!(index) {
-            if let Some(grade) = std::rc::Rc::downgrade (
+            if let Some(grade) = Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 grade.get_value()
@@ -46,7 +80,7 @@ impl Set {
         index: char,
     ) -> Option<String> {
         if let Some(i) = parse_index!(index) {
-            if let Some(axiom) = std::rc::Rc::downgrade (
+            if let Some(axiom) = Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 axiom.get_ident()
@@ -65,9 +99,9 @@ impl Set {
     pub fn get_exp (
         &self,
         index: char
-    ) -> Option<std::rc::Rc<Exp>> {
+    ) -> Option<Rc<Exp>> {
         if let Some(i) = parse_index!(index) {
-            if let Some(grade) = std::rc::Rc::downgrade (
+            if let Some(grade) = Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 Some(grade)
@@ -89,7 +123,7 @@ impl Set {
         value: bool,
     ) -> bool {
         if let Some(i) = parse_index!(index) {
-            match std::rc::Rc::get_mut (
+            match Rc::get_mut (
                 &mut self.axioms[i]
             ) {
                 Some(axiom) => axiom.set_value(value),
@@ -99,6 +133,11 @@ impl Set {
         else {
             false
         }
+    }
+
+    pub fn set_value_str(&mut self, index: &str, value: bool) -> bool {
+        let c = index.chars().next().unwrap();
+        self.set_value(c, value)
     }
 }
 

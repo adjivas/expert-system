@@ -8,6 +8,7 @@
 
 #![plugin(regex_macros)]
 extern crate regex;
+#[macro_use]
 extern crate expert_sys;
 
 mod parse;
@@ -15,6 +16,9 @@ mod tokenizer;
 mod exp;
 mod fc_string;
 mod axiom;
+mod rules;
+mod set;
+mod macros;
 
 #[cfg(test)]
 mod test_parse;
