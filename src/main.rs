@@ -15,11 +15,17 @@ mod parse;
 mod tokenizer;
 mod exp;
 mod fc_string;
+mod axiom;
+
+#[cfg(test)]
+mod test_parse;
+mod ops;
 
 use std::fs::File;
 use std::env;
 use std::io::prelude::*;
 use parse::{Parser};
+pub use exp::{Exp};
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
