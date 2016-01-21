@@ -5,14 +5,21 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-
-
 extern crate expert_sys;
 
-use regex::{Regex};
 use expert_sys::ops::{And, Not, Xor, Or, Imply};
-use expert_sys::parse::{TokenType};
+
+use expert_sys::Token;
+use expert_sys::TokenInfo;
+use expert_sys::Tokenizer;
+use expert_sys::Exp;
+use expert_sys::Axiom;
+use expert_sys::Parser;
+//use regex::Regex;
+use std::collections::VecDeque;
 use std::rc::Rc;
+use expert_sys::Set;
+use expert_sys::Rules;
 
 fn test_parsability(s: &str, is_correct: bool) {
 	println!("\nFor : {:?}", s);

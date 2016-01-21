@@ -23,4 +23,5 @@ pub use solver::Exp;
 pub use solver::Set;
 pub use solver::Axiom;
 pub use rules::Rules;
+pub use parse::Parser;
 pub use tokenizer::{Tokenizer, TokenInfo, Token};
