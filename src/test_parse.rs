@@ -27,6 +27,7 @@ fn test_parser_basics() {
     test_parsability("A ^ B => C", true);
     test_parsability("A ^ B ^ !C + !D => E", true);
     test_parsability("!A => !B", true);
+    test_parsability("!(A + B) => C", true);
     test_parsability("A => B #blabla", true);
 
     test_parsability("A ", false);
@@ -83,5 +84,6 @@ fn test_parse_tree() {
     test_tree("A => B", tree);
 
     test_tree2("(A|(B+C))=>D");
-    test_tree2("((!A+!B)+!C)=>D");
+    test_tree2("((!(A)+!(B))+!(C))=>D");
+    test_tree2("(!((A+C))|D)=>D");
 }

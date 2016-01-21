@@ -116,9 +116,8 @@ impl Parser {
 
 	fn rule_not(&mut self) -> bool {
 		let old_state = self.save_state();
-		// TODO replace tok_is_type by a rule_value ?
 		let to_return =	self.tok_is_type(TokenType::Not) &&
-				self.rule_axiom();
+				(self.rule_axiom() || self.rule_parenthesis());
 		if to_return {
 			if self.stack.len() == 0 {
 			    println!("parse error, stack is empty");
