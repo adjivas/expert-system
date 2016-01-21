@@ -5,10 +5,6 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-/*#![feature(plugin)]
-
-#![plugin(regex_macros)]
-extern crate regex;
 extern crate expert_sys;
 
 mod parse;

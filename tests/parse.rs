@@ -1,7 +1,17 @@
-use parse::{Parser};
-use exp::{Exp};
-use axiom::{Axiom};
-use ops::{And, Not, Xor, Or, Imply};
+// @gbersac, @adjivas - github.com/adjivas. See the LICENSE
+// file at the top-level directory of this distribution and at
+// https://github.com/adjivas/expert-system
+//
+// This file may not be copied, modified, or distributed
+// except according to those terms.
+
+
+
+extern crate expert_sys;
+
+use regex::{Regex};
+use expert_sys::ops::{And, Not, Xor, Or, Imply};
+use expert_sys::parse::{TokenType};
 use std::rc::Rc;
 
 fn test_parsability(s: &str, is_correct: bool) {
@@ -77,10 +87,10 @@ fn test_tree2(s: &str) {
 
 #[test]
 fn test_parse_tree() {
-    let tree = Imply::new(
+    let tree = Imply::new (
         Axiom::new('A') as Rc<Exp>,
         Axiom::new('B') as Rc<Exp>
-        );
+    );
     test_tree("A => B", tree);
 
     test_tree2("(A|(B+C))=>D");

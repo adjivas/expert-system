@@ -14,3 +14,6 @@ license = "GPL-3.0"
 [[bin]]
 name = "expert_sys"
 doc = false
+
+[dependencies]
+regex = "*"

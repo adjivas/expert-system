@@ -1,7 +1,7 @@
 use ops::{And, Not, Xor, Or, Imply};
-use axiom::{Axiom};
 use tokenizer::{Tokenizer, TokenInfo, Token};
-use exp::{Exp};
+
+use ops::{};
 use regex::Regex;
 use std::collections::VecDeque;
 use std::rc::Rc;
@@ -44,16 +44,16 @@ impl Parser {
 		let token_types = vec![
 			TokenInfo::new(TokenType::OpenParenthesis, Regex::new(r"\(").unwrap()),
 			TokenInfo::new(TokenType::CloseParenthesis, Regex::new(r"\)").unwrap()),
-			TokenInfo::new(TokenType::Not, regex!("!")),
+			TokenInfo::new(TokenType::Not, Regex::new("!").unwrap()),
 			TokenInfo::new(TokenType::And, Regex::new(r"\+").unwrap()),
 			TokenInfo::new(TokenType::Or, Regex::new(r"\|").unwrap()),
-			TokenInfo::new(TokenType::Xor, regex!(r"\^")),
-			TokenInfo::new(TokenType::Implies, regex!("=>")),
-			TokenInfo::new(TokenType::If, regex!("<=>")),
-			TokenInfo::new(TokenType::EndLine, regex!("\n")),
-			TokenInfo::new(TokenType::Axiom, regex!("[a-zA-Z]")),
-			TokenInfo::new(TokenType::Comment, regex!("#.*")),
-			TokenInfo::new(TokenType::Unknow, regex!(".*")),
+			TokenInfo::new(TokenType::Xor, Regex::new(r"\^").unwrap()),
+			TokenInfo::new(TokenType::Implies, Regex::new("=>").unwrap()),
+			TokenInfo::new(TokenType::If, Regex::new("<=>").unwrap()),
+			TokenInfo::new(TokenType::EndLine, Regex::new("\n").unwrap()),
+			TokenInfo::new(TokenType::Axiom, Regex::new("[a-zA-Z]").unwrap()),
+			TokenInfo::new(TokenType::Comment, Regex::new("#.*").unwrap()),
+			TokenInfo::new(TokenType::Unknow, Regex::new(".*").unwrap()),
 		];
 		let tokenizer = Tokenizer::new(token_types);
 		tokenizer.split(to_parse)

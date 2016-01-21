@@ -5,12 +5,18 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#![feature(plugin)]
+extern crate regex;
+pub use regex::Regex;
+
 #[macro_use]
 mod macros;
 mod solver;
+mod parse;
 pub mod command;
 
 pub use solver::ops;
 pub use solver::Exp;
 pub use solver::Set;
 pub use solver::Axiom;
+pub use parse::{};
