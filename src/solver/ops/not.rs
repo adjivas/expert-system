@@ -7,7 +7,7 @@
 
 extern crate std;
 
-use exp::Exp;
+use Exp;
 
 /// The `Not` structure is a binary Not.
 

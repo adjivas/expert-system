@@ -5,12 +5,11 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#[macro_use]
-mod macros;
-mod solver;
-pub mod command;
+mod exp;
+mod axiom;
+mod set;
+pub mod ops;
 
-pub use solver::ops;
-pub use solver::Exp;
-pub use solver::Set;
-pub use solver::Axiom;
+pub use self::exp::Exp;
+pub use self::set::Set;
+pub use self::axiom::Axiom;

@@ -7,8 +7,8 @@
 
 extern crate std;
 
-use axiom::Axiom;
-use exp::Exp;
+use Axiom;
+use Exp;
 
 /// The `Set` structure is all alphabet axioms.
 

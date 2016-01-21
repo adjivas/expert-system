@@ -1,4 +1,4 @@
-use regex::{Regex};
+/*use regex::{Regex};
 use fc_string;
 use std::fmt::{Formatter, Error, Debug};
 
@@ -204,3 +204,4 @@ fn test_tokenizer()
 			vec_token[1].get_content() == "aaa" &&
 			vec_token[2].get_content() == "c");
 }
+*/
