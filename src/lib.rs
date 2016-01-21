@@ -13,10 +13,14 @@ pub use regex::Regex;
 mod macros;
 mod solver;
 mod parse;
+mod rules;
+mod fc_string;
+mod tokenizer;
 pub mod command;
 
 pub use solver::ops;
 pub use solver::Exp;
 pub use solver::Set;
 pub use solver::Axiom;
-pub use parse::{};
+pub use rules::Rules;
+pub use tokenizer::{Tokenizer, TokenInfo, Token};

@@ -1,4 +1,4 @@
-/*use regex::{Regex};
+use regex::{Regex};
 use fc_string;
 use std::fmt::{Formatter, Error, Debug};
 
@@ -115,7 +115,7 @@ impl<E: Clone + Debug> Tokenizer<E>
 	{
 		Tokenizer{
 			types_info:	infos,
-			discards:	regex!("[ \t]+"),
+			discards:	Regex::new("[ \t]+").unwrap(),
 		}
 	}
 
@@ -172,13 +172,13 @@ fn test_tokenizer()
 	}
 
 	let token_types = vec![
-		TokenInfo::new(TokenType::AAA, regex!("aaa")),
-		TokenInfo::new(TokenType::BBB, regex!("bbb")),
-		TokenInfo::new(TokenType::NONE, regex!("[^ \n\t]+")),
+		TokenInfo::new(TokenType::AAA, Regex::new("aaa").unwrap()),
+		TokenInfo::new(TokenType::BBB, Regex::new("bbb").unwrap()),
+		TokenInfo::new(TokenType::NONE, Regex::new("[^ \n\t]+").unwrap()),
 	];
 	let tokenizer = Tokenizer{
 		types_info: token_types,
-		discards: regex!("[ \t\n]+"),
+		discards: Regex::new("[ \t\n]+").unwrap(),
 	};
 
 	// basic
@@ -211,4 +211,3 @@ fn test_tokenizer()
 			vec_token[1].get_content() == "aaa" &&
 			vec_token[2].get_content() == "c");
 }
-*/

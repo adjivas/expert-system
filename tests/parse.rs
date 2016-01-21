@@ -39,6 +39,8 @@ fn test_parser_basics() {
     test_parsability("!A => !B", true);
     test_parsability("!(A + B) => C", true);
     test_parsability("A => B #blabla", true);
+    test_parsability("?ABCDEF #blabla", true);
+    test_parsability("=ABCDEF #blabla", true);
 
     test_parsability("A ", false);
     test_parsability("A #blabla", false);
@@ -46,6 +48,7 @@ fn test_parser_basics() {
     test_parsability("=> C #blabla", false);
     test_parsability("A + => C #blabla", false);
     test_parsability("A + B + => C #blabla", false);
+    test_parsability("=ABCD|EF #blabla", false);
 }
 
 #[test]

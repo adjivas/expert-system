@@ -1,10 +1,15 @@
 use ops::{And, Not, Xor, Or, Imply};
-use tokenizer::{Tokenizer, TokenInfo, Token};
 
-use ops::{};
+use Token;
+use TokenInfo;
+use Tokenizer;
+use Exp;
+use Axiom;
 use regex::Regex;
 use std::collections::VecDeque;
 use std::rc::Rc;
+use Set;
+use Rules;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType
@@ -20,7 +25,9 @@ pub enum TokenType
 	Comment,
 	EndLine,
 	Axiom,
-	Unknow
+	Unknow,
+	InitialFacts,
+	Queries
 }
 
 pub struct Parser {
@@ -28,7 +35,7 @@ pub struct Parser {
 	index: usize,
 
 	/// Instructions parsed. This is the result of the parsing.
-	instrs: Vec<Rc<Exp>>,
+	rules: Rules,
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
@@ -202,12 +209,48 @@ impl Parser {
 				self.rule_expr() &&
 				Parser::optional(self.tok_is_type(TokenType::Comment)) &&
 				self.tok_is_type(TokenType::EndLine);
-		if to_return {
+		/*if to_return {
 		    let (rg, lf) = self.pop_stack_two();
 		    self.instrs.push(Imply::new(lf, rg));
 		    self.stack.clear();
-		}
+		}*/
 		self.restore_state(to_return, old_state);
+		to_return
+	}
+
+	fn rule_query(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::Queries);
+		let mut tok_type = self.tokens[self.index].get_type().clone();
+		while tok_type == TokenType::Axiom {
+			self.rules.add_request(self.tokens[self.index].get_content());
+			self.index += 1;
+			tok_type = self.tokens[self.index].get_type().clone();
+		}
+		// in case there is a comment at the end of the line (discard it).
+		/*self.tok_is_type(TokenType::Comment);
+		to_return = self.tok_is_type(TokenType::EndLine);
+		self.restore_state(to_return, old_state);*/
+		to_return
+	}
+
+	fn rule_initial_facts(&mut self) -> bool {
+		let old_state = self.save_state();
+		let to_return =	self.tok_is_type(TokenType::InitialFacts);
+		let mut new_set = Set::new();
+		let mut tok_type = self.tokens[self.index].get_type().clone();
+		while tok_type == TokenType::Axiom {
+			new_set.set_value_str(self.tokens[self.index].get_content(), true);
+			self.index += 1;
+			tok_type = self.tokens[self.index].get_type().clone();
+		}
+		// in case there is a comment at the end of the line (discard it).
+		self.tok_is_type(TokenType::Comment);
+		/*to_return = self.tok_is_type(TokenType::EndLine);
+		if to_return {
+		    self.rules.add_set(new_set);
+		}
+		self.restore_state(to_return, old_state);*/
 		to_return
 	}
 
@@ -227,24 +270,27 @@ impl Parser {
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
 		println!("{:?}", tokens);
-		let mut parser = Parser{
+		/*let mut parser = Parser{
 			index: 0,
 			instrs: Vec::new(),
 			tokens: tokens,
 			stack: VecDeque::new()
-		};
+		};*/
 
 		// test tokens against rules
 		let mut carry_on = true;
-		while carry_on && !parser.reached_end() {
-			carry_on = parser.rule_empty_line() || parser.rule_instruction();
-		}
+		/*while carry_on && !parser.reached_end() {
+			carry_on = parser.rule_empty_line() ||
+					parser.rule_instruction() ||
+					parser.rule_initial_facts() ||
+					parser.rule_query();
+		}*/
 
 		// return value
-		if carry_on {
+		/*if carry_on {
 		    Some(parser.instrs)
-		} else {
+		} else {*/
 		    None
-		}
+		/*}*/
 	}
 }
