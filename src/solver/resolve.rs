@@ -5,11 +5,12 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-mod axiom;
-mod set;
-mod resolve;
-pub mod ops;
-pub mod exp;
+use Exp;
+/*
+pub fn query (
+    rules: &Rules,
+) {
+    let instrs: &Vec<Rc<Exp>> = rules.get_instrs(&self);
 
-pub use self::set::Set;
-pub use self::axiom::Axiom;
+
+}*/

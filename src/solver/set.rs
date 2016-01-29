@@ -54,7 +54,7 @@ impl Set {
 
     /// The `get_value` function returns the axiom's boolean.
 
-    pub fn get_value (
+    pub fn get_value  (
         &self,
         index: char,
     ) -> Option<bool> {
@@ -94,9 +94,9 @@ impl Set {
         }
     }
 
-    /// The `get_exp` function returns the expression.
+    /// The `get_exprs` function returns the expression.
 
-    pub fn get_exp (
+    pub fn get_exprs   (
         &self,
         index: char
     ) -> Option<Rc<Exp>> {
@@ -135,7 +135,9 @@ impl Set {
         }
     }
 
-    pub fn set_value_str(&mut self, index: &str, value: bool) -> bool {
+    /// The `set_values` function updates a axiomatic list of boolean values.
+
+    pub fn set_values(&mut self, index: &str, value: bool) -> bool {
         let c = index.chars().next().unwrap();
         self.set_value(c, value)
     }

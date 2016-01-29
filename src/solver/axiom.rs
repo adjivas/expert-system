@@ -23,7 +23,11 @@ impl Axiom {
     pub fn new (ident: char) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
             Axiom {
-                ident: ident,
+                ident: match ident as u8 {
+                    l @ 65u8...90u8 => l,
+                    l @ 97u8...122u8 =>l-32u8,
+                    _ => unimplemented!(),
+                } as char,
                 value: false,
             }
         )
@@ -53,6 +57,32 @@ impl Exp for Axiom {
     fn get_ident (&self) -> Option<String> {
         Some(format!("{}", self.ident))
     }
+
+    /// The `get_ident_left` function returns nothing.
+
+    fn get_ident_left (&self) -> Option<String> {
+        None
+    }
+
+
+    /// The `get_ident_right` function returns nothing.
+
+    fn get_ident_right (&self) -> Option<String> {
+        None
+    }
+
+    /// The `get_exprs_left` function returns nothing.
+
+    fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>> {
+        None
+    }
+
+
+    /// The `get_exprs_right` function returns tnothing.
+
+    fn get_exprs_right (&self) -> Option<std::rc::Rc<Exp>> {
+        None
+    }
 }
 
 impl std::fmt::Display for Axiom {
@@ -67,6 +97,5 @@ impl std::fmt::Display for Axiom {
             (Some(ident), Some(value)) => write!(f, "{}=>{}", ident, value),
             (_, _) => write!(f, "None"),
         }
-
     }
 }

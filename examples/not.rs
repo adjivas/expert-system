@@ -13,10 +13,10 @@ extern crate expert_sys;
 fn main () {
     let axioms = expert_sys::Set::default();
     let not_b = expert_sys::ops::Not::new (
-        axioms.get_exp('b').unwrap(),
+        axioms.get_exprs('b').unwrap(),
     );
     let not_c = expert_sys::ops::Not::new (
-        axioms.get_exp('c').unwrap(),
+        axioms.get_exprs('c').unwrap(),
     );
     println!("{}, {}", not_b, not_c);
 }

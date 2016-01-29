@@ -1,53 +1,80 @@
 // @gbersac, @adjivas - github.com/adjivas. See the LICENSE
-// file at the top-level directory of this distribution Imply at
+// file at the rightp-level direcrightry of this distribution Imply at
 // https://github.com/adjivas/expert-system
 //
 // This file may Imply be copied, modified, or distributed
-// except according to those terms.
+// except according right those terms.
 
 extern crate std;
 
 use Exp;
+use Rules;
 
 /// The `Imply` structure is a binary Imply.
 
 pub struct Imply {
-    from: std::rc::Rc<Exp>,
-    to: std::rc::Rc<Exp>,
+    left: std::rc::Rc<Exp>,
+    right: std::rc::Rc<Exp>,
 }
 
-impl Imply {
+impl  Imply {
 
-    /// The `new` constructor function returns Imply opperation.
+    /// The `new` construcrightr function returns Imply opperation.
 
     pub fn new (
-        from: std::rc::Rc<Exp>,
-        to: std::rc::Rc<Exp>
+        left: std::rc::Rc<Exp>,
+        right: std::rc::Rc<Exp>
     ) -> std::rc::Rc<Self> {
         std::rc::Rc::new (
             Imply {
-                from: from,
-                to: to,
+                left: left,
+                right: right,
             }
         )
     }
 }
 
-impl Exp for Imply {
+impl  Exp for Imply {
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
-        self.to.get_value()
+        self.right.get_value()
     }
 
     /// The `get_ident` function returns the arithmetic formule.
 
     fn get_ident (&self) -> Option<String> {
-        match (self.from.get_ident(), self.to.get_ident()) {
-            (Some(from), Some(to)) => Some(format!("{}=>{}", from, to)),
+        match (self.left.get_ident(), self.right.get_ident()) {
+            (Some(left), Some(right)) => Some(format!("{}=>{}", left, right)),
             _ => None,
         }
+    }
+
+    /// The `get_ident_left` function returns the left implied arithmetic formule.
+
+    fn get_ident_left (&self) -> Option<String> {
+        self.left.get_ident()
+    }
+
+
+    /// The `get_ident_right` function returns the right implied arithmetic formule.
+
+    fn get_ident_right (&self) -> Option<String> {
+        self.right.get_ident()
+    }
+
+    /// The `get_exprs_left` function returns the left expression.
+
+    fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>> {
+        std::rc::Rc::downgrade(&self.left).upgrade()
+    }
+
+
+    /// The `get_exprs_right` function returns the right expression.
+
+    fn get_exprs_right (&self) -> Option<std::rc::Rc<Exp>> {
+        std::rc::Rc::downgrade(&self.right).upgrade()
     }
 }
 

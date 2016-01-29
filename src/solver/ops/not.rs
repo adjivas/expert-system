@@ -8,6 +8,7 @@
 extern crate std;
 
 use Exp;
+use Rules;
 
 /// The `Not` structure is a binary Not.
 
@@ -15,7 +16,7 @@ pub struct Not {
     infer: std::rc::Rc<Exp>, // infer dependencies.
 }
 
-impl Not {
+impl  Not {
 
     /// The `new` constructor function returns Not opperation.
 
@@ -48,9 +49,34 @@ impl Exp for Not {
             None => None,
         }
     }
+
+    /// The `get_ident_left` function returns nothing.
+
+    fn get_ident_left (&self) -> Option<String> {
+        None
+    }
+
+
+    /// The `get_ident_right` function returns nothing.
+
+    fn get_ident_right (&self) -> Option<String> {
+        None
+    }
+
+    /// The `get_exprs_left` function returns the nothing.
+
+    fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>> {
+        None
+    }
+
+    /// The `get_exprs_right` function returns the nothing.
+
+    fn get_exprs_right (&self) -> Option<std::rc::Rc<Exp>> {
+        None
+    }
 }
 
-impl std::fmt::Display for Not {
+impl  std::fmt::Display for Not {
 
     /// The `fmt` function prints the Not.
 

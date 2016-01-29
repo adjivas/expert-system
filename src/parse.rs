@@ -69,7 +69,6 @@ impl Parser {
 	}
 
 	fn reached_end(&self) -> bool {
-		println!("{:?} < {:?}", self.index, self.tokens.len());
 	    if self.index < self.tokens.len() {
 	        false
 	    } else {
@@ -243,7 +242,7 @@ impl Parser {
 		let mut new_set = Set::new();
 		let mut tok_type = self.tokens[self.index].get_type().clone();
 		while tok_type == TokenType::Axiom {
-			new_set.set_value_str(self.tokens[self.index].get_content(), true);
+			new_set.set_values(self.tokens[self.index].get_content(), true);
 			self.index += 1;
 			tok_type = self.tokens[self.index].get_type().clone();
 		}
@@ -272,7 +271,6 @@ impl Parser {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
-		println!("{:?}", tokens);
 		let mut parser = Parser{
 			index: 0,
 			rules: Rules::new(),

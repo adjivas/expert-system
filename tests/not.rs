@@ -14,16 +14,16 @@ fn test_example () {
     let mut axioms: expert_sys::Set = expert_sys::Set::default();
 
     let not_a: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
-        axioms.get_exp('a').unwrap(),
+        axioms.get_exprs('a').unwrap(),
     );
     let not_not_a: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
         not_a
     );
     let not_b: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
-        axioms.get_exp('b').unwrap(),
+        axioms.get_exprs('b').unwrap(),
     );
     let not_c: std::rc::Rc<expert_sys::ops::Not> = expert_sys::ops::Not::new (
-        axioms.get_exp('c').unwrap(),
+        axioms.get_exprs('c').unwrap(),
     );
     assert_eq!(not_not_a.get_value(), Some(false));
 }

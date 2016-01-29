@@ -7,15 +7,19 @@
 
 extern crate std;
 
-use std::rc::Rc;
+use Rules;
 
 /// The `Exp` Trait is an expression's implemention.
 
 pub trait Exp {
-    fn get_ident(&self) -> Option<String>;
-    fn get_value(&self) -> Option<bool>;
 
-    fn eq(&self, other: Rc<Exp>) -> bool {
+    fn get_value(&self) -> Option<bool>;
+    fn get_ident(&self) -> Option<String>;
+    fn get_ident_left (&self) -> Option<String>;
+    fn get_ident_right (&self) -> Option<String>;
+    fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>>;
+    fn get_exprs_right (&self) -> Option<std::rc::Rc<Exp>>;
+    fn eq(&self, other: std::rc::Rc<Exp>) -> bool {
         self.get_ident() == other.get_ident()
     }
 }

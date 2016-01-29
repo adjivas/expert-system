@@ -16,11 +16,11 @@ fn test_example () {
     axioms.set_value('a', true);
     axioms.set_value('b', true);
     let a_and_b = expert_sys::ops::And::new (
-        axioms.get_exp('a').unwrap(),
-        axioms.get_exp('b').unwrap()
+        axioms.get_exprs('a').unwrap(),
+        axioms.get_exprs('b').unwrap()
     );
     let b_and_c = expert_sys::ops::And::new (
-        axioms.get_exp('b').unwrap(),
-        axioms.get_exp('c').unwrap()
+        axioms.get_exprs('b').unwrap(),
+        axioms.get_exprs('c').unwrap()
     );
 }

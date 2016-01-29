@@ -1,10 +1,11 @@
 use Set;
-use Exp;
+use solver::exp::Exp;
 use std::rc::Rc;
+use ops::Imply;
 
 pub struct Rules {
 	/// List of initial_facts initialize to true.
-    initial_facts: Vec<Set>,
+    initial_facts: Set,
 
     /// Instruction trees.
     instrs: Vec<Rc<Exp>>,
@@ -13,17 +14,41 @@ pub struct Rules {
     request: Vec<char>
 }
 
-impl Rules {
+impl  Rules {
+
     pub fn new() -> Rules {
         Rules {
-        	initial_facts: Vec::new(),
+        	initial_facts: Set::default(),
         	instrs: Vec::new(),
         	request: Vec::new()
         }
     }
 
+    fn get_exprs_imply(&self, query: Rc<Exp>) -> Option<Rc<Exp>> {
+        if let (Some(res), _) = self.instrs.iter().fold((
+            None,
+            query.get_ident()
+        ), |(res, acc), ins|
+            if res.is_none() {
+                if let Some(instruction) = Rc::downgrade(ins).upgrade() {
+                    if instruction.get_ident_right() == acc {
+                        (Some(instruction.get_exprs_left()), acc)
+                    }
+                    else { (res, acc) }
+                }
+                else { (res, acc) }
+            }
+            else { (res, acc) }
+        ) {
+            res
+        }
+        else {
+            None
+        }
+    }
+
     pub fn add_set(&mut self, new_set: Set) {
-        self.initial_facts.push(new_set);
+        self.initial_facts = new_set;
     }
 
     pub fn add_instrs(&mut self, new_instrs: Rc<Exp>) {

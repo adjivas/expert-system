@@ -6,25 +6,21 @@
 // except according to those terms.
 
 extern crate expert_sys;
-/*
-mod parse;
-mod tokenizer;
-mod exp;
-mod fc_string;
-mod axiom;
-mod rules;
-mod set;
-mod macros;
+
+use expert_sys::Parser;
+use expert_sys::Tokenizer;
+use expert_sys::Rules;
 
 #[cfg(test)]
-mod test_parse;
-mod ops;
+use expert_sys::ops;
 
 use std::fs::File;
 use std::env;
 use std::io::prelude::*;
-use parse::{Parser};
-pub use exp::{Exp};
+
+use std::rc::Rc;
+use expert_sys::Exp;
+use expert_sys::ops::Imply;
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
@@ -42,9 +38,29 @@ fn args_parse() -> String {
 	}
 	args[1].clone()
 }
+
+/*pub fn get_from (
+    rules: &Vec<Rc<Imply>>,
+    ident: &String,
+) -> Option<String> {
+    for rule in rules {
+        match (*rule.get_ident_from(), *rule.get_ident_to()) {
+            (Some(ref from), Some(ref to)) if to == ident => return get_from(rules, from),
+            _ => continue ,
+        }
+    }
+    Some(ident.clone())
+}
 */
 fn main () {
-/*	let filename = args_parse();
+	let filename = args_parse();
 	let instructions_str = file_as_string(&filename);
-	let instructions = Parser::parse(&instructions_str);*/
+
+    let rules: Option<Rules> = Parser::parse(&instructions_str);
+	if let Some(rules) = rules {
+//        rules.resolve('a');
+
+//            println!("{} {}", rule, get_from(&rules, &rule.get_ident_to().unwrap()).unwrap());
+
+    }
 }

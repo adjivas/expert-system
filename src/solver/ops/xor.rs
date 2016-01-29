@@ -8,6 +8,7 @@
 extern crate std;
 
 use Exp;
+use Rules;
 
 /// The `Xor` structure is a binary Xor.
 
@@ -33,7 +34,7 @@ impl Xor {
     }
 }
 
-impl Exp for Xor {
+impl  Exp for Xor {
 
     /// The `get_value` function returns the result.
 
@@ -52,6 +53,31 @@ impl Exp for Xor {
             (Some(left), Some(right)) => Some(format!("({}^{})", left, right)),
             _ => None,
         }
+    }
+
+    /// The `get_ident_left` function returns the left anded arithmetic formule.
+
+    fn get_ident_left (&self) -> Option<String> {
+        self.left.get_ident()
+    }
+
+
+    /// The `get_ident_right` function returns the right anded arithmetic formule.
+
+    fn get_ident_right (&self) -> Option<String> {
+        self.right.get_ident()
+    }
+
+    /// The `get_exprs_left` function returns the left expression.
+
+    fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>> {
+        std::rc::Rc::downgrade(&self.left).upgrade()
+    }
+
+    /// The `get_exprs_right` function returns the right expression.
+
+    fn get_exprs_right (&self) -> Option<std::rc::Rc<Exp>> {
+        std::rc::Rc::downgrade(&self.right).upgrade()
     }
 }
 

@@ -19,7 +19,7 @@ mod tokenizer;
 pub mod command;
 
 pub use solver::ops;
-pub use solver::Exp;
+pub use solver::exp::Exp;
 pub use solver::Set;
 pub use solver::Axiom;
 pub use rules::Rules;
