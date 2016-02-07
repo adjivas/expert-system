@@ -36,6 +36,15 @@ impl  Or {
 
 impl Exp for Or {
 
+    // The `put_eval_imply` function returns the value and prints the implication.
+
+    fn put_eval_imply (
+        &self,
+        targ: &Vec<std::rc::Rc<Exp>>
+    ) -> bool {
+        false
+    }
+
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {

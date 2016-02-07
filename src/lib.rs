@@ -5,8 +5,7 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![feature(plugin)]
-extern crate regex;
+#![feature(plugin)]extern crate regex;
 pub use regex::Regex;
 
 #[macro_use]

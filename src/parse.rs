@@ -12,8 +12,7 @@ use Set;
 use Rules;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
-pub enum TokenType
-{
+pub enum TokenType {
 	OpenParenthesis,
 	CloseParenthesis,
 	Not,
@@ -271,7 +270,7 @@ impl Parser {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
-		let mut parser = Parser{
+		let mut parser = Parser {
 			index: 0,
 			rules: Rules::new(),
 			tokens: tokens,

@@ -46,6 +46,28 @@ impl Axiom {
 
 impl Exp for Axiom {
 
+    // The `put_eval_imply` function returns the value and prints the implication.
+
+    fn put_eval_imply (
+        &self,
+        rules: &Vec<std::rc::Rc<Exp>>
+    ) -> bool {
+        let result: bool = self.value;
+        let a: Option<String> = self.get_ident();
+
+        for rule in rules.iter() {
+            if let Some(b) = std::rc::Rc::downgrade(&rule).upgrade() {
+                if a == b.get_ident_right() {
+                    if let Some(expr) = b.get_exprs_left() {
+                        result = expr.put_eval_imply(&rules);
+                        break ;
+                    }
+                }
+            }
+        }
+        result
+    }
+
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
@@ -76,7 +98,6 @@ impl Exp for Axiom {
     fn get_exprs_left (&self) -> Option<std::rc::Rc<Exp>> {
         None
     }
-
 
     /// The `get_exprs_right` function returns tnothing.
 

@@ -36,6 +36,29 @@ impl  And {
 
 impl  Exp for And {
 
+    // The `put_eval_imply` function returns the value and prints the implication.
+
+    fn put_eval_imply (
+        &self,
+        targ: &Vec<std::rc::Rc<Exp>>
+    ) -> bool {
+        let result_left: bool = self.left;
+        let result_right: bool = self.right;
+        let a: Option<String> = self.get_ident();
+
+        for rule in rules.iter() {
+            if let Some(b) = std::rc::Rc::downgrade(&rule).upgrade() {
+                if a == b.get_ident_right() {
+                    if let Some(expr) = b.get_exprs_left() {
+                        result = expr.put_eval_imply(&rules);
+                        break ;
+                    }
+                }
+            }
+        }
+        result
+    }
+
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
