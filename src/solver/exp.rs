@@ -12,7 +12,7 @@ use Rules;
 /// The `Exp` Trait is an expression's implemention.
 
 pub trait Exp {
-    fn put_eval_imply (&self, targ: &Vec<std::rc::Rc<Exp>>) -> bool;
+    fn put_eval_imply (&self, rules: &Rules) -> Option<bool>;
     fn get_value(&self) -> Option<bool>;
     fn get_ident(&self) -> Option<String>;
     fn get_ident_left (&self) -> Option<String>;

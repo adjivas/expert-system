@@ -8,6 +8,7 @@
 extern crate std;
 
 use Exp;
+use Rules;
 
 /// The `Axiom` structure is a primitive.
 
@@ -50,22 +51,9 @@ impl Exp for Axiom {
 
     fn put_eval_imply (
         &self,
-        rules: &Vec<std::rc::Rc<Exp>>
-    ) -> bool {
-        let result: bool = self.value;
-        let a: Option<String> = self.get_ident();
-
-        for rule in rules.iter() {
-            if let Some(b) = std::rc::Rc::downgrade(&rule).upgrade() {
-                if a == b.get_ident_right() {
-                    if let Some(expr) = b.get_exprs_left() {
-                        result = expr.put_eval_imply(&rules);
-                        break ;
-                    }
-                }
-            }
-        }
-        result
+        rules: &Rules,
+    ) -> Option<bool> {
+        self.get_value()
     }
 
     /// The `get_value` function returns the result.

@@ -34,15 +34,20 @@ impl Xor {
     }
 }
 
-impl  Exp for Xor {
+impl Exp for Xor {
 
     // The `put_eval_imply` function returns the value and prints the implication.
 
     fn put_eval_imply (
         &self,
-        targ: &Vec<std::rc::Rc<Exp>>
-    ) -> bool {
-        false
+        rules: &Rules,
+    ) -> Option<bool> {
+        match (rules.get_imply(&self.left), rules.get_imply(&self.right)) {
+            (Some(true), Some(false)) => Some(true),
+            (Some(false), Some(true)) => Some(true),
+            (Some(_), Some(_)) => Some(false),
+            _ => None,
+        }
     }
 
     /// The `get_value` function returns the result.

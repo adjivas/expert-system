@@ -9,12 +9,11 @@ extern crate std;
 
 use Axiom;
 use Exp;
-use std::rc::Rc;
 
 /// The `Set` structure is all alphabet axioms.
 
 pub struct Set {
-    axioms: [Rc<Axiom>; 26],
+    axioms: [std::rc::Rc<Axiom>; 26],
 }
 
 impl Set {
@@ -59,7 +58,7 @@ impl Set {
         index: char,
     ) -> Option<bool> {
         if let Some(i) = parse_index!(index) {
-            if let Some(grade) = Rc::downgrade (
+            if let Some(grade) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 grade.get_value()
@@ -80,7 +79,7 @@ impl Set {
         index: char,
     ) -> Option<String> {
         if let Some(i) = parse_index!(index) {
-            if let Some(axiom) = Rc::downgrade (
+            if let Some(axiom) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 axiom.get_ident()
@@ -99,9 +98,9 @@ impl Set {
     pub fn get_exprs   (
         &self,
         index: char
-    ) -> Option<Rc<Exp>> {
+    ) -> Option<std::rc::Rc<Exp>> {
         if let Some(i) = parse_index!(index) {
-            if let Some(grade) = Rc::downgrade (
+            if let Some(grade) = std::rc::Rc::downgrade (
                 &self.axioms[i]
             ).upgrade() {
                 Some(grade)
@@ -123,7 +122,7 @@ impl Set {
         value: bool,
     ) -> bool {
         if let Some(i) = parse_index!(index) {
-            match Rc::get_mut (
+            match std::rc::Rc::get_mut (
                 &mut self.axioms[i]
             ) {
                 Some(axiom) => axiom.set_value(value),

@@ -34,15 +34,15 @@ impl  Imply {
     }
 }
 
-impl  Exp for Imply {
+impl Exp for Imply {
 
     // The `put_eval_imply` function returns the value and prints the implication.
 
     fn put_eval_imply (
         &self,
-        targ: &Vec<std::rc::Rc<Exp>>
-    ) -> bool {
-        false
+        rules: &Rules,
+    ) -> Option<bool> {
+        Some(false)
     }
 
     /// The `get_value` function returns the result.

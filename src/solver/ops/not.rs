@@ -35,9 +35,13 @@ impl Exp for Not {
 
     fn put_eval_imply (
         &self,
-        targ: &Vec<std::rc::Rc<Exp>>
-    ) -> bool {
-        false
+        rules: &Rules,
+    ) -> Option<bool> {
+        match rules.get_imply (&self.infer) {
+            Some(true) => Some(false),
+            Some(false) => Some(true),
+            None => None,
+        }
     }
 
     /// The `get_value` function returns the result.

@@ -66,33 +66,7 @@ fn test_parser_parenthesis() {
 
     test_parsability("(A + B => C", false);
 }
-
-fn test_tree(s: &str, tree: Rc<Imply>) {
-    println!("\nFor : {:?}", s);
-    let result = Parser::parse(&s.to_string());
-    match result {
-        Some(expr) => {
-            let result_tree = expr.get_instrs().get(0).unwrap();
-            println!("tree {:?}", result_tree.get_ident());
-            assert!(result_tree.eq(tree as Rc<Exp>));
-        },
-        None => panic!("The expr #{:?}# is false.", s),
-    };
-}
-
-fn test_tree2(s: &str) {
-    println!("\nFor : {:?}", s);
-    let result = Parser::parse(&s.to_string());
-    match result {
-        Some(expr) => {
-            let result_tree = expr.get_instrs().get(0).unwrap();
-            println!("tree {:?}", result_tree.get_ident());
-            assert!(result_tree.get_ident().unwrap() == s.to_string());
-        },
-        None => panic!("The expr #{:?}# is false.", s),
-    };
-}
-
+/*
 #[test]
 fn test_parse_tree() {
     let tree = Imply::new (
@@ -105,3 +79,4 @@ fn test_parse_tree() {
     test_tree2("((!(A)+!(B))+!(C))=>D");
     test_tree2("(!((A+C))|D)=>D");
 }
+*/

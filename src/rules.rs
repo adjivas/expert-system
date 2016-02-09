@@ -24,44 +24,6 @@ impl  Rules {
         }
     }
 
-    fn put_eval_init(&self, targ: Rc<Exp>) {
-        if let Some(targ_a) = Rc::downgrade(&targ).upgrade() {
-            let a: Option<String> = targ_a.get_ident();
-            for instr in self.instrs.iter() {
-                if let Some(targ_b) = Rc::downgrade(&instr).upgrade() {
-                    let b: Option<String> = targ_b.get_ident_right();
-                    if a == b {
-                        if let Some(expr) = targ_b.get_exprs_left() {
-                            expr.put_eval_imply(&self.instrs);
-                        }
-                    }
-                }
-            }
-        }
-
-        /*if let (Some(res), _) = self.instrs.iter().fold((
-            None,
-            query.get_ident()
-        ), |(res, acc), ins|
-            if res.is_none() {
-                println!("{:?}", acc);
-                if let Some(instruction) = Rc::downgrade(ins).upgrade() {
-                    if instruction.get_ident_right() == acc {
-                        (Some(instruction.get_exprs_left()), acc)
-                    }
-                    else { (res, acc) }
-                }
-                else { (res, acc) }
-            }
-            else { (res, acc) }
-        ) {
-            res
-        }
-        else {
-            None
-        }*/
-    }
-
     pub fn add_set(&mut self, new_set: Set) {
         self.initial_facts = new_set;
     }
@@ -80,9 +42,31 @@ impl  Rules {
         self.request.push(req);
     }
 
-    pub fn get_instrs(&self, letter: char) {
+    /// The `get_imply` function returns the value axiom.
+
+    pub fn get_imply(&self, targ: &Rc<Exp>) -> Option<bool> {
+        if let Some(targ_a) = Rc::downgrade(&targ).upgrade() {
+            let a: Option<String> = targ_a.get_ident();
+            for instr in self.instrs.iter() {
+                if let Some(targ_b) = Rc::downgrade(&instr).upgrade() {
+                    let b: Option<String> = targ_b.get_ident_right();
+                    if a == b {
+                        if let Some(expr) = targ_b.get_exprs_left() {
+                            return expr.put_eval_imply(self);
+                        }
+                    }
+                }
+            }
+        }
+        targ.get_value()
+    }
+
+    pub fn get_axiom(&self, letter: char) -> Option<bool> {
         if let Some(expr) = self.initial_facts.get_exprs(letter) {
-            self.put_eval_init(expr);
+            self.get_imply(&expr)
+        }
+        else {
+            None
         }
     }
 }

@@ -17,7 +17,7 @@ pub struct Or {
     right: std::rc::Rc<Exp>, // right dependency.
 }
 
-impl  Or {
+impl Or {
 
     /// The `new` constructor function returns Or opperation.
 
@@ -40,18 +40,22 @@ impl Exp for Or {
 
     fn put_eval_imply (
         &self,
-        targ: &Vec<std::rc::Rc<Exp>>
-    ) -> bool {
-        false
+        rules: &Rules,
+    ) -> Option<bool> {
+        match (rules.get_imply(&self.left), rules.get_imply(&self.right)) {
+            (Some(true), Some(_)) => Some(true),
+            (Some(_), Some(true)) => Some(true),
+            (Some(_), Some(_)) => Some(false),
+            _ => None,
+        }
     }
 
     /// The `get_value` function returns the result.
 
     fn get_value (&self) -> Option<bool> {
         match (self.left.get_value(), self.right.get_value()) {
-            (Some(true), Some(false)) => Some(true),
-            (Some(false), Some(true)) => Some(true),
-            (Some(true), Some(true)) => Some(true),
+            (Some(true), Some(_)) => Some(true),
+            (Some(_), Some(true)) => Some(true),
             _ => Some(false),
         }
     }
