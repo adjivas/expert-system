@@ -7,7 +7,6 @@
 
 mod axiom;
 mod set;
-mod resolve;
 pub mod ops;
 pub mod exp;
 

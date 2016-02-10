@@ -12,6 +12,7 @@ use Rules;
 
 /// The `Axiom` structure is a primitive.
 
+#[derive(Clone)]
 pub struct Axiom {
     ident: char, // name.
     value: bool, // result.
@@ -43,6 +44,24 @@ impl Axiom {
         self.value = value;
         true
     }
+
+    /// The `get_exprs` function returns a expression by clone.
+
+    fn get_exprs (
+        &self,
+    ) -> Option<std::rc::Rc<Exp>> {
+        let clone: Axiom = self.clone();
+        let axiom: std::rc::Rc<Axiom> = std::rc::Rc::new (
+            clone
+        );
+
+        if let Some(exp) = std::rc::Rc::downgrade(&axiom).upgrade() {
+            Some(exp)
+        }
+        else {
+            None
+        }
+    }
 }
 
 impl Exp for Axiom {
@@ -53,7 +72,15 @@ impl Exp for Axiom {
         &self,
         rules: &Rules,
     ) -> Option<bool> {
-        self.get_value()
+        if let Some(exp) = self.get_exprs() {
+            match rules.get_imply (&exp) {
+                Some(result) => Some(result),
+                None => None,
+            }
+        }
+        else {
+            None
+        }
     }
 
     /// The `get_value` function returns the result.
