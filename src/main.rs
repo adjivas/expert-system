@@ -31,6 +31,6 @@ fn main () {
     let rules_parse: Option<expert_sys::Rules> = expert_sys::Parser::parse(&instructions_str);
 
     if let Some(rules) = rules_parse {
-        println!("{:?}", rules.get_axiom('a'));
+        rules.resolve();
     }
 }

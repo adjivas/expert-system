@@ -116,7 +116,7 @@ impl Set {
 
     /// The `set_value` function updates the axiom's boolean value.
 
-    pub fn set_value (
+    fn set_value (
         &mut self,
         index: char,
         value: bool,
@@ -137,8 +137,11 @@ impl Set {
     /// The `set_values` function updates a axiomatic list of boolean values.
 
     pub fn set_values(&mut self, index: &str, value: bool) -> bool {
-        let c = index.chars().next().unwrap();
-        self.set_value(c, value)
+        let mut result = true;
+        for c in index.chars() {
+            result &= self.set_value(c, value);
+        }
+        result
     }
 }
 

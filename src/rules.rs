@@ -1,7 +1,6 @@
 use Set;
 use solver::exp::Exp;
 use std::rc::Rc;
-use ops::Imply;
 
 pub struct Rules {
 	/// List of initial_facts initialize to true.
@@ -45,6 +44,7 @@ impl  Rules {
     /// The `get_imply` function returns the value axiom.
 
     pub fn get_imply(&self, targ: &Rc<Exp>) -> Option<bool> {
+
         if let Some(targ_a) = Rc::downgrade(&targ).upgrade() {
             let a: Option<String> = targ_a.get_ident();
             for instr in self.instrs.iter() {
@@ -52,12 +52,15 @@ impl  Rules {
                     let b: Option<String> = targ_b.get_ident_right();
                     if a == b {
                         if let Some(expr) = targ_b.get_exprs_left() {
+                            println!("debug search: {}<=>{}", targ_a, targ_b);
                             return expr.put_eval_imply(self);
                         }
                     }
                 }
             }
         }
+
+        println!("debug: {}", targ);
         targ.get_value()
     }
 
@@ -67,6 +70,16 @@ impl  Rules {
         }
         else {
             None
+        }
+    }
+
+    pub fn resolve (&self) {
+        println!("debug:{}\n", self.initial_facts);
+        for req in &self.request {
+            match self.get_axiom(*req) {
+                Some(result) => println!("{}=>{}", req, result),
+                None => println!("{}=>None", req),
+            }
         }
     }
 }

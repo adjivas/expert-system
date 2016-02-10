@@ -40,7 +40,7 @@ impl Exp for Imply {
 
     fn put_eval_imply (
         &self,
-        rules: &Rules,
+        _: &Rules,
     ) -> Option<bool> {
         Some(false)
     }

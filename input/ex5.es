@@ -1,9 +1,10 @@
 B => A
 C => A
 
-# = # A should be false.
-# =B # A should be true.
-# =C # A should be false.
-# =BC # A should be false.
+# With =, A should be false.
+# With =B, A should be true.
+# With =C, A should be true. 
+# With =BC, A should be true.
+
 
 ?A
