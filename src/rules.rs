@@ -1,5 +1,4 @@
-use Set;
-use Exp;
+use ops::{Set, Exp, ExpPtr};
 use std::rc::Rc;
 
 pub struct Rules {
@@ -7,7 +6,7 @@ pub struct Rules {
     initial_facts: Vec<Set>,
 
     /// Instruction trees.
-    instrs: Vec<Rc<Exp>>,
+    instrs: Vec<ExpPtr>,
 
     /// The axiom for which to request value at the end of the computation.
     request: Vec<char>
@@ -26,7 +25,7 @@ impl Rules {
         self.initial_facts.push(new_set);
     }
 
-    pub fn add_instrs(&mut self, new_instrs: Rc<Exp>) {
+    pub fn add_instrs(&mut self, new_instrs: ExpPtr) {
         self.instrs.push(new_instrs);
     }
 
@@ -40,7 +39,7 @@ impl Rules {
         self.request.push(req);
     }
 
-    pub fn get_instrs(&self) -> &Vec<Rc<Exp>> {
+    pub fn get_instrs(&self) -> &Vec<ExpPtr> {
         &self.instrs
     }
 }

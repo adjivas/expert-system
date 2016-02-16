@@ -13,9 +13,15 @@ mod not;
 mod xor;
 mod or;
 mod imply;
+mod set;
+mod axiom;
+pub mod exp;
 
 pub use self::and::And;
 pub use self::not::Not;
 pub use self::xor::Xor;
 pub use self::or::Or;
 pub use self::imply::Imply;
+pub use self::set::{Set};
+pub use self::axiom::{Axiom, AxiomPtr};
+pub use self::exp::{Exp, ExpPtr};

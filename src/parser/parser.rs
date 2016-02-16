@@ -1,15 +1,11 @@
 use ops::{And, Not, Xor, Or, Imply};
 
-use Token;
-use TokenInfo;
-use Tokenizer;
-use Exp;
-use Axiom;
+use parser::tokenizer::{Token, TokenInfo, Tokenizer};
+use ops::{Axiom, Exp, Set, ExpPtr};
 use regex::Regex;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use Set;
-use Rules;
+use rules::Rules;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType
@@ -41,7 +37,7 @@ pub struct Parser {
 	tokens: Vec<Token<TokenType>>,
 
 	/// The stack for generating the abstract syntax tree
-	stack: VecDeque<Rc<Exp>>
+	stack: VecDeque<ExpPtr>
 }
 
 impl Parser {
@@ -102,7 +98,7 @@ impl Parser {
 	    found
 	}
 
-	fn pop_stack_two(&mut self) -> (Rc<Exp>, Rc<Exp>) {
+	fn pop_stack_two(&mut self) -> (ExpPtr, ExpPtr) {
 		if self.stack.len() <= 1 {
 		    panic!("parse error: stack is too short");
 		}
@@ -117,7 +113,7 @@ impl Parser {
 		if to_return {
 			let mut axiom_letter = self.tokens[self.index - 1].get_content();
 			let axiom_letter = axiom_letter.chars().next().unwrap();
-			self.stack.push_front(Axiom::new(axiom_letter));
+			self.stack.push_front(Axiom::new_ptr(axiom_letter));
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -132,7 +128,7 @@ impl Parser {
 			    println!("parse error, stack is empty");
 			}
 		    let val = self.stack.pop_front().unwrap();
-		    self.stack.push_front(Not::new(val));
+		    self.stack.push_front(Not::new_ptr(val));
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -213,7 +209,7 @@ impl Parser {
 				self.tok_is_type(TokenType::EndLine);
 		if to_return {
 		    let (rg, lf) = self.pop_stack_two();
-		    self.rules.add_instrs(Imply::new(lf, rg));
+		    self.rules.add_instrs(Imply::new_ptr(lf, rg));
 		    self.stack.clear();
 		}
 		self.restore_state(to_return, old_state);
@@ -267,8 +263,7 @@ impl Parser {
 	}
 
 	/// Parse the string into an equation and reduce it.
-	pub fn parse(to_parse: &String) -> Option<Rules>
-	{
+	pub fn parse(to_parse: &String) -> Option<Rules> {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));

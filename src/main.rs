@@ -5,26 +5,21 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate expert_sys;
-/*
-mod parse;
-mod tokenizer;
-mod exp;
-mod fc_string;
-mod axiom;
+extern crate regex;
+
+mod parser;
 mod rules;
-mod set;
+mod solver;
+mod ops;
 mod macros;
 
-#[cfg(test)]
-mod test_parse;
-mod ops;
+// #[cfg(test)]
+// mod test_parse;
 
 use std::fs::File;
 use std::env;
 use std::io::prelude::*;
-use parse::{Parser};
-pub use exp::{Exp};
+use parser::{Parser};
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
@@ -42,9 +37,9 @@ fn args_parse() -> String {
 	}
 	args[1].clone()
 }
-*/
+
 fn main () {
-/*	let filename = args_parse();
+	let filename = args_parse();
 	let instructions_str = file_as_string(&filename);
-	let instructions = Parser::parse(&instructions_str);*/
+	let instructions = Parser::parse(&instructions_str);
 }

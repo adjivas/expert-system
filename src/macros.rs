@@ -7,7 +7,7 @@
 
 /// The `parse_index` macro returns a formated Index or Nothing.
 
-#[macro_export]
+#[macro_use]
 macro_rules! parse_index {
     ($index: expr) => {
         match {$index as usize} {
@@ -29,8 +29,7 @@ macro_rules! parse_index {
 
 /// The `format_exp` macro returns the String of all dependencies
 /// from a expression.
-
-#[macro_export]
+#[macro_use]
 macro_rules! format_exp {
     ($exp: expr) => {
         match $exp {

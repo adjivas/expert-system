@@ -5,19 +5,13 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate expert_sys;
-
-use expert_sys::ops::{And, Not, Xor, Or, Imply};
-use expert_sys::Token;
-use expert_sys::TokenInfo;
-use expert_sys::Tokenizer;
-use expert_sys::Exp;
-use expert_sys::Axiom;
-use expert_sys::Parser;
+use ops::{And, Not, Xor, Or, Imply, Set, Exp, Axiom, ExpPtr};
+use parser::tokenizer::{Token, Tokenizer, TokenInfo};
+use parser::Parser;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use expert_sys::Set;
-use expert_sys::Rules;
+use rules::Rules;
+use std::fmt::Display;
 
 fn test_parsability(s: &str, is_correct: bool) {
 	println!("\nFor : {:?}", s);
@@ -67,27 +61,14 @@ fn test_parser_parenthesis() {
     test_parsability("(A + B => C", false);
 }
 
-fn test_tree(s: &str, tree: Rc<Imply>) {
+fn test_tree(s: &str) {
     println!("\nFor : {:?}", s);
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-            let result_tree = expr.get_instrs().get(0).unwrap();
-            println!("tree {:?}", result_tree.get_ident());
-            assert!(result_tree.eq(tree as Rc<Exp>));
-        },
-        None => panic!("The expr #{:?}# is false.", s),
-    };
-}
-
-fn test_tree2(s: &str) {
-    println!("\nFor : {:?}", s);
-    let result = Parser::parse(&s.to_string());
-    match result {
-        Some(expr) => {
-            let result_tree = expr.get_instrs().get(0).unwrap();
-            println!("tree {:?}", result_tree.get_ident());
-            assert!(result_tree.get_ident().unwrap() == s.to_string());
+            let result_tree: &ExpPtr = expr.get_instrs().get(0).unwrap();
+            println!("tree {:?}", result_tree.borrow().get_ident());
+            assert!(result_tree.borrow().get_ident().unwrap() == s.to_string());
         },
         None => panic!("The expr #{:?}# is false.", s),
     };
@@ -95,13 +76,7 @@ fn test_tree2(s: &str) {
 
 #[test]
 fn test_parse_tree() {
-    let tree = Imply::new (
-        Axiom::new('A') as Rc<Exp>,
-        Axiom::new('B') as Rc<Exp>
-    );
-    test_tree("A => B", tree);
-
-    test_tree2("(A|(B+C))=>D");
-    test_tree2("((!(A)+!(B))+!(C))=>D");
-    test_tree2("(!((A+C))|D)=>D");
+    test_tree("(A|(B+C))=>D");
+    test_tree("((!(A)+!(B))+!(C))=>D");
+    test_tree("(!((A+C))|D)=>D");
 }

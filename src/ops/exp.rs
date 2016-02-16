@@ -5,31 +5,30 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate std;
-
 use std::rc::Rc;
+use std::cell::RefCell;
+
+pub type ExpPtr = Rc<RefCell<Exp>>;
 
 /// The `Exp` Trait is an expression's implemention.
-
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;
-    fn get_value(&self) -> Option<bool>;
+    fn get_value(&self) -> bool;
 
     fn eq(&self, other: Rc<Exp>) -> bool {
         self.get_ident() == other.get_ident()
     }
 }
 
-impl std::fmt::Display for Exp {
+use std::fmt::{Formatter, Display, Error};
 
-    /// The `fmt` function prints a generic expression.
-
+impl Display for Exp {
     fn fmt (
         &self,
-        f: &mut std::fmt::Formatter,
-    ) -> Result<(), std::fmt::Error> {
+        f: &mut Formatter,
+    ) -> Result<(), Error> {
         match (self.get_ident(), self.get_value()) {
-            (Some(ident), Some(value)) => write!(f, "({}=>{})", ident, value),
+            (Some(ident), value) => write!(f, "({}=>{})", ident, value),
             (_, _) => write!(f, "None"),
         }
     }
