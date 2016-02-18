@@ -11,7 +11,6 @@ use std::rc::Rc;
 use ops::{Set};
 
 /// The `Imply` structure is a binary Imply.
-
 pub struct Imply {
     from: ExpPtr,
     to: ExpPtr,
@@ -44,5 +43,18 @@ impl Exp for Imply {
             (Some(from), Some(to)) => Some(format!("{}=>{}", from, to)),
             _ => None,
         }
+    }
+
+    fn solve(&self,
+        initial_values: &Set,
+        result_values: &mut Set
+    ) -> bool {
+        let new_value = self.from.borrow().get_value(initial_values);
+        self.set_value(result_values, new_value);
+        true
+    }
+
+    fn set_value(&self, set: &mut Set, new_value: bool) {
+        self.to.borrow().set_value(set, new_value);
     }
 }

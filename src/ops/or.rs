@@ -53,4 +53,9 @@ impl Exp for Or {
             _ => None,
         }
     }
+
+    fn set_value(&self, set: &mut Set, new_value: bool) {
+        self.left.borrow().set_value(set, new_value);
+        self.right.borrow().set_value(set, new_value);
+    }
 }

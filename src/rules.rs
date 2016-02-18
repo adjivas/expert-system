@@ -42,4 +42,8 @@ impl Rules {
     pub fn get_instrs(&self) -> &Vec<ExpPtr> {
         &self.instrs
     }
+
+    pub fn get_initial_value(&self) -> &Vec<Set> {
+        &self.initial_facts
+    }
 }

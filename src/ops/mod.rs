@@ -16,6 +16,8 @@ mod imply;
 mod set;
 mod axiom;
 pub mod exp;
+#[cfg(test)]
+mod test_exp;
 
 pub use self::and::And;
 pub use self::not::Not;

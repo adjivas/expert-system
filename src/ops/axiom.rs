@@ -49,4 +49,8 @@ impl Exp for Axiom {
     fn get_ident(&self) -> Option<String> {
         Some(format!("{}", self.ident))
     }
+
+    fn set_value(&self, set: &mut Set, new_value: bool) {
+        set.set_value(self.ident, new_value);
+    }
 }

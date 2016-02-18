@@ -42,4 +42,8 @@ impl Exp for Not {
             None => None,
         }
     }
+
+    fn set_value(&self, set: &mut Set, new_value: bool) {
+        self.infer.borrow().set_value(set, !new_value);
+    }
 }

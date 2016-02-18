@@ -11,6 +11,7 @@ use std::collections::HashMap;
 use std::ops::Index;
 
 /// The `Set` structure is all alphabet axioms.
+#[derive(Debug, PartialEq)]
 pub struct Set {
     axioms: HashMap<char, bool>,
 }
@@ -50,13 +51,24 @@ impl Set {
         }
     }
 
+    /// Return a set where every value corresponding to each key of the chars
+    /// in the `s` string set to true.
+    #[cfg(test)]
+    pub fn from_str(s: &str) -> Set {
+        let mut to_return = Set::new();
+        for c in s.chars() {
+            to_return.set_value(c, true);
+        }
+        to_return
+    }
+
     /// The `get_value` function returns the axiom's boolean.
-    pub fn get_value (&self, index: char) -> bool {
+    pub fn get_value(&self, index: char) -> bool {
         self.axioms[&index]
     }
 
     /// The `set_value` function updates the axiom's boolean value.
-    pub fn set_value (&mut self, index: char, new_value: bool) {
+    pub fn set_value(&mut self, index: char, new_value: bool) {
         let keyval = self.axioms.entry(index).or_insert(false);
         *keyval = new_value;
     }
@@ -77,13 +89,14 @@ impl Display for Set {
         &self,
         f: &mut Formatter,
     ) -> Result<(), Error> {
-        write! (f, "{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},\
-                    {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}",
-            self.get_value('a'), self.get_value('b'), self.get_value('c'), self.get_value('d'), self.get_value('e'), self.get_value('f'),
-            self.get_value('g'), self.get_value('h'), self.get_value('i'), self.get_value('j'), self.get_value('k'), self.get_value('l'),
-            self.get_value('m'), self.get_value('n'), self.get_value('o'), self.get_value('p'), self.get_value('q'), self.get_value('r'),
-            self.get_value('s'), self.get_value('t'), self.get_value('u'), self.get_value('v'), self.get_value('w'), self.get_value('x'),
-            self.get_value('y'), self.get_value('z'),
+        write! (f, "A({}), B({}), C({}), D({}), E({}), F({}), G({}), H({}), I({}), \
+                    J({}), K({}), L({}), M({}), N({}), O({}), P({}), Q({}), R({}), \
+                    S({}), T({}), U({}), V({}), W({}), X({}), Y({}), Z({})",
+            self.get_value('A'), self.get_value('B'), self.get_value('C'), self.get_value('D'), self.get_value('E'), self.get_value('F'),
+            self.get_value('G'), self.get_value('H'), self.get_value('I'), self.get_value('J'), self.get_value('K'), self.get_value('L'),
+            self.get_value('M'), self.get_value('N'), self.get_value('O'), self.get_value('P'), self.get_value('Q'), self.get_value('R'),
+            self.get_value('S'), self.get_value('T'), self.get_value('U'), self.get_value('V'), self.get_value('W'), self.get_value('X'),
+            self.get_value('Y'), self.get_value('Z'),
         )
     }
 }
