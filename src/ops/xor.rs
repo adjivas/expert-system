@@ -8,6 +8,7 @@
 use ops::{Exp, ExpPtr};
 use std::cell::RefCell;
 use std::rc::Rc;
+use ops::{Set};
 
 /// The `Xor` structure is a binary Xor.
 pub struct Xor {
@@ -32,8 +33,12 @@ impl Xor {
 }
 
 impl Exp for Xor {
-    fn get_value (&self) -> bool {
-        match (self.left.borrow().get_value(), self.right.borrow().get_value()) {
+
+    fn get_value(&self, initial_values: &Set) -> bool {
+        match (
+            self.left.borrow().get_value(initial_values),
+            self.right.borrow().get_value(initial_values)
+        ) {
             (true, false) => true,
             _ => false,
         }
@@ -43,20 +48,6 @@ impl Exp for Xor {
         match (self.left.borrow().get_ident(), self.right.borrow().get_ident()) {
             (Some(left), Some(right)) => Some(format!("({}^{})", left, right)),
             _ => None,
-        }
-    }
-}
-
-use std::fmt::{Formatter, Display, Error};
-
-impl Display for Xor {
-    fn fmt (
-        &self,
-        f: &mut Formatter,
-    ) -> Result<(), Error> {
-        match (self.get_ident(), self.get_value()) {
-            (Some(ident), value) => write!(f, "{}=>{}", ident, value),
-            (_, _) => write!(f, "None"),
         }
     }
 }

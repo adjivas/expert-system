@@ -8,13 +8,13 @@
 use ops::Exp;
 use std::rc::Rc;
 use std::cell::RefCell;
+use ops::{Set};
 
 pub type AxiomPtr = Rc<RefCell<Axiom>>;
 
 /// The `Axiom` structure is a primitive.
 pub struct Axiom {
     ident: char, // name.
-    value: bool, // result.
 }
 
 impl Axiom {
@@ -25,7 +25,6 @@ impl Axiom {
             RefCell::new(
                 Axiom {
                     ident: ident,
-                    value: false,
                 }
             )
         )
@@ -34,37 +33,20 @@ impl Axiom {
     /// The `set_value` function updates the axiom's value.
     pub fn set_value (
         &mut self,
-        value: bool,
-    ) -> bool {
-        self.value = value;
-        true
+        result_values: &mut Set,
+        new_value: bool
+    ) {
+        result_values.set_value(self.ident, new_value);
     }
 }
 
 impl Exp for Axiom {
 
-    fn get_value (&self) -> bool {
-        self.value
+    fn get_value(&self, initial_values: &Set) -> bool {
+        initial_values.get_value(self.ident)
     }
 
-    fn get_ident (&self) -> Option<String> {
+    fn get_ident(&self) -> Option<String> {
         Some(format!("{}", self.ident))
-    }
-}
-
-use std::fmt::{Formatter, Display, Error};
-
-impl Display for Axiom {
-
-    /// The `fmt` function prints the Axiom.
-    fn fmt (
-        &self,
-        f: &mut Formatter,
-    ) -> Result<(), Error> {
-        match (self.get_ident(), self.get_value()) {
-            (Some(ident), value) => write!(f, "{}=>{}", ident, value),
-            (_, _) => write!(f, "None"),
-        }
-
     }
 }

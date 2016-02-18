@@ -12,39 +12,39 @@ use std::ops::Index;
 
 /// The `Set` structure is all alphabet axioms.
 pub struct Set {
-    axioms: HashMap<char, AxiomPtr>,
+    axioms: HashMap<char, bool>,
 }
 
 impl Set {
 
     pub fn new() -> Set {
         let mut axioms = HashMap::with_capacity(26);
-        axioms.insert('A', Axiom::new_ptr('A'));
-        axioms.insert('B', Axiom::new_ptr('B'));
-        axioms.insert('C', Axiom::new_ptr('C'));
-        axioms.insert('D', Axiom::new_ptr('D'));
-        axioms.insert('E', Axiom::new_ptr('E'));
-        axioms.insert('F', Axiom::new_ptr('F'));
-        axioms.insert('G', Axiom::new_ptr('G'));
-        axioms.insert('H', Axiom::new_ptr('H'));
-        axioms.insert('I', Axiom::new_ptr('I'));
-        axioms.insert('J', Axiom::new_ptr('J'));
-        axioms.insert('K', Axiom::new_ptr('K'));
-        axioms.insert('L', Axiom::new_ptr('L'));
-        axioms.insert('M', Axiom::new_ptr('M'));
-        axioms.insert('N', Axiom::new_ptr('N'));
-        axioms.insert('O', Axiom::new_ptr('O'));
-        axioms.insert('P', Axiom::new_ptr('P'));
-        axioms.insert('Q', Axiom::new_ptr('Q'));
-        axioms.insert('R', Axiom::new_ptr('R'));
-        axioms.insert('S', Axiom::new_ptr('S'));
-        axioms.insert('T', Axiom::new_ptr('T'));
-        axioms.insert('U', Axiom::new_ptr('U'));
-        axioms.insert('V', Axiom::new_ptr('V'));
-        axioms.insert('W', Axiom::new_ptr('W'));
-        axioms.insert('X', Axiom::new_ptr('X'));
-        axioms.insert('Y', Axiom::new_ptr('Y'));
-        axioms.insert('Z', Axiom::new_ptr('Z'));
+        axioms.insert('A', false);
+        axioms.insert('B', false);
+        axioms.insert('C', false);
+        axioms.insert('D', false);
+        axioms.insert('E', false);
+        axioms.insert('F', false);
+        axioms.insert('G', false);
+        axioms.insert('H', false);
+        axioms.insert('I', false);
+        axioms.insert('J', false);
+        axioms.insert('K', false);
+        axioms.insert('L', false);
+        axioms.insert('M', false);
+        axioms.insert('N', false);
+        axioms.insert('O', false);
+        axioms.insert('P', false);
+        axioms.insert('Q', false);
+        axioms.insert('R', false);
+        axioms.insert('S', false);
+        axioms.insert('T', false);
+        axioms.insert('U', false);
+        axioms.insert('V', false);
+        axioms.insert('W', false);
+        axioms.insert('X', false);
+        axioms.insert('Y', false);
+        axioms.insert('Z', false);
         Set {
             axioms: axioms
         }
@@ -52,12 +52,13 @@ impl Set {
 
     /// The `get_value` function returns the axiom's boolean.
     pub fn get_value (&self, index: char) -> bool {
-        self.axioms[&index].borrow().get_value()
+        self.axioms[&index]
     }
 
     /// The `set_value` function updates the axiom's boolean value.
-    pub fn set_value (&mut self, index: char, value: bool) {
-        let axiom = self.axioms[&index].borrow_mut().set_value(value);
+    pub fn set_value (&mut self, index: char, new_value: bool) {
+        let keyval = self.axioms.entry(index).or_insert(false);
+        *keyval = new_value;
     }
 
     /// Set `value` for axiom `index`, index being a string of size 1.

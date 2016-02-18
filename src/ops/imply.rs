@@ -8,6 +8,7 @@
 use ops::{Exp, ExpPtr};
 use std::cell::RefCell;
 use std::rc::Rc;
+use ops::{Set};
 
 /// The `Imply` structure is a binary Imply.
 
@@ -34,28 +35,14 @@ impl Imply {
 
 impl Exp for Imply {
 
-    fn get_value (&self) -> bool {
-        self.to.borrow().get_value()
+    fn get_value(&self, initial_values: &Set) -> bool {
+        self.from.borrow().get_value(initial_values)
     }
 
     fn get_ident (&self) -> Option<String> {
         match (self.from.borrow().get_ident(), self.to.borrow().get_ident()) {
             (Some(from), Some(to)) => Some(format!("{}=>{}", from, to)),
             _ => None,
-        }
-    }
-}
-
-use std::fmt::{Formatter, Display, Error};
-
-impl Display for Imply {
-    fn fmt (
-        &self,
-        f: &mut Formatter,
-    ) -> Result<(), Error> {
-        match (self.get_ident(), self.get_value()) {
-            (Some(ident), value) => write!(f, "{}=>{}", ident, value),
-            (_, _) => write!(f, "None"),
         }
     }
 }

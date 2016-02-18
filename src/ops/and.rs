@@ -8,6 +8,7 @@
 use ops::{Exp, ExpPtr};
 use std::rc::Rc;
 use std::cell::RefCell;
+use ops::{Set};
 
 /// The `And` structure is a binary And.
 pub struct And {
@@ -33,8 +34,12 @@ impl And {
 }
 
 impl Exp for And {
-    fn get_value (&self) -> bool {
-        match (self.left.borrow().get_value(), self.right.borrow().get_value()) {
+
+    fn get_value(&self, initial_values: &Set) -> bool {
+        match (
+            self.left.borrow().get_value(initial_values),
+            self.right.borrow().get_value(initial_values)
+        ) {
             (true, true) => true,
             _ => false,
         }

@@ -7,29 +7,16 @@
 
 use std::rc::Rc;
 use std::cell::RefCell;
+use ops::{Set};
 
 pub type ExpPtr = Rc<RefCell<Exp>>;
 
 /// The `Exp` Trait is an expression's implemention.
 pub trait Exp {
     fn get_ident(&self) -> Option<String>;
-    fn get_value(&self) -> bool;
+    fn get_value(&self, initial_values: &Set) -> bool;
 
     fn eq(&self, other: Rc<Exp>) -> bool {
         self.get_ident() == other.get_ident()
-    }
-}
-
-use std::fmt::{Formatter, Display, Error};
-
-impl Display for Exp {
-    fn fmt (
-        &self,
-        f: &mut Formatter,
-    ) -> Result<(), Error> {
-        match (self.get_ident(), self.get_value()) {
-            (Some(ident), value) => write!(f, "({}=>{})", ident, value),
-            (_, _) => write!(f, "None"),
-        }
     }
 }

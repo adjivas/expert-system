@@ -8,6 +8,7 @@
 use ops::{Exp, ExpPtr};
 use std::rc::Rc;
 use std::cell::RefCell;
+use ops::{Set};
 
 /// The `Not` structure is a binary Not.
 pub struct Not {
@@ -28,8 +29,8 @@ impl Not {
 
 impl Exp for Not {
 
-    fn get_value (&self) -> bool {
-        match self.infer.borrow().get_value() {
+    fn get_value(&self, initial_values: &Set) -> bool {
+        match self.infer.borrow().get_value(initial_values) {
             true => false,
             false => true,
         }
@@ -39,23 +40,6 @@ impl Exp for Not {
         match self.infer.borrow().get_ident() {
             Some(infer) => Some(format! ("!({})", infer)),
             None => None,
-        }
-    }
-}
-
-use std::fmt::{Formatter, Display, Error};
-
-impl Display for Not {
-
-    /// The `fmt` function prints the Not.
-
-    fn fmt (
-        &self,
-        f: &mut Formatter,
-    ) -> Result<(), Error> {
-        match (self.get_ident(), self.get_value()) {
-            (Some(ident), value) => write!(f, "{}=>{}", ident, value),
-            (_, _) => write!(f, "None"),
         }
     }
 }
