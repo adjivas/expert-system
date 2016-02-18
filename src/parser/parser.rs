@@ -5,7 +5,7 @@ use ops::{Axiom, Exp, Set, ExpPtr};
 use regex::Regex;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use rules::Rules;
+use parse_result::ParseResult;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType
@@ -31,7 +31,7 @@ pub struct Parser {
 	index: usize,
 
 	/// Instructions parsed. This is the result of the parsing.
-	rules: Rules,
+	rules: ParseResult,
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
@@ -262,13 +262,13 @@ impl Parser {
 	}
 
 	/// Parse the string into an equation and reduce it.
-	pub fn parse(to_parse: &String) -> Option<Rules> {
+	pub fn parse(to_parse: &String) -> Option<ParseResult> {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
 		let mut parser = Parser{
 			index: 0,
-			rules: Rules::new(),
+			rules: ParseResult::new(),
 			tokens: tokens,
 			stack: VecDeque::new()
 		};

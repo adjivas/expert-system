@@ -1,7 +1,7 @@
 use ops::{Set, Exp, ExpPtr};
 use std::rc::Rc;
 
-pub struct Rules {
+pub struct ParseResult {
 	/// List of initial_facts initialize to true.
     initial_facts: Vec<Set>,
 
@@ -12,9 +12,9 @@ pub struct Rules {
     request: Vec<char>
 }
 
-impl Rules {
-    pub fn new() -> Rules {
-        Rules {
+impl ParseResult {
+    pub fn new() -> ParseResult {
+        ParseResult {
         	initial_facts: Vec::new(),
         	instrs: Vec::new(),
         	request: Vec::new()

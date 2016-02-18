@@ -10,7 +10,7 @@ use parser::tokenizer::{Token, Tokenizer, TokenInfo};
 use parser::Parser;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use rules::Rules;
+use parse_result::ParseResult;
 use std::fmt::Display;
 
 fn test_parsability(s: &str, is_correct: bool) {

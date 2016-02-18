@@ -8,7 +8,7 @@
 extern crate regex;
 
 mod parser;
-mod rules;
+mod parse_result;
 mod solver;
 mod ops;
 mod macros;
