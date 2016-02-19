@@ -66,7 +66,7 @@ fn test_tree(s: &str) {
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-            let result_tree: &ExpPtr = expr.get_instrs().get(0).unwrap();
+            let result_tree = expr.instrs.get(0).unwrap();
             println!("tree {:?}", result_tree.borrow().get_ident());
             assert!(result_tree.borrow().get_ident().unwrap() == s.to_string());
         },

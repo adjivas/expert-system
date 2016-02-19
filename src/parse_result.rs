@@ -1,15 +1,15 @@
-use ops::{Set, Exp, ExpPtr};
+use ops::{Set, Exp, ImplyPtr};
 use std::rc::Rc;
 
 pub struct ParseResult {
 	/// List of initial_facts initialize to true.
-    initial_facts: Vec<Set>,
+    pub initial_facts: Vec<Set>,
 
     /// Instruction trees.
-    instrs: Vec<ExpPtr>,
+    pub instrs: Vec<ImplyPtr>,
 
-    /// The axiom for which to request value at the end of the computation.
-    request: Vec<char>
+    /// The axiom for which to query value at the end of the computation.
+    pub query: Vec<char>
 }
 
 impl ParseResult {
@@ -17,7 +17,7 @@ impl ParseResult {
         ParseResult {
         	initial_facts: Vec::new(),
         	instrs: Vec::new(),
-        	request: Vec::new()
+        	query: Vec::new()
         }
     }
 
@@ -25,25 +25,17 @@ impl ParseResult {
         self.initial_facts.push(new_set);
     }
 
-    pub fn add_instrs(&mut self, new_instrs: ExpPtr) {
+    pub fn add_instrs(&mut self, new_instrs: ImplyPtr) {
         self.instrs.push(new_instrs);
     }
 
     pub fn add_request(&mut self, new_req: &str) {
     	let req = new_req.chars().next().unwrap();
-        for c in &self.request {
+        for c in &self.query {
             if *c == req {
                 return ;
             }
         }
-        self.request.push(req);
-    }
-
-    pub fn get_instrs(&self) -> &Vec<ExpPtr> {
-        &self.instrs
-    }
-
-    pub fn get_initial_value(&self) -> &Vec<Set> {
-        &self.initial_facts
+        self.query.push(req);
     }
 }

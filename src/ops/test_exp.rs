@@ -6,10 +6,10 @@ fn test_one(s: &str, expected_true_axiom: &str) {
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-            let instruction: &ExpPtr = expr.get_instrs().get(0).unwrap();
+            let instruction = expr.instrs.get(0).unwrap();
             let mut result_values = Set::new();
             let expected_values = Set::from_str(expected_true_axiom);
-            let initial_value = &expr.get_initial_value()[0];
+            let initial_value = &expr.initial_facts[0];
             instruction.borrow().solve(initial_value, &mut result_values);
             print!("result {}", result_values);
             assert!(result_values == expected_values);

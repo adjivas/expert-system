@@ -11,10 +11,6 @@ mod parser;
 mod parse_result;
 mod solver;
 mod ops;
-mod macros;
-
-// #[cfg(test)]
-// mod test_parse;
 
 use std::fs::File;
 use std::env;

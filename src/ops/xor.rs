@@ -9,6 +9,7 @@ use ops::{Exp, ExpPtr};
 use std::cell::RefCell;
 use std::rc::Rc;
 use ops::{Set};
+use ops;
 
 /// The `Xor` structure is a binary Xor.
 pub struct Xor {
@@ -54,5 +55,11 @@ impl Exp for Xor {
     fn set_value(&self, set: &mut Set, new_value: bool) {
         self.left.borrow().set_value(set, new_value);
         self.right.borrow().set_value(set, new_value);
+    }
+
+    fn list_axiom(&self) -> Vec<char> {
+        let v1 = self.left.borrow().list_axiom();
+        let v2 = self.right.borrow().list_axiom();
+        ops::merge_axiom_vector(&v1, &v2)
     }
 }

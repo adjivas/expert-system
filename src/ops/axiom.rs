@@ -53,4 +53,8 @@ impl Exp for Axiom {
     fn set_value(&self, set: &mut Set, new_value: bool) {
         set.set_value(self.ident, new_value);
     }
+
+    fn list_axiom(&self) -> Vec<char> {
+        vec![self.ident]
+    }
 }

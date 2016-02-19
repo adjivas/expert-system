@@ -46,4 +46,8 @@ impl Exp for Not {
     fn set_value(&self, set: &mut Set, new_value: bool) {
         self.infer.borrow().set_value(set, !new_value);
     }
+
+    fn list_axiom(&self) -> Vec<char> {
+        self.infer.borrow().list_axiom()
+    }
 }
