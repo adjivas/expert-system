@@ -62,4 +62,19 @@ impl Exp for Xor {
         let v2 = self.right.borrow().list_axiom();
         ops::merge_axiom_vector(&v1, &v2)
     }
+
+    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr) {
+        let is_axiom = self.left.borrow().is_axiom(axiom);
+        match is_axiom {
+            true => self.left = replacement.clone(),
+            false => self.left.borrow_mut().
+                    replace_axiom(axiom, replacement.clone()),
+        }
+        let is_axiom = self.right.borrow().is_axiom(axiom);
+        match is_axiom {
+            true => self.right = replacement.clone(),
+            false => self.right.borrow_mut().
+                    replace_axiom(axiom, replacement.clone()),
+        }
+    }
 }

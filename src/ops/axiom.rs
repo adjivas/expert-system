@@ -8,7 +8,7 @@
 use ops::Exp;
 use std::rc::Rc;
 use std::cell::RefCell;
-use ops::{Set};
+use ops::{Set, ExpPtr};
 
 pub type AxiomPtr = Rc<RefCell<Axiom>>;
 
@@ -56,5 +56,13 @@ impl Exp for Axiom {
 
     fn list_axiom(&self) -> Vec<char> {
         vec![self.ident]
+    }
+
+    fn is_axiom(&self, index: char) -> bool {
+        self.ident == index
+    }
+
+    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr) {
+
     }
 }

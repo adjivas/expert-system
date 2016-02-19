@@ -26,6 +26,13 @@ pub trait Exp {
     /// Return the list of all the axiom in this expression
     fn list_axiom(&self) -> Vec<char>;
 
+    /// Replace axiom of index `axiom` by the expression `override`
+    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr);
+
+    fn is_axiom(&self, index: char) -> bool {
+        false
+    }
+
     fn eq(&self, other: Rc<Exp>) -> bool {
         self.get_ident() == other.get_ident()
     }
@@ -39,5 +46,16 @@ pub trait Exp {
             }
         }
         false
+    }
+}
+
+use std::fmt::{Formatter, Display, Error};
+
+impl Display for Exp
+{
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error>
+    {
+        write!(f, "{}", self.get_ident().unwrap());
+        Ok(())
     }
 }

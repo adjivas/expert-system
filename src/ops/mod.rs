@@ -35,8 +35,8 @@ fn merge_axiom_vector(v1: &Vec<char>, v2: &Vec<char>) -> Vec<char> {
             if *c1 == *c2 {
                 continue ;
             }
+            to_return.push(*c2);
         }
-        to_return.push(*c1);
     }
     to_return
 }

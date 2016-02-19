@@ -50,4 +50,13 @@ impl Exp for Not {
     fn list_axiom(&self) -> Vec<char> {
         self.infer.borrow().list_axiom()
     }
+
+    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr) {
+        let is_axiom = self.infer.borrow().is_axiom(axiom);
+        match is_axiom {
+            true => self.infer = replacement.clone(),
+            false => self.infer.borrow_mut().
+                    replace_axiom(axiom, replacement.clone()),
+        }
+    }
 }

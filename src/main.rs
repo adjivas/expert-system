@@ -16,6 +16,8 @@ use std::fs::File;
 use std::env;
 use std::io::prelude::*;
 use parser::{Parser};
+use ops::{Exp};
+// use solver::{solve};
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
@@ -37,5 +39,9 @@ fn args_parse() -> String {
 fn main () {
 	let filename = args_parse();
 	let instructions_str = file_as_string(&filename);
-	let instructions = Parser::parse(&instructions_str);
+	let parsed = Parser::parse(&instructions_str).unwrap();
+    let dep = solver::solve(parsed);
+    for (key, value) in dep {
+        println!("{:?} >>> {}", key, value.borrow().get_ident().unwrap());
+    }
 }

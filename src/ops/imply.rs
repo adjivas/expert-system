@@ -73,4 +73,14 @@ impl Exp for Imply {
         let v2 = self.to.borrow().list_axiom();
         ops::merge_axiom_vector(&v1, &v2)
     }
+
+    /// Warning, here, only replace axiom on the from branch !
+    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr) {
+        let is_axiom = self.from.borrow().is_axiom(axiom);
+        match is_axiom {
+            true => self.from = replacement.clone(),
+            false => self.from.borrow_mut().
+                    replace_axiom(axiom, replacement.clone()),
+        }
+    }
 }
