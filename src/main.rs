@@ -16,8 +16,8 @@ use std::fs::File;
 use std::env;
 use std::io::prelude::*;
 use parser::{Parser};
-use ops::{Exp};
-// use solver::{solve};
+use ops::{Exp, ExpPtr, Set, ImplyPtr};
+use std::collections::HashMap;
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
@@ -36,12 +36,37 @@ fn args_parse() -> String {
 	args[1].clone()
 }
 
+fn resolve_and_print(
+	deps: &HashMap<char, ImplyPtr>,
+	initial_facts: &Set
+) {
+	let initial_facts_str = initial_facts.true_fact_str();
+	println!("\nWith true facts : {}", initial_facts_str);
+    for (key, instr) in deps {
+    	let mut final_facts = Set::new();
+    	instr.borrow().solve(initial_facts, &mut final_facts);
+    	let value = final_facts.get_value(*key);
+    	println!("For {} value is {}", key, value);
+    }
+}
+
 fn main () {
 	let filename = args_parse();
 	let instructions_str = file_as_string(&filename);
-	let parsed = Parser::parse(&instructions_str).unwrap();
-    let dep = solver::solve(parsed);
-    for (key, value) in dep {
-        println!("{:?} >>> {}", key, value.borrow().get_ident().unwrap());
+	let parsed = Parser::parse(&instructions_str);
+	if parsed.is_none() {
+		println!("Parse error");
+		return ;
+	}
+	let parsed = parsed.unwrap();
+    let deps = solver::solve(&parsed);
+    println!("Query dependences:");
+    for (key, value) in &deps {
+    	println!("For {} dependence tree is: {}",
+    			key, value.borrow().get_ident().unwrap());
+    }
+    println!("\nSolution according to those dependences:");
+    for initial_facts in &parsed.initial_facts {
+        resolve_and_print(&deps, initial_facts);
     }
 }

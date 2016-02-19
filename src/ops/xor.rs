@@ -41,6 +41,7 @@ impl Exp for Xor {
             self.right.borrow().get_value(initial_values)
         ) {
             (true, false) => true,
+            (false, true) => true,
             _ => false,
         }
     }

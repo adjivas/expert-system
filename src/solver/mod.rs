@@ -59,7 +59,7 @@ fn generate_query_tree(
 	            Some(axiom_dependence) => {
 	            	carry_on = true;
 	            	merged_dependences.borrow_mut().
-	            		replace_axiom(axiom, axiom_dependence.borrow().from.clone());
+	            		replace_axiom(dep_axiom, axiom_dependence.borrow().from.clone());
 	            },
 	            None => {},
 	        }
@@ -68,15 +68,15 @@ fn generate_query_tree(
 	Some(merged_dependences)
 }
 
-pub fn solve(instrs: ParseResult) -> HashMap<char, ImplyPtr> {
+pub fn solve(instrs: &ParseResult) -> HashMap<char, ImplyPtr> {
 	let mut to_return = HashMap::new();
-    for query in instrs.query {
-        let tree_opt = generate_query_tree(query, &instrs.instrs);
+    for query in &instrs.query {
+        let tree_opt = generate_query_tree(*query, &instrs.instrs);
         let new_tree = match tree_opt {
             Some(tree) => tree,
-            None => Imply::new_ptr(Axiom::new_ptr(query), Axiom::new_ptr(query)),
+            None => Imply::new_ptr(Axiom::new_ptr(*query), Axiom::new_ptr(*query)),
         };
-        to_return.insert(query, new_tree);
+        to_return.insert(*query, new_tree);
     }
     to_return
 }

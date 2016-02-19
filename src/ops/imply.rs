@@ -37,10 +37,10 @@ impl Imply {
     /// Change the value stored in result_values according to this
     /// expression if necessary.
     pub fn solve(&self,
-        initial_values: &Set,
+        initial_facts: &Set,
         result_values: &mut Set
     ) -> bool {
-        let new_value = self.from.borrow().get_value(initial_values);
+        let new_value = self.from.borrow().get_value(initial_facts);
         self.set_value(result_values, new_value);
         true
     }
@@ -53,8 +53,8 @@ impl Imply {
 
 impl Exp for Imply {
 
-    fn get_value(&self, initial_values: &Set) -> bool {
-        self.from.borrow().get_value(initial_values)
+    fn get_value(&self, initial_facts: &Set) -> bool {
+        self.from.borrow().get_value(initial_facts)
     }
 
     fn get_ident (&self) -> Option<String> {

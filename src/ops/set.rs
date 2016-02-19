@@ -78,6 +78,17 @@ impl Set {
         let c = index.chars().next().unwrap();
         self.set_value(c, value);
     }
+
+    /// String with all the true axioms.
+    pub fn true_fact_str(&self) -> String {
+        let mut to_return = "".to_string();
+        for (&key, &value) in &self.axioms {
+            if value {
+                to_return.push(key);
+            }
+        }
+        to_return
+    }
 }
 
 use std::fmt::{Formatter, Display, Error};
