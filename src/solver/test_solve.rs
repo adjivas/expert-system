@@ -8,7 +8,7 @@ fn test_one_tree_expand(s: &str, expected: &str) {
     let result = Parser::parse(&s.to_string());
     match result {
         Some(expr) => {
-        	let trees = solver::solve(expr);
+        	let trees = solver::solve(&expr);
         	let res_str = &trees[&'A'].borrow().get_ident().unwrap();
         	println!("Result:   {:?}", res_str);
         	println!("Expected: {:?}", expected);

@@ -1,10 +1,9 @@
 use ops::{And, Not, Xor, Or, Imply};
 
 use parser::tokenizer::{Token, TokenInfo, Tokenizer};
-use ops::{Axiom, Exp, Set, ExpPtr};
+use ops::{Axiom, Set, ExpPtr};
 use regex::Regex;
 use std::collections::VecDeque;
-use std::rc::Rc;
 use parse_result::ParseResult;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -110,7 +109,7 @@ impl Parser {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::Axiom);
 		if to_return {
-			let mut axiom_letter = self.tokens[self.index - 1].get_content();
+			let axiom_letter = self.tokens[self.index - 1].get_content();
 			let axiom_letter = axiom_letter.chars().next().unwrap();
 			self.stack.push_front(Axiom::new_ptr(axiom_letter));
 		}
@@ -189,8 +188,7 @@ impl Parser {
 
 	fn rule_expr(&mut self) -> bool {
 		let old_state = self.save_state();
-		let mut to_return =	true;
-		to_return = self.rule_value();
+		let to_return = self.rule_value();
 		let mut carry_on = to_return;
 		while to_return && carry_on {
 			carry_on = self.rule_and() || self.rule_or() || self.rule_xor();

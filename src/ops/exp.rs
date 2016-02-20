@@ -29,7 +29,7 @@ pub trait Exp {
     /// Replace axiom of index `axiom` by the expression `override`
     fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr);
 
-    fn is_axiom(&self, index: char) -> bool {
+    fn is_axiom(&self, _: char) -> bool {
         false
     }
 
@@ -55,7 +55,7 @@ impl Display for Exp
 {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error>
     {
-        write!(f, "{}", self.get_ident().unwrap());
+        let _ = write!(f, "{}", self.get_ident().unwrap());
         Ok(())
     }
 }

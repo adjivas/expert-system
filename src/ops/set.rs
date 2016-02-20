@@ -5,10 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ops::{Axiom, AxiomPtr, Exp};
-use std::rc::Rc;
+use ops::{Exp};
 use std::collections::HashMap;
-use std::ops::Index;
 
 /// The `Set` structure is all alphabet axioms.
 #[derive(Debug, PartialEq)]

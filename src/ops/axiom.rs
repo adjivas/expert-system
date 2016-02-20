@@ -31,6 +31,7 @@ impl Axiom {
     }
 
     /// The `set_value` function updates the axiom's value.
+    #[allow(dead_code)]
     pub fn set_value (
         &mut self,
         result_values: &mut Set,
@@ -62,7 +63,7 @@ impl Exp for Axiom {
         self.ident == index
     }
 
-    fn replace_axiom(&mut self, axiom: char, replacement: ExpPtr) {
+    fn replace_axiom(&mut self, _: char, _: ExpPtr) {
 
     }
 }

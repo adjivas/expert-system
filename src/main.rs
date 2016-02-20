@@ -16,13 +16,13 @@ use std::fs::File;
 use std::env;
 use std::io::prelude::*;
 use parser::{Parser};
-use ops::{Exp, ExpPtr, Set, ImplyPtr};
+use ops::{Exp, Set, ImplyPtr};
 use std::collections::HashMap;
 
 fn file_as_string(filename: &String) -> String {
     let mut f = File::open(filename).unwrap();
     let mut s = String::new();
-    f.read_to_string(&mut s);
+    let _ = f.read_to_string(&mut s);
     s
 }
 

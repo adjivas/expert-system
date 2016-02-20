@@ -1,5 +1,4 @@
-use ops::{Set, Exp, ImplyPtr};
-use std::rc::Rc;
+use ops::{Set, ImplyPtr};
 
 pub struct ParseResult {
 	/// List of initial_facts initialize to true.
