@@ -5,9 +5,6 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-<<<<<<< HEAD
-extern crate expert_sys;
-=======
 extern crate regex;
 
 mod parser;
@@ -21,11 +18,9 @@ use std::io::prelude::*;
 use parser::{Parser};
 use ops::{Exp, Set, ImplyPtr};
 use std::collections::HashMap;
->>>>>>> origin/guillaume
 
 fn file_as_string(filename: &String) -> String {
-    use std::io::prelude::*;
-    let mut f = std::fs::File::open(filename).unwrap();
+    let mut f = File::open(filename).unwrap();
     let mut s = String::new();
     let _ = f.read_to_string(&mut s);
     s
@@ -33,7 +28,7 @@ fn file_as_string(filename: &String) -> String {
 
 /// Return the file name to parse in this execution.
 fn args_parse() -> String {
-	let args: Vec<_> = std::env::args().collect();
+	let args: Vec<_> = env::args().collect();
 	if args.len() < 2 {
 		println!("usage: {} file_name", args[0]);
 		std::process::exit(1)
@@ -41,15 +36,6 @@ fn args_parse() -> String {
 	args[1].clone()
 }
 
-<<<<<<< HEAD
-fn main () {
-	let filename = args_parse();
-	let instructions_str = file_as_string(&filename);
-    let rules_parse: Option<expert_sys::Rules> = expert_sys::Parser::parse(&instructions_str);
-
-    if let Some(rules) = rules_parse {
-        rules.resolve();
-=======
 fn resolve_and_print(
 	deps: &HashMap<char, ImplyPtr>,
 	initial_facts: &Set
@@ -82,6 +68,5 @@ fn main () {
     println!("\nSolution according to those dependences:");
     for initial_facts in &parsed.initial_facts {
         resolve_and_print(&deps, initial_facts);
->>>>>>> origin/guillaume
     }
 }

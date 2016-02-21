@@ -7,7 +7,8 @@ use std::collections::VecDeque;
 use parse_result::ParseResult;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
-pub enum TokenType {
+pub enum TokenType
+{
 	OpenParenthesis,
 	CloseParenthesis,
 	Not,
@@ -235,7 +236,7 @@ impl Parser {
 		let mut new_set = Set::new();
 		let mut tok_type = self.tokens[self.index].get_type().clone();
 		while tok_type == TokenType::Axiom {
-			new_set.set_values(self.tokens[self.index].get_content(), true);
+			new_set.set_value_str(self.tokens[self.index].get_content(), true);
 			self.index += 1;
 			tok_type = self.tokens[self.index].get_type().clone();
 		}
@@ -263,11 +264,7 @@ impl Parser {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
-<<<<<<< HEAD:src/parse.rs
-		let mut parser = Parser {
-=======
 		let mut parser = Parser{
->>>>>>> origin/guillaume:src/parser/parser.rs
 			index: 0,
 			rules: ParseResult::new(),
 			tokens: tokens,

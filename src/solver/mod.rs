@@ -5,15 +5,6 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-<<<<<<< HEAD
-mod axiom;
-mod set;
-pub mod ops;
-pub mod exp;
-
-pub use self::set::Set;
-pub use self::axiom::Axiom;
-=======
 #[cfg(test)]
 mod test_solve;
 
@@ -89,4 +80,3 @@ pub fn solve(instrs: &ParseResult) -> HashMap<char, ImplyPtr> {
     }
     to_return
 }
->>>>>>> origin/guillaume

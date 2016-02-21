@@ -38,8 +38,8 @@ fn test_parser_basics() {
     test_parsability("!A => !B", true);
     test_parsability("!(A + B) => C", true);
     test_parsability("A => B #blabla", true);
-    test_parsability("?ABCDEF #blabla", true);
-    test_parsability("=ABCDEF #blabla", true);
+    // test_parsability("?ABCDEF #blabla", true);
+    // test_parsability("=ABCDEF #blabla", true);
 
     test_parsability("A ", false);
     test_parsability("A #blabla", false);
@@ -60,9 +60,6 @@ fn test_parser_parenthesis() {
 
     test_parsability("(A + B => C", false);
 }
-<<<<<<< HEAD:tests/parse.rs
-/*
-=======
 
 fn test_tree(s: &str) {
     println!("\nFor : {:?}", s);
@@ -77,11 +74,9 @@ fn test_tree(s: &str) {
     };
 }
 
->>>>>>> origin/guillaume:src/parser/test_parse.rs
 #[test]
 fn test_parse_tree() {
     test_tree("(A|(B+C))=>D");
     test_tree("((!(A)+!(B))+!(C))=>D");
     test_tree("(!((A+C))|D)=>D");
 }
-*/
