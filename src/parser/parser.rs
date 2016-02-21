@@ -1,15 +1,10 @@
 use ops::{And, Not, Xor, Or, Imply};
 
-use Token;
-use TokenInfo;
-use Tokenizer;
-use Exp;
-use Axiom;
+use parser::tokenizer::{Token, TokenInfo, Tokenizer};
+use ops::{Axiom, Set, ExpPtr};
 use regex::Regex;
 use std::collections::VecDeque;
-use std::rc::Rc;
-use Set;
-use Rules;
+use parse_result::ParseResult;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum TokenType {
@@ -34,13 +29,13 @@ pub struct Parser {
 	index: usize,
 
 	/// Instructions parsed. This is the result of the parsing.
-	rules: Rules,
+	rules: ParseResult,
 
 	/// Tokens to parse
 	tokens: Vec<Token<TokenType>>,
 
 	/// The stack for generating the abstract syntax tree
-	stack: VecDeque<Rc<Exp>>
+	stack: VecDeque<ExpPtr>
 }
 
 impl Parser {
@@ -100,7 +95,7 @@ impl Parser {
 	    found
 	}
 
-	fn pop_stack_two(&mut self) -> (Rc<Exp>, Rc<Exp>) {
+	fn pop_stack_two(&mut self) -> (ExpPtr, ExpPtr) {
 		if self.stack.len() <= 1 {
 		    panic!("parse error: stack is too short");
 		}
@@ -113,9 +108,9 @@ impl Parser {
 		let old_state = self.save_state();
 		let to_return =	self.tok_is_type(TokenType::Axiom);
 		if to_return {
-			let mut axiom_letter = self.tokens[self.index - 1].get_content();
+			let axiom_letter = self.tokens[self.index - 1].get_content();
 			let axiom_letter = axiom_letter.chars().next().unwrap();
-			self.stack.push_front(Axiom::new(axiom_letter));
+			self.stack.push_front(Axiom::new_ptr(axiom_letter));
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -130,7 +125,7 @@ impl Parser {
 			    println!("parse error, stack is empty");
 			}
 		    let val = self.stack.pop_front().unwrap();
-		    self.stack.push_front(Not::new(val));
+		    self.stack.push_front(Not::new_ptr(val));
 		}
 		self.restore_state(to_return, old_state);
 		to_return
@@ -192,8 +187,7 @@ impl Parser {
 
 	fn rule_expr(&mut self) -> bool {
 		let old_state = self.save_state();
-		let mut to_return =	true;
-		to_return = self.rule_value();
+		let to_return = self.rule_value();
 		let mut carry_on = to_return;
 		while to_return && carry_on {
 			carry_on = self.rule_and() || self.rule_or() || self.rule_xor();
@@ -211,7 +205,7 @@ impl Parser {
 				self.tok_is_type(TokenType::EndLine);
 		if to_return {
 		    let (rg, lf) = self.pop_stack_two();
-		    self.rules.add_instrs(Imply::new(lf, rg));
+		    self.rules.add_instrs(Imply::new_ptr(lf, rg));
 		    self.stack.clear();
 		}
 		self.restore_state(to_return, old_state);
@@ -265,14 +259,17 @@ impl Parser {
 	}
 
 	/// Parse the string into an equation and reduce it.
-	pub fn parse(to_parse: &String) -> Option<Rules>
-	{
+	pub fn parse(to_parse: &String) -> Option<ParseResult> {
 		// init parser struct
 		let mut tokens = Parser::split_into_tokens(to_parse);
 		tokens.push(Token::new(TokenType::EndLine, "\n".to_string()));
+<<<<<<< HEAD:src/parse.rs
 		let mut parser = Parser {
+=======
+		let mut parser = Parser{
+>>>>>>> origin/guillaume:src/parser/parser.rs
 			index: 0,
-			rules: Rules::new(),
+			rules: ParseResult::new(),
 			tokens: tokens,
 			stack: VecDeque::new()
 		};
